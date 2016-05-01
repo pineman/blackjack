@@ -1,134 +1,11 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_image.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
-#include <stdbool.h>
+#include "sdl.h"
 
-#define STRING_SIZE 100       // max size for some strings
-#define WIDTH_WINDOW 900      // window width
-#define HEIGHT_WINDOW 525     // window height
-#define MAX_DECK_SIZE 52      // number of max cards in the deck
-#define MAX_CARD_HAND 11      // 11 cards max. that each player can hold
-#define CARD_WIDTH 67         // card width
-#define CARD_HEIGHT 97        // card height
-#define WINDOW_POSX 500       // initial position of the window: x
-#define WINDOW_POSY 250       // initial position of the window: y
-#define EXTRASPACE 150
-#define MARGIN 5
-#define MAX_PLAYERS 4         // number of maximum players
-
-// declaration of the functions related to graphical issues
-void InitEverything(int , int , SDL_Surface **, SDL_Window ** , SDL_Renderer ** );
-void InitSDL();
-void InitFont();
-SDL_Window* CreateWindow(int , int );
-SDL_Renderer* CreateRenderer(int , int , SDL_Window *);
-int RenderText(int , int , const char* , TTF_Font *, SDL_Color *, SDL_Renderer * );
-int RenderLogo(int , int , SDL_Surface *, SDL_Renderer * );
-void RenderTable(int [], SDL_Surface **, SDL_Renderer * );
-void RenderCard(int , int , int , SDL_Surface **, SDL_Renderer * );
-void RenderHouseCards(int [], int , SDL_Surface **, SDL_Renderer * );
-void RenderPlayerCards(int [][MAX_CARD_HAND], int [], SDL_Surface **, SDL_Renderer * );
-void LoadCards(SDL_Surface **);
-void UnLoadCards(SDL_Surface **);
-
-// definition of some strings: they cannot be changed when the program is executed !
 const char myName[] = "Prof. Joao Ascenso";
 const char myNumber[] = "IST11111";
 const char * playerNames[] = {"Player 1", "Player 2", "Player 3", "Player 4"};
-
-/**
- * main function: entry point of the program
- * only to invoke other functions !
- */
-int main( int argc, char* args[] )
-{
-    SDL_Window* window;
-    SDL_Renderer* renderer;
-    SDL_Surface *cards[MAX_DECK_SIZE+1], *imgs[2];
-    SDL_Event event;
-    int delay = 300;
-    int quit = 0;
-    int money[MAX_PLAYERS] = {110, 110, 110, 110};
-	int player_cards[MAX_PLAYERS][MAX_CARD_HAND] = {{0}};
-    int house_cards[MAX_CARD_HAND] = {0};
-    int pos_house_hand = 0;
-    int pos_player_hand[MAX_PLAYERS] = {0};
-
-	// initialize graphics
-	InitEverything(WIDTH_WINDOW, HEIGHT_WINDOW, imgs, &window, &renderer);
-    // loads the cards images
-    LoadCards(cards);
-    
-    // put down some cards just for testing purposes: for you to remove !
-    player_cards[0][0] = 0;
-    player_cards[0][1] = 15;
-    player_cards[1][0] = 10;
-    player_cards[1][1] = 34;
-    player_cards[1][2] = 0;
-    player_cards[1][3] = 15;
-    player_cards[1][4] = 10;
-    player_cards[2][0] = 34;
-    player_cards[2][1] = 0;
-    player_cards[3][0] = 15;
-    player_cards[3][1] = 10;
-    pos_player_hand[0] = 2;
-    pos_player_hand[1] = 5;
-    pos_player_hand[2] = 2;
-    pos_player_hand[3] = 2;
-
-    house_cards[0] = 0;
-    house_cards[1] = 12;
-    pos_house_hand = 1;
-	
- 	while( quit == 0 )
-    {
-        // while there's events to handle
-        while( SDL_PollEvent( &event ) )
-        {
-			if( event.type == SDL_QUIT )
-            {
-                // quit the program
-            }
-			else if ( event.type == SDL_KEYDOWN )
-			{
-				switch ( event.key.keysym.sym )
-				{
-					case SDLK_s:
-                        // stand !
-						// todo 
-					case SDLK_h:
-						// hit !
-                        // todo
-					default:
-						break;
-				}
-			}
-        }
-        // render game table
-        RenderTable(money, imgs, renderer);
-        // render house cards
-        RenderHouseCards(house_cards, pos_house_hand, cards, renderer);
-        // render player cards
-        RenderPlayerCards(player_cards, pos_player_hand, cards, renderer);
-        // render in the screen all changes above
-        SDL_RenderPresent(renderer);
-    	// add a delay
-		SDL_Delay( delay );
-    }
-
-    // free memory allocated for images and textures and close everything
-    UnLoadCards(cards);
-    SDL_FreeSurface(imgs[0]);
-    SDL_FreeSurface(imgs[1]);
-    SDL_DestroyRenderer(renderer);
-	SDL_DestroyWindow(window);
-	SDL_Quit();
-	return EXIT_SUCCESS;
-}
-
 
 /**
  * RenderTable: Draws the table where the game will be played, namely:
@@ -142,21 +19,21 @@ int main( int argc, char* args[] )
  */
 void RenderTable(int _money[], SDL_Surface *_img[], SDL_Renderer* _renderer)
 {
-    SDL_Color black = { 0, 0, 0 }; // black
-    SDL_Color white = { 255, 255, 255 }; // white
+    SDL_Color black = {0, 0, 0, 255}; // black
+    SDL_Color white = {255, 255, 255, 255}; // white
     char name_money_str[STRING_SIZE];
     TTF_Font *serif = NULL;
     SDL_Texture *table_texture;
     SDL_Rect tableSrc, tableDest, playerRect;
     int separatorPos = (int)(0.95f*WIDTH_WINDOW); // seperates the left from the right part of the window
     int height;
-   
+
     // set color of renderer to some color
     SDL_SetRenderDrawColor( _renderer, 255, 255, 255, 255 );
-    
+
     // clear the window
     SDL_RenderClear( _renderer );
-    
+
     // this opens a font style and sets a size
     serif = TTF_OpenFont("FreeSerif.ttf", 16);
     if(!serif)
@@ -175,16 +52,16 @@ void RenderTable(int _money[], SDL_Surface *_img[], SDL_Renderer* _renderer)
 
     table_texture = SDL_CreateTextureFromSurface(_renderer, _img[0]);
     SDL_RenderCopy(_renderer, table_texture, &tableSrc, &tableDest);
-   
+
     // render the IST Logo
     height = RenderLogo(separatorPos, 0, _img[1], _renderer);
-    
+
     // render the student name
     height += RenderText(separatorPos+3*MARGIN, height, myName, serif, &black, _renderer);
-    
+
     // this renders the student number
     RenderText(separatorPos+3*MARGIN, height, myNumber, serif, &black, _renderer);
-    
+
     // renders the squares + name for each player
     SDL_SetRenderDrawColor(_renderer, 255, 255, 255, 255 );
 
@@ -199,7 +76,7 @@ void RenderTable(int _money[], SDL_Surface *_img[], SDL_Renderer* _renderer)
         RenderText(playerRect.x+20, playerRect.y-30, name_money_str, serif, &white, _renderer);
         SDL_RenderDrawRect(_renderer, &playerRect);
     }
-    
+
     // destroy everything
     SDL_DestroyTexture(table_texture);
 
@@ -261,7 +138,7 @@ void RenderPlayerCards(int _player_cards[][MAX_CARD_HAND], int _pos_player_hand[
             if ( pos == 2 || pos == 3) y += CARD_HEIGHT+ 10;
             // render it !
             RenderCard(x, y, _player_cards[num_player][card], _cards, _renderer);
-        }        
+        }
     }
 }
 
@@ -346,14 +223,14 @@ int RenderLogo(int x, int y, SDL_Surface *_logoIST, SDL_Renderer* _renderer)
 {
 	SDL_Texture *text_IST;
 	SDL_Rect boardPos;
-    
+
     // space occupied by the logo
 	boardPos.x = x;
 	boardPos.y = y;
 	boardPos.w = _logoIST->w;
 	boardPos.h = _logoIST->h;
 
-    // render it 
+    // render it
 	text_IST = SDL_CreateTextureFromSurface(_renderer, _logoIST);
 	SDL_RenderCopy(_renderer, text_IST, NULL, &boardPos);
 
@@ -411,7 +288,7 @@ void InitEverything(int width, int height, SDL_Surface *_img[], SDL_Window** _wi
     InitFont();
     *_window = CreateWindow(width, height);
     *_renderer = CreateRenderer(width, height, *_window);
-    
+
     // load the table texture
     _img[0] = IMG_Load("table_texture.png");
     if (_img[0] == NULL)
@@ -419,7 +296,7 @@ void InitEverything(int width, int height, SDL_Surface *_img[], SDL_Window** _wi
         printf("Unable to load image: %s\n", SDL_GetError());
         exit(EXIT_FAILURE);
     }
-    
+
     // load IST logo
     _img[1] = SDL_LoadBMP("ist_logo.bmp");
     if (_img[1] == NULL)
