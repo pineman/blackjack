@@ -5,6 +5,8 @@
 #define MAX_PLAYERS 4
 #define	MAX_LEN	64
 
+//enum player type
+
 typedef struct config {
 	int num_decks;
 	int num_players;
@@ -38,7 +40,6 @@ config *read_config(char *filename)
 	config *parameters = NULL;
 	parameters = (config *) malloc(sizeof(config));
 
-	//read file
 	FILE *fp = NULL;
 	fp = fopen(filename, "r");
 
@@ -51,10 +52,16 @@ config *read_config(char *filename)
 	sscanf(buffer, "%d-%d", &(parameters->num_decks),
 							&(parameters->num_players));
 
-	for (int i=0; fgets(buffer, MAX_LEN, fp) != NULL; i++) {
+	if (parametros->num_deck > 8 || parametros->num_deck < 4){
+		puts("Erro: numero de baralhos invalido!");
+		exit(EXIT_FAILURE);
+
+	if (parametos)
+	for (int i=0; fgets(buffer, MAX, fp) != NULL; i++) {
 		strcpy(parameters->type_players[i], strsep(&buffer, "-"));
 		strcpy(parameters->player_names[i], strsep(&buffer, "-"));
 		sscanf(buffer, "%d-%d", &parameters->money[i], &parameters->bets[i]);
+
 	}
 
 	return parameters;
