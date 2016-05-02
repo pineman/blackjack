@@ -37,11 +37,6 @@ typedef struct card {
 	int id; // 0 a 12
 } card;
 
-typedef struct player {
-	int position;
-	char name[8];
-} player;
-
 void list_prepend(list *head, void *payload);
 void list_append(list *head, void *payload);
 bool list_remove(list *head, int pos);
@@ -50,19 +45,21 @@ int create_megadeck(list *head, int num_decks);
 int main()
 {
 	list dummy = {NULL, NULL, NULL};
-	list *head = &(dummy);
+	list *head = &dummy;
 	int cards_left = 0;
 
 	cards_left = create_megadeck(head, 2);
 	printf("%d\n", cards_left);
 
-	list *aux = head;
-	while (aux->next) {
-		aux = aux->next;
+	list *aux = head->next;
+	list *tmp = NULL;
+	while (aux) {
+		tmp = aux;
 		printf("suit %d: id %d\n",
-			  ((card *) aux->payload)->suit, ((card *) aux->payload)->id);
-		free(aux->payload);
-		free(aux);
+			  ((card *) tmp->payload)->suit, ((card *) tmp->payload)->id);
+		aux = tmp->next;
+		free(tmp->payload);
+		free(tmp);
 	}
 }
 
