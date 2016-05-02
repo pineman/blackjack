@@ -1,22 +1,41 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #define	MAX	64
 
 typedef struct config {
 	int num_decks;
 	int num_players;
-	char **type_players;
-	char *player_names[MAX];
-	int *money;
-	int *bets;
+	char type_players[4][4];
+	char player_names[4][MAX];
+	int money[4];
+	int bets[4];
 } config;
+
+config *read_config(char *filename);
 	
+
+int main()
+{
+	config *parameter = NULL;
+	parameter = read_config("parametros.txt");
+
+	return EXIT_SUCCESS;
+}
+
 config *read_config(char *filename)
 {
+	char *str;
+	char *token;
+	static char *buffer;
+	buffer = (char *) malloc(64*sizeof(char));
+
+
 	config *parameters = NULL;
 	parameters = (config *) malloc(sizeof(config));
 
+	//read file
 	FILE *fp = NULL;
 	fp = fopen(filename, "r");
 	
@@ -25,30 +44,17 @@ config *read_config(char *filename)
 		exit(EXIT_FAILURE);
 	}
 
-	char buffer[MAX];
-
 	fgets(buffer, MAX, fp);
-	sscanf(buffer, "%d-%d", &(parameters->num_decks), &(parameters->num_players));
+	sscanf(buffer, "%d-%d", &(parameters->num_decks), 
+							&(parameters->num_players));
 
-	// Quero fixed size para parameter->type_player[i] de 3*sizeof(char *)
-	// Como distinguir mini strings
 	for (int i=0; fgets(buffer, MAX, fp) != NULL; i++) {
-		parameters->type_players = (char **) realloc(parameters->type_players, (i+1) * sizeof(char **));
-		parameters->type_players[i] = (char *) malloc(64 * sizeof(char *));
-		sscanf(buffer, "%s", parameters->type_players[i]);
 
+		strcpy(parameters->type_players[i], strsep(&buffer, "-"));
+		strcpy(parameters->player_names[i], strsep(&buffer, "-"));
+
+		sscanf(buffer, "%d-%d", &parameters->money[i], &parameters->bets[i]);
 	}
 	
 	return parameters;
 }
-
-int main()
-{
-	config *parameter = NULL;
-	parameter = read_config("parametros.txt");
-	printf("%d\n", parameter->num_decks);
-	printf("%d\n", parameter->num_players);
-	printf("%s\n", parameter->type_players[3]);
-	return EXIT_SUCCESS;
-}
-
