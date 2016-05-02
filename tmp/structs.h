@@ -27,9 +27,8 @@ typedef struct player {
 typedef struct config {
 	int num_decks;
 	int num_players;
-	// Para cada jogador, arrays de no máximo 4
-	bool human[4];
-	char player_names[4][MAX_PLAYER_NAME+1];
-	int initial_money[4];
-	int initial_bet[4];
-}
+	int player_type[MAX_PLAYERS];
+	char player_names[MAX_PLAYERS][MAX_LEN];
+	float money[MAX_PLAYERS];
+	float bets[MAX_PLAYERS];
+} config;
