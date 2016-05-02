@@ -31,7 +31,6 @@ config *read_config(char *filename)
 	static char *buffer;
 	buffer = (char *) malloc(64*sizeof(char));
 
-
 	config *parameters = NULL;
 	parameters = (config *) malloc(sizeof(config));
 
@@ -49,10 +48,8 @@ config *read_config(char *filename)
 							&(parameters->num_players));
 
 	for (int i=0; fgets(buffer, MAX, fp) != NULL; i++) {
-
 		strcpy(parameters->type_players[i], strsep(&buffer, "-"));
 		strcpy(parameters->player_names[i], strsep(&buffer, "-"));
-
 		sscanf(buffer, "%d-%d", &parameters->money[i], &parameters->bets[i]);
 	}
 	
