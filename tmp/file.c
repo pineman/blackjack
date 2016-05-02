@@ -20,12 +20,9 @@ config *read_config(char *filename);
 
 int main()
 {
+
 	config *parameters = NULL;
 	parameters = read_config("parametros.txt");
-
-	printf("num_decks: %d\n", parameters->num_decks);
-	for (int i = 0; i < MAX_PLAYERS; i++)
-		printf("money[%d]: %d\n", i, parameters->money[i]);
 
 	return EXIT_SUCCESS;
 }
@@ -34,7 +31,7 @@ config *read_config(char *filename)
 {
 	char *str;
 	char *token;
-	static char *buffer;
+	char *buffer;
 	buffer = (char *) malloc(MAX_LEN*sizeof(char));
 
 	config *parameters = NULL;
@@ -52,16 +49,32 @@ config *read_config(char *filename)
 	sscanf(buffer, "%d-%d", &(parameters->num_decks),
 							&(parameters->num_players));
 
-	if (parametros->num_deck > 8 || parametros->num_deck < 4){
+	if (parameters->num_decks > 8 || parameters->num_decks < 4){
 		puts("Erro: numero de baralhos invalido!");
 		exit(EXIT_FAILURE);
+	}
 
-	if (parametos)
-	for (int i=0; fgets(buffer, MAX, fp) != NULL; i++) {
-		strcpy(parameters->type_players[i], strsep(&buffer, "-"));
-		strcpy(parameters->player_names[i], strsep(&buffer, "-"));
-		sscanf(buffer, "%d-%d", &parameters->money[i], &parameters->bets[i]);
+	if (parameters->num_players > 4 || parameters->num_players < 1) {
+		puts("Erro: numero de jogadores invalido!");;
+		exit(EXIT_FAILURE);
+	}
 
+	for (int i=0; fgets(buffer, MAX_LEN, fp) != NULL; i++) {
+		str = strtok(buffer, "-");
+		strcpy(parameters->type_players[i], str);
+		
+		str = strtok(NULL, "-");
+		strcpy(parameters->player_names[i], str);
+
+		str = strtok(NULL, "\0");
+		sscanf(str, "%d-%d", &parameters->money[i], &parameters->bets[i]);
+		
+		if (parameters->money[i] < 10 || parameters->money[i] > 500) {
+			puts("Erro: Valor inicial de dinheiro invalido!");
+			exit(EXIT_FAILURE);
+		}
+
+		if (parameters->bets[i] < 2 || parameters->bets[i] > parameters->money[i] / 4);
 	}
 
 	return parameters;
