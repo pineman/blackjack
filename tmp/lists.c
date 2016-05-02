@@ -72,14 +72,9 @@ void list_append(list *head, void *payload)
 
 void create_megadeck(list *head, int num_decks)
 {
-	for(int i=1; i<=num_decks; i++) {
-		printf("num_decks = %d\n", i);
-
-		for(int j=clubs; j<spades; j++) {
-			printf("suit = %d\n", j);
-
+	for(int i=1; i<=num_decks; i++)
+		for(int j=clubs; j<spades; j++)
 			for(int k=1; k < MAX_CARD_ID; k++) {
-				printf("card_id = %d\n", k);
 				card *cur_card = (card *) calloc(1, sizeof(card));
 
 				cur_card->id = k;
@@ -88,6 +83,4 @@ void create_megadeck(list *head, int num_decks)
 				printf("%d: %d", cur_card->suit, cur_card->id);
 				list_append(head, cur_card);
 			}
-		}
-	}
 }
