@@ -8,7 +8,8 @@
  * precisar, o que pode ser chato, adicionar complexidade ao código
  * e/ou criar bugs difíceis de perceber se nos esquecermos de
  * fazer cast da payload... (ou seja, fazia-se dereference dum
- * void pointer, o que é ilegal).
+ * void pointer, o que é ilegal) E o utilizador tem se fazer free()
+ * da payload manualmente.
  *
  * Mas, por outro lado, o programa torna-se mais modular,
  * mais fácil de compreender e abstrai-se assim toda a parte
@@ -31,7 +32,7 @@ void list_prepend(list *head, void *payload)
 
 void list_append(list *head, void *payload)
 {
-	list *aux = head;
+	list *aux = head; // dummy head
 	while(aux->next)
 		aux = aux->next;
 	list *tail = aux;
@@ -45,17 +46,9 @@ void list_append(list *head, void *payload)
 	tail->next = new_tail;
 }
 
-bool list_remove(list *head, int pos)
+bool list_remove(list *node)
 {
-	list *aux = head;
-	for (int i = 0; i < pos; i++) {
-		if (aux->next)
-			aux = aux->next;
-		else
-			// o que queremos remover não existe
-			return false;
-	}
-	list *to_rm = aux;
-	to_rm->next->prev = to_rm->prev;
-	to_rm->prev->next = to_rm->next;
+	list *to_rm = node;
+	node->next->prev = to_rm->prev;
+	node->prev->next = to_rm->next;
 }

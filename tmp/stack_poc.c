@@ -1,24 +1,15 @@
-/*
- * stack com 'dummy tail'
- * push: aux = calloc()
- * aux->next = SP
- * SP = aux
- * pop: aux = SP
- * SP = SP->next
- * free(aux)
- */
-#include <stdio.h>
-#include <stdlib.h>
-#include "stack.h"
+	#include <stdio.h>
+	#include <stdlib.h>
+	#include "stack.h"
 
-enum suits {clubs, diamonds, hearts, spades};
+	enum suits {clubs, diamonds, hearts, spades};
 
-typedef struct card {
-	enum suits suit;
-	int id; // 0 a 12
-} card;
+	typedef struct card {
+		enum suits suit;
+		int id; // 0 a 12
+	} card;
 
-void remove_cards(stack *player_cards);
+	void remove_cards(stack *player_cards);
 
 int main()
 {
