@@ -2,24 +2,28 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define	MAX	64
+#define MAX_PLAYERS 4
+#define	MAX_LEN	64
 
 typedef struct config {
 	int num_decks;
 	int num_players;
-	char type_players[4][4];
-	char player_names[4][MAX];
-	int money[4];
-	int bets[4];
+	char type_players[MAX_PLAYERS][4];
+	char player_names[MAX_PLAYERS][MAX_LEN];
+	int money[MAX_PLAYERS];
+	int bets[MAX_PLAYERS];
 } config;
 
 config *read_config(char *filename);
-	
 
 int main()
 {
-	config *parameter = NULL;
-	parameter = read_config("parametros.txt");
+	config *parameters = NULL;
+	parameters = read_config("parametros.txt");
+
+	printf("num_decks: %d\n", parameters->num_decks);
+	for (int i = 0; i < MAX_PLAYERS; i++)
+		printf("money[%d]: %d\n", i, parameters->money[i]);
 
 	return EXIT_SUCCESS;
 }
@@ -29,7 +33,7 @@ config *read_config(char *filename)
 	char *str;
 	char *token;
 	static char *buffer;
-	buffer = (char *) malloc(64*sizeof(char));
+	buffer = (char *) malloc(MAX_LEN*sizeof(char));
 
 	config *parameters = NULL;
 	parameters = (config *) malloc(sizeof(config));
@@ -37,21 +41,21 @@ config *read_config(char *filename)
 	//read file
 	FILE *fp = NULL;
 	fp = fopen(filename, "r");
-	
+
 	if (fp == NULL) {
 		puts("Erro: Impossivel abrir ficheiro");
 		exit(EXIT_FAILURE);
 	}
 
-	fgets(buffer, MAX, fp);
-	sscanf(buffer, "%d-%d", &(parameters->num_decks), 
+	fgets(buffer, MAX_LEN, fp);
+	sscanf(buffer, "%d-%d", &(parameters->num_decks),
 							&(parameters->num_players));
 
-	for (int i=0; fgets(buffer, MAX, fp) != NULL; i++) {
+	for (int i=0; fgets(buffer, MAX_LEN, fp) != NULL; i++) {
 		strcpy(parameters->type_players[i], strsep(&buffer, "-"));
 		strcpy(parameters->player_names[i], strsep(&buffer, "-"));
 		sscanf(buffer, "%d-%d", &parameters->money[i], &parameters->bets[i]);
 	}
-	
+
 	return parameters;
 }
