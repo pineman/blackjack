@@ -55,8 +55,9 @@ int main()
 
 	list *aux = head;
 	while (aux->next) {
-		printf("%d\n", ((card *) aux->next->payload)->id);
 		aux = aux->next;
+		printf("suit %d: id %d\n",
+			  ((card *) aux->payload)->suit, ((card *) aux->payload)->id);
 	}
 }
 
@@ -97,7 +98,7 @@ void create_megadeck(list *head, int num_decks)
 				cur_card->id = k;
 				cur_card->suit = j;
 
-				printf("%d: %d", cur_card->suit, cur_card->id);
+				printf("suit %d: id %d\n", cur_card->suit, cur_card->id);
 				list_append(head, cur_card);
 			}
 }
