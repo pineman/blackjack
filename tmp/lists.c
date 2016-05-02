@@ -1,3 +1,21 @@
+/*
+ * Proof of concept das listas que vamos usar no projeto.
+ * Estas são listas de payload genérico,
+ * doubly-linked com dummy head node.
+ *
+ * A desvantagem de utilizar listas de payload genérico é que
+ * obrigamos o utilizador a fazer cast do payload para o que ele
+ * precisar, o que pode ser chato, adicionar complexidade ao código
+ * e/ou criar bugs difíceis de perceber se nos esquecermos de
+ * fazer cast da payload... (ou seja, fazia-se dereference dum
+ * void pointer, o que é ilegal).
+ *
+ * Mas, por outro lado, o programa torna-se mais modular,
+ * mais fácil de compreender e abstrai-se assim toda a parte
+ * das listas.
+ */
+
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -10,7 +28,7 @@ enum suits {clubs=1, diamonds, hearts, spades};
 
 // Doubly-linked list with dummy head nodes
 typedef struct list {
-	void *payload;
+	void *payload; // payload genérica
 	struct list *next;
 	struct list *prev;
 } list;
