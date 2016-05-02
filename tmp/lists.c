@@ -25,26 +25,16 @@ typedef struct player {
 	char name[8];
 } player;
 
-void create_megadeck(list *head,int num_decks);
-void list_append(list *head,void *payload,size_t size);
-void list_prepend(list *head,void *payload,size_t size);
-void alloc_payload(list **node,void *payload,size_t size);
+void create_megadeck(list *head, int num_decks);
+void list_append(list *head, void *payload);
+void list_prepend(list *head, void *payload);
 
 int main()
 {
 	list dummy = {NULL, NULL, NULL};
 	list *head = &(dummy);
 
-	card cur_card = {clubs, 3};
-	list_append(head, &(cur_card), sizeof(card));
-	cur_card.id = 4;
-	list_append(head, &(cur_card), sizeof(card));
-	cur_card.id = 5;
-	list_prepend(head, &(cur_card), sizeof(card));
-	cur_card.id = 6;
-	list_append(head, &(cur_card), sizeof(card));
-	cur_card.id = 8;
-	list_append(head, &(cur_card), sizeof(card));
+	create_megadeck(head, 2);
 
 	list *aux = head;
 	while (aux->next) {
@@ -53,23 +43,18 @@ int main()
 	}
 }
 
-void alloc_payload(list **node, void *payload, size_t size)
-{
-	(*node)->payload = calloc((size_t) 1, size);
-	memcpy((*node)->payload, payload, size);
-}
-
-void list_prepend(list *head, void *payload, size_t size)
+void list_prepend(list *head, void *payload)
 {
 	list *new_head = (list *) calloc((size_t) 1, sizeof(list));
 
-	alloc_payload(&new_head, payload, size);
+	new_head->payload = payload;
+
 	new_head->next = head->next;
 	new_head->prev = head;
 	head->next = new_head;
 }
 
-void list_append(list *head, void *payload, size_t size)
+void list_append(list *head, void *payload)
 {
 	list *aux = head;
 	while(aux->next)
@@ -78,7 +63,8 @@ void list_append(list *head, void *payload, size_t size)
 
 	list *new_tail = (list *) calloc((size_t) 1, sizeof(list));
 
-	alloc_payload(&new_tail, payload, size);
+	new_tail->payload = payload;
+
 	new_tail->next = NULL;
 	new_tail->prev = tail;
 	tail->next = new_tail;
@@ -100,7 +86,7 @@ void create_megadeck(list *head, int num_decks)
 				cur_card->suit = j;
 
 				printf("%d: %d", cur_card->suit, cur_card->id);
-				list_append(head, cur_card, sizeof(card));
+				list_append(head, cur_card);
 			}
 		}
 	}
