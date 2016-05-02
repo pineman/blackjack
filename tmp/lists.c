@@ -14,16 +14,16 @@
  * mais fácil de compreender e abstrai-se assim toda a parte
  * das listas.
  */
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 
 // estes não ficam aqui!!
-#define	MAX_DECK_SIZE	52
-#define MAX_CARD_ID		13
+#define	DECK_SIZE	52
+#define SUIT_SIZE	13
 
-enum suits {clubs=1, diamonds, hearts, spades};
+enum suits {clubs, diamonds, hearts, spades};
 
 // Doubly-linked list with dummy head nodes
 typedef struct list {
@@ -34,7 +34,7 @@ typedef struct list {
 
 typedef struct card {
 	enum suits suit;
-	int id;
+	int id; // 0 a 12
 } card;
 
 typedef struct player {
@@ -42,22 +42,27 @@ typedef struct player {
 	char name[8];
 } player;
 
-void create_megadeck(list *head, int num_decks);
-void list_append(list *head, void *payload);
 void list_prepend(list *head, void *payload);
+void list_append(list *head, void *payload);
+bool list_remove(list *head, int pos);
+int create_megadeck(list *head, int num_decks);
 
 int main()
 {
 	list dummy = {NULL, NULL, NULL};
 	list *head = &(dummy);
+	int cards_left = 0;
 
-	create_megadeck(head, 2);
+	cards_left = create_megadeck(head, 2);
+	printf("%d\n", cards_left);
 
 	list *aux = head;
 	while (aux->next) {
 		aux = aux->next;
 		printf("suit %d: id %d\n",
 			  ((card *) aux->payload)->suit, ((card *) aux->payload)->id);
+		free(aux->payload);
+		free(aux);
 	}
 }
 
@@ -88,17 +93,35 @@ void list_append(list *head, void *payload)
 	tail->next = new_tail;
 }
 
-void create_megadeck(list *head, int num_decks)
+bool list_remove(list *head, int pos)
 {
-	for(int i=1; i<=num_decks; i++)
-		for(int j=clubs; j<spades; j++)
-			for(int k=1; k < MAX_CARD_ID; k++) {
+	list *aux = head;
+	for (int i = 0; i < pos; i++) {
+		if (aux->next)
+			aux = aux->next;
+		else
+			// o que queremos remover não existe
+			return false;
+	}
+	list *to_rm = aux;
+	to_rm->next->prev = to_rm->prev;
+	to_rm->prev->next = to_rm->next;
+}
+
+int create_megadeck(list *head, int num_decks)
+{
+	int total_cards = 0;
+
+	for(int i = 0; i < num_decks; i++)
+		for(int j = clubs; j <= spades; j++)
+			for(int k = 0; k < SUIT_SIZE; k++) {
+				//cur_card = cards[i*DECK_SIZE + j*SUIT_SIZE + k];
 				card *cur_card = (card *) calloc(1, sizeof(card));
-
-				cur_card->id = k;
 				cur_card->suit = j;
-
-				printf("suit %d: id %d\n", cur_card->suit, cur_card->id);
+				cur_card->id = k;
 				list_append(head, cur_card);
 			}
+
+	total_cards = num_decks * DECK_SIZE;
+	return total_cards;
 }
