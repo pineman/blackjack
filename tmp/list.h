@@ -9,4 +9,4 @@ typedef struct list {
 
 void list_prepend(list *head, void *payload);
 void list_append(list *head, void *payload);
-bool list_remove(list *head, int pos);
+bool list_remove(list *head);

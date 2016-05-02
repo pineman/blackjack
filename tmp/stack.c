@@ -1,11 +1,10 @@
 /*
+ * o utilizador tem que fazer cast e free() da sua payload
  * stack com 'dummy tail'
  * push: aux = calloc()
  * aux->next = SP
  * SP = aux
- * pop: aux = SP
- * SP = SP->next
- * free(aux)
+ * pop: SP = SP->next
  */
 #include <stdlib.h>
 #include "stack.h"
