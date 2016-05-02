@@ -1,3 +1,4 @@
+// Leitura e escrita de ficheiros
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -5,32 +6,20 @@
 #define MAX_PLAYERS 4
 #define	MAX_LEN	64
 
-//enum player type
+enum type_player {EA, HU};
 
 typedef struct config {
 	int num_decks;
 	int num_players;
-	char type_players[MAX_PLAYERS][4];
+	int player_type[MAX_PLAYERS];
 	char player_names[MAX_PLAYERS][MAX_LEN];
-	int money[MAX_PLAYERS];
-	int bets[MAX_PLAYERS];
+	float money[MAX_PLAYERS];
+	float bets[MAX_PLAYERS];
 } config;
-
-config *read_config(char *filename);
-
-int main()
-{
-
-	config *parameters = NULL;
-	parameters = read_config("parametros.txt");
-
-	return EXIT_SUCCESS;
-}
 
 config *read_config(char *filename)
 {
 	char *str;
-	char *token;
 	char *buffer;
 	buffer = (char *) malloc(MAX_LEN*sizeof(char));
 
@@ -61,21 +50,38 @@ config *read_config(char *filename)
 
 	for (int i=0; fgets(buffer, MAX_LEN, fp) != NULL; i++) {
 		str = strtok(buffer, "-");
-		strcpy(parameters->type_players[i], str);
+		if (!strcmp(str, "HU"))
+			parameters->player_type[i] = HU;
+		else if (!strcmp(str, "EA"))
+			parameters->player_type[i] = EA;
+		else {
+			puts("Erro: Tipo de jogador invalido!");
+			exit(EXIT_FAILURE);
+		}
 		
 		str = strtok(NULL, "-");
 		strcpy(parameters->player_names[i], str);
 
 		str = strtok(NULL, "\0");
-		sscanf(str, "%d-%d", &parameters->money[i], &parameters->bets[i]);
+		sscanf(str, "%f-%f", &parameters->money[i], &parameters->bets[i]);
 		
 		if (parameters->money[i] < 10 || parameters->money[i] > 500) {
 			puts("Erro: Valor inicial de dinheiro invalido!");
 			exit(EXIT_FAILURE);
 		}
 
-		if (parameters->bets[i] < 2 || parameters->bets[i] > parameters->money[i] / 4);
+		if (parameters->bets[i] < 2 || 
+			parameters->bets[i] > parameters->money[i] * 0.25) 
+		{
+			puts("Valor da aposta invalido!");
+			exit(EXIT_FAILURE);
+		}
 	}
 
 	return parameters;
+}
+
+int main()
+{
+	return EXIT_SUCCESS;
 }
