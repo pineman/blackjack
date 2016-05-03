@@ -21,18 +21,18 @@
 
 void list_prepend(list *head, void *payload)
 {
-	list *new_head = (list *) calloc((size_t) 1, sizeof(list));
+	list *new = (list *) calloc((size_t) 1, sizeof(list));
 
-	new_head->payload = payload;
+	new->payload = payload;
 
-	new_head->next = head->next;
-	new_head->prev = head;
-	head->next = new_head;
+	new->next = head->next;
+	new->prev = head;
+	head->next = new;
 }
 
 void list_append(list *head, void *payload)
 {
-	list *aux = head; // dummy head
+	list *aux = head;
 	while(aux->next)
 		aux = aux->next;
 	list *tail = aux;
@@ -49,7 +49,13 @@ void list_append(list *head, void *payload)
 bool list_remove(list *node)
 {
 	list *to_rm = node;
+	printf("node: %p\n", node);
+	printf("node->next->prev: %p, node->prev: %p\n", node->next->prev, to_rm->prev);
 	node->next->prev = to_rm->prev;
+
+	printf("node->prev->next: %p, node->next: %p\n", node->prev->next, to_rm->next);
 	node->prev->next = to_rm->next;
+	to_rm->next = NULL;
+	to_rm->prev = NULL;
 	free(to_rm);
 }

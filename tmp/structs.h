@@ -14,7 +14,7 @@ typedef struct card {
 	int id;
 } card;
 
-typedef struct player {
+struct player_struct {
 	int player_type;
 	char name[MAX_PLAYER_NAME+1];
 	int position;
@@ -22,13 +22,14 @@ typedef struct player {
 	int money;
 	int bet;
 	int points;
-	card cards[MAX_CARD_HAND];
+	card *cards[MAX_CARD_HAND];
 	int num_cards;
 	int wins;
 	int losses;
 	int draws;
 	//enum status;
-} player;
+} player_default = {0, {0}, 0, false, 0, 0, 0, {0}, 0, 0, 0, 0};
+typedef struct player_struct player;
 
 typedef struct config {
 	int num_decks;
