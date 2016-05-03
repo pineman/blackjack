@@ -16,8 +16,6 @@ int main()
 	int cards_left = 0;
 	int num_decks = 2;
 
-	create_megadeck(megadeck, num_decks);
-	print_list(megadeck);
 	player pineman = player_default;
 
 	for (int j = 0; j < 10; j++) {
@@ -92,8 +90,11 @@ int give_card(
 		// TODO: o jogador não pode receber mais cartas
 		return -1;
 
-	if (!*cards_left)
+	if (!*cards_left) {
+		puts("creating megadeck");
 		*cards_left = create_megadeck(megadeck, num_decks);
+		print_list(megadeck);
+	}
 
 	printf("cards_left = %d ", *cards_left);
 	random = rand() % (*cards_left + 1) + 1;

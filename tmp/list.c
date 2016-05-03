@@ -50,12 +50,21 @@ bool list_remove(list *node)
 {
 	list *to_rm = node;
 	printf("node: %p\n", node);
-	printf("node->next->prev: %p, node->prev: %p\n", node->next->prev, to_rm->prev);
-	node->next->prev = to_rm->prev;
+	if (node->next) {
+		// removing tail
+		printf("node->next->prev: %p, node->prev: %p\n", node->next->prev, to_rm->prev);
+		node->next->prev = to_rm->prev;
+	}
 
-	printf("node->prev->next: %p, node->next: %p\n", node->prev->next, to_rm->next);
-	node->prev->next = to_rm->next;
-	to_rm->next = NULL;
-	to_rm->prev = NULL;
+	if (node->prev) {
+		printf("node->prev->next: %p, node->next: %p\n", node->prev->next, to_rm->next);
+		node->prev->next = to_rm->next;
+	}
+	else {
+		// TODO: removing dummy head!! panic
+		return false;
+	}
+
 	free(to_rm);
+	return true;
 }
