@@ -49,15 +49,13 @@ void list_append(list *head, void *payload)
 bool list_remove(list *node)
 {
 	list *to_rm = node;
-	printf("node: %p\n", node);
+
 	if (node->next) {
 		// removing tail
-		printf("node->next->prev: %p, node->prev: %p\n", node->next->prev, to_rm->prev);
 		node->next->prev = to_rm->prev;
 	}
 
 	if (node->prev) {
-		printf("node->prev->next: %p, node->next: %p\n", node->prev->next, to_rm->next);
 		node->prev->next = to_rm->next;
 	}
 	else {
