@@ -1,16 +1,21 @@
 #include <stdbool.h>
+
+#define MAX_PLAYERS 4
 #define MAX_PLAYER_NAME 8
+#define MAX_CARD_HAND 11
+#define	MAX_LEN	64
 
 enum suits {clubs, diamonds, hearts, spades};
+enum player_type {EA, HU};
 //enum status {blackjack, bust, stand, hit} // double, surrender
 
 typedef struct card {
-	enum suits suit;
+	int suit;
 	int id;
 } card;
 
 typedef struct player {
-	bool human;
+	int player_type;
 	char name[MAX_PLAYER_NAME+1];
 	int position;
 	bool playing;
@@ -33,3 +38,5 @@ typedef struct config {
 	float money[MAX_PLAYERS];
 	float bets[MAX_PLAYERS];
 } config;
+
+#endif

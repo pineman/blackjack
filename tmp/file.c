@@ -23,8 +23,8 @@ config *read_config(char *filename)
 	char *buffer;
 	buffer = (char *) malloc(MAX_LEN*sizeof(char));
 
-	config *parameters = NULL;
-	parameters = (config *) malloc(sizeof(config));
+	config *game_config = NULL;
+	game_config = (config *) malloc(sizeof(config));
 
 	FILE *fp = NULL;
 	fp = fopen(filename, "r");
@@ -35,53 +35,62 @@ config *read_config(char *filename)
 	}
 
 	fgets(buffer, MAX_LEN, fp);
-	sscanf(buffer, "%d-%d", &(parameters->num_decks),
-							&(parameters->num_players));
+	sscanf(buffer, "%d-%d", &(game_config->num_decks),
+							&(game_config->num_players));
 
-	if (parameters->num_decks > 8 || parameters->num_decks < 4){
+	if (game_config->num_decks > 8 || game_config->num_decks < 4){
 		puts("Erro: numero de baralhos invalido!");
 		exit(EXIT_FAILURE);
 	}
 
-	if (parameters->num_players > 4 || parameters->num_players < 1) {
+	if (game_config->num_players > 4 || game_config->num_players < 1) {
 		puts("Erro: numero de jogadores invalido!");;
 		exit(EXIT_FAILURE);
 	}
 
-	for (int i=0; fgets(buffer, MAX_LEN, fp) != NULL; i++) {
+	for (int i=0; fgets(buffer, MAX_LEN, fp) != NULL && i < game_config->num_players; i++) {
 		str = strtok(buffer, "-");
 		if (!strcmp(str, "HU"))
-			parameters->player_type[i] = HU;
+			game_config->player_type[i] = HU;
 		else if (!strcmp(str, "EA"))
-			parameters->player_type[i] = EA;
+			game_config->player_type[i] = EA;
 		else {
 			puts("Erro: Tipo de jogador invalido!");
 			exit(EXIT_FAILURE);
 		}
-		
+
 		str = strtok(NULL, "-");
-		strcpy(parameters->player_names[i], str);
+		strcpy(game_config->player_names[i], str);
 
 		str = strtok(NULL, "\0");
-		sscanf(str, "%f-%f", &parameters->money[i], &parameters->bets[i]);
-		
-		if (parameters->money[i] < 10 || parameters->money[i] > 500) {
+		sscanf(str, "%f-%f", &game_config->money[i], &game_config->bets[i]);
+
+		if (game_config->money[i] < 10 || game_config->money[i] > 500) {
 			puts("Erro: Valor inicial de dinheiro invalido!");
 			exit(EXIT_FAILURE);
 		}
 
-		if (parameters->bets[i] < 2 || 
-			parameters->bets[i] > parameters->money[i] * 0.25) 
+		if (game_config->bets[i] < 2 ||
+			game_config->bets[i] > game_config->money[i] * 0.25)
 		{
 			puts("Valor da aposta invalido!");
 			exit(EXIT_FAILURE);
 		}
 	}
 
-	return parameters;
+	return game_config;
 }
 
 int main()
 {
-	return EXIT_SUCCESS;
+	config *game_config = read_config("parametros.txt");
+
+	printf("num_decks = %d\n", game_config->num_decks);
+	printf("num_players = %d\n", game_config->num_players);
+	for (int i = 0; i < game_config->num_players; i++) {
+		printf("player_type[%d] = %s\n", i, game_config->player_type[i] == HU ? "HU" : "EA");
+		printf("player_names[%d] = %s\n", i, game_config->player_names[i]);
+		printf("money[%d] = %f\n", i, game_config->money[i]);
+		printf("bets[%d] = %f\n", i, game_config->bets[i]);
+	}
 }
