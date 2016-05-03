@@ -90,13 +90,9 @@ int give_card(
 		// TODO: o jogador não pode receber mais cartas
 		return -1;
 
-	if (!*cards_left) {
-		puts("creating megadeck");
+	if (!*cards_left)
 		*cards_left = create_megadeck(megadeck, num_decks);
-		print_list(megadeck);
-	}
 
-	printf("cards_left = %d ", *cards_left);
 	random = rand() % (*cards_left + 1) + 1;
 	// random: 1 - cards_left
 	// random é o número de nós a seguir na lista, por isso,
@@ -104,7 +100,6 @@ int give_card(
 	// ou no máximo o número de nós (se seguirmos *cards_left
 	// nós a partir do dummy head node, chegamos à tail)
 	random = *cards_left;
-	printf("random = %d\n", random);
 
 	list *random_node = megadeck;
 	for (int i = 0; i < random; i++) {
