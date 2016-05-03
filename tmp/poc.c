@@ -1,11 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include "list.h"
-#include "stack.h"
 
 // estes não ficam aqui!!
-#define	DECK_SIZE	52
-#define SUIT_SIZE	13
+#define	DECK_SIZE 52
+#define SUIT_SIZE 13
+#define MAX_CARD_HAND 11
 
 enum suits {clubs, diamonds, hearts, spades};
 
@@ -16,43 +17,30 @@ typedef struct card {
 
 int create_megadeck(list *head, int num_decks);
 void destroy_megadeck(list *head);
-int give_card(list *megadeck, stack **player_cards, int cards_left);
+int give_card(
+	list *megadeck, int *cards_left, int num_decks,
+	card *cards[MAX_CARD_HAND], int *num_cards);
 
 int main()
 {
-	srand(123);
+	srand(time(NULL));
 	list dummy_head = {NULL, NULL, NULL};
 	list *megadeck = &dummy_head;
-
 	int cards_left = 0;
-	cards_left = create_megadeck(megadeck, 2);
+	int num_decks = 2;
+	card *cards[MAX_CARD_HAND] = {0};
+	int num_cards = 0;
 
-	//list *aux = megadeck->next; // dummy head
-	//while (aux) {
-	//	printf("suit %d: id %d\n",
-	//		  ((card *) aux->payload)->suit, ((card *) aux->payload)->id);
-	//	aux = aux->next;
-	//}
+	give_card(megadeck, &cards_left, num_decks, cards, &num_cards);
+	give_card(megadeck, &cards_left, num_decks, cards, &num_cards);
 
-	stack dummy_tail = {NULL, NULL};
-	stack *player_cards = &dummy_tail;
-
-	cards_left = give_card(megadeck, &player_cards, cards_left);
-	cards_left = give_card(megadeck, &player_cards, cards_left);
-	cards_left = give_card(megadeck, &player_cards, cards_left);
-	cards_left = give_card(megadeck, &player_cards, cards_left);
-	printf("cards_left = %d\n", cards_left);
-
-	stack *aux = player_cards;
-	while (aux->next) { // enquanto não chegámos ao dummy tail
-		printf("%d: %d\n", ((card *) aux->payload)->suit, ((card *) aux->payload)->id);
-		aux = aux->next;
-	}
+	for (int i = 0; i < num_cards; i++)
+		printf("suit: %d id: %d\n", cards[i]->suit, cards[i]->id);
 
 	destroy_megadeck(megadeck);
 }
 
-int create_megadeck(list *head, int num_decks)
+int create_megadeck(list *megadeck, int num_decks)
 {
 	int total_cards = 0;
 
@@ -63,7 +51,7 @@ int create_megadeck(list *head, int num_decks)
 				card *cur_card = (card *) calloc(1, sizeof(card));
 				cur_card->suit = j;
 				cur_card->id = k;
-				list_append(head, cur_card);
+				list_append(megadeck, cur_card);
 			}
 
 	total_cards = num_decks * DECK_SIZE;
@@ -82,25 +70,33 @@ void destroy_megadeck(list *head)
 	}
 }
 
-int give_card(list *megadeck, stack **player_cards, int cards_left)
+int give_card(
+	list *megadeck, int *cards_left, int num_decks,
+	card *cards[MAX_CARD_HAND], int *num_cards)
 {
-	int random = rand() % cards_left;
+	int random = 0;
+
+	if (*num_cards == MAX_CARD_HAND)
+		// TODO: o jogador não pode receber mais cartas
+		return -1;
+
+	if (!*cards_left)
+		*cards_left = create_megadeck(megadeck, num_decks);
+
+	random = rand() % *cards_left;
 
 	list *aux = megadeck->next; // dummy head
 	for (int i = 0; i < random; i++) {
 		if (aux->next)
 			aux = aux->next;
 		else
-			// o que queremos remover não existe
-			exit(EXIT_FAILURE);
+			// TODO: a carta que queremos dar não existe
+			return -1;
 	}
 
-	//printf("rand: %d\n", random);
-	//printf("suit: %d id: %d\n", ((card *) aux->payload)->suit, ((card *) aux->payload)->id);
-	stack_push(player_cards, aux->payload);
-	//printf("suit: %d id: %d\n", ((card *) (*player_cards)->payload)->suit, ((card *) (*player_cards)->payload)->id);
+	cards[*num_cards] = (card *) aux->payload;
+	++*num_cards;
 	list_remove(aux);
-	cards_left--;
-
-	return cards_left;
+	--*cards_left;
+	return 0;
 }

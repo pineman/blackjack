@@ -17,7 +17,8 @@ typedef struct player {
 	int money;
 	int bet;
 	int points;
-	//stack *cards;
+	card cards[MAX_CARD_HAND];
+	int num_cards;
 	int wins;
 	int losses;
 	int draws;
