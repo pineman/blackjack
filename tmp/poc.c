@@ -2,21 +2,15 @@
 #include <stdlib.h>
 #include <time.h>
 #include "list.h"
+#include "structs.h"
 
 // estes não ficam aqui!!
 #define	DECK_SIZE 52
 #define SUIT_SIZE 13
-#define MAX_CARD_HAND 11
-
-enum suits {clubs, diamonds, hearts, spades};
-
-typedef struct card {
-	enum suits suit;
-	int id; // 0 a 12
-} card;
 
 int create_megadeck(list *head, int num_decks);
 void destroy_megadeck(list *head);
+void destroy_player_cards(card *player_cards[MAX_CARD_HAND], int *num_cards);
 int give_card(
 	list *megadeck, int *cards_left, int num_decks,
 	card *cards[MAX_CARD_HAND], int *num_cards);
@@ -24,19 +18,24 @@ int give_card(
 int main()
 {
 	srand(time(NULL));
+
 	list dummy_head = {NULL, NULL, NULL};
 	list *megadeck = &dummy_head;
 	int cards_left = 0;
 	int num_decks = 2;
+
 	card *cards[MAX_CARD_HAND] = {0};
 	int num_cards = 0;
 
+	give_card(megadeck, &cards_left, num_decks, cards, &num_cards);
+	give_card(megadeck, &cards_left, num_decks, cards, &num_cards);
 	give_card(megadeck, &cards_left, num_decks, cards, &num_cards);
 	give_card(megadeck, &cards_left, num_decks, cards, &num_cards);
 
 	for (int i = 0; i < num_cards; i++)
 		printf("suit: %d id: %d\n", cards[i]->suit, cards[i]->id);
 
+	destroy_player_cards(cards, &num_cards);
 	destroy_megadeck(megadeck);
 }
 
@@ -68,6 +67,13 @@ void destroy_megadeck(list *head)
 		free(tmp->payload);
 		free(tmp);
 	}
+}
+
+void destroy_player_cards(card *player_cards[MAX_CARD_HAND], int *num_cards)
+{
+	for (int i = 0; i < *num_cards+2; i++)
+		free(player_cards[i]);
+	*num_cards = 0;
 }
 
 int give_card(

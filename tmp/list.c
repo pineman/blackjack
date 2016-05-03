@@ -51,4 +51,5 @@ bool list_remove(list *node)
 	list *to_rm = node;
 	node->next->prev = to_rm->prev;
 	node->prev->next = to_rm->next;
+	free(to_rm);
 }
