@@ -1,9 +1,8 @@
 #include <stdbool.h>
+#include "stack.h"
 
 #define MAX_PLAYERS 4
-#define MAX_PLAYER_NAME 8
-#define MAX_CARD_HAND 11
-#define	MAX_LEN	64
+#define MAX_PLAYER_NAME 8+1
 
 enum suits {clubs, diamonds, hearts, spades};
 enum player_type {EA, HU};
@@ -16,26 +15,27 @@ typedef struct card {
 
 struct player_struct {
 	int player_type;
-	char name[MAX_PLAYER_NAME+1];
+	char name[MAX_PLAYER_NAME];
 	int position;
 	bool playing;
 	int money;
 	int bet;
 	int points;
-	card *cards[MAX_CARD_HAND];
+	stack *cards;
 	int num_cards;
 	int wins;
 	int losses;
 	int draws;
 	//enum status;
-} player_default = {0, {0}, 0, false, 0, 0, 0, {0}, 0, 0, 0, 0};
+};
+static struct player_struct default_player = {0, {0}, 0, false, 0, 0, 0, NULL, 0, 0, 0, 0};
 typedef struct player_struct player;
 
 typedef struct config {
 	int num_decks;
 	int num_players;
 	int player_type[MAX_PLAYERS];
-	char player_names[MAX_PLAYERS][MAX_LEN];
+	char player_names[MAX_PLAYERS][MAX_PLAYER_NAME];
 	float money[MAX_PLAYERS];
 	float bets[MAX_PLAYERS];
 } config;
