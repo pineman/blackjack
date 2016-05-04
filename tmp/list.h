@@ -1,8 +1,6 @@
 #ifndef LIST_H
 #define LIST_H
 
-#include <stdbool.h>
-
 // Doubly-linked list with dummy head nodes
 typedef struct list {
 	void *payload; // payload genérica
@@ -10,8 +8,10 @@ typedef struct list {
 	struct list *prev;
 } list;
 
+static list default_dummy_head = {NULL, NULL, NULL};
+
 void list_prepend(list *head, void *payload);
 void list_append(list *head, void *payload);
-bool list_remove(list *head);
+void *list_remove(list *node);
 
 #endif

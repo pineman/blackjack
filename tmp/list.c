@@ -46,23 +46,26 @@ void list_append(list *head, void *payload)
 	tail->next = new_tail;
 }
 
-bool list_remove(list *node)
+void *list_remove(list *node)
 {
 	list *to_rm = node;
+	void *payload = to_rm->payload;
 
 	if (node->next) {
-		// removing tail
 		node->next->prev = to_rm->prev;
+	}
+	else {
+		// removing tail, it has no next, skip.
 	}
 
 	if (node->prev) {
 		node->prev->next = to_rm->next;
 	}
 	else {
-		// TODO: removing dummy head!! panic
-		return false;
+		// TODO: removing dummy head!! it has no prev! panic
+		return NULL;
 	}
 
 	free(to_rm);
-	return true;
+	return payload;
 }
