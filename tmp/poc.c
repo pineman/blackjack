@@ -56,6 +56,8 @@ int main()
 		printf("cards_left = %d\n\n", cards_left);
 	}
 
+	print_reverse_stack(((player *) players->next->payload)->cards);
+
 	destroy_stack(&player_cards);
 	destroy_list(players);
 	destroy_list(megadeck);
@@ -148,5 +150,19 @@ void print_list(list *megadeck)
 		if (aux->payload)
 			printf("suit: %d id: %d\n", ((card *) aux->payload)->suit, ((card *) aux->payload)->id);
 		aux = aux->next;
+	}
+}
+
+void print_reverse_stack(stack *sp)
+{
+	stack *aux = sp;
+	stack *tmp = NULL;
+
+	while (tmp != sp) {
+		aux = sp;
+		while (aux->next != tmp)
+			aux = aux->next;
+		printf("suit: %d id: %d\n", ((card *) aux->payload)->suit, ((card *) aux->payload)->id);
+		tmp = aux;
 	}
 }
