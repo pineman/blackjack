@@ -3,8 +3,8 @@
 #include <SDL2/SDL_image.h>
 #include "sdl.h"
 
-const char myName[] = "Prof. Joao Ascenso";
-const char myNumber[] = "IST11111";
+const char myName[] = "João Pinheiro João Freitas";
+const char myNumber[] = "ist84086          ist84093";
 const char * playerNames[] = {"Player 1", "Player 2", "Player 3", "Player 4"};
 
 /**
@@ -256,7 +256,7 @@ int RenderText(int x, int y, const char *text, TTF_Font *_font, SDL_Color *_colo
 	solidRect.x = x;
 	solidRect.y = y;
     // create a surface from the string text with a predefined font
-	text_surface = TTF_RenderText_Blended(_font,text,*_color);
+	text_surface = TTF_RenderUTF8_Blended(_font,text,*_color);
 	if(!text_surface)
 	{
 	    printf("TTF_RenderText_Blended: %s\n", TTF_GetError());
