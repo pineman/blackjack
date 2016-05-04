@@ -11,5 +11,6 @@ int create_megadeck(list *megadeck, int num_decks);
 void destroy_list(list *head);
 void destroy_stack(stack **cards);
 void print_list(list *megadeck);
+void print_reverse_stack(stack *sp);
 
 #endif
