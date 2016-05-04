@@ -21,7 +21,7 @@ config *read_config(char *filename)
 {
 	char *str;
 	char *buffer;
-	buffer = (char *) malloc(MAX_LEN*sizeof(char));
+	buffer = (char *) malloc(MAX_PLAYER_NAME*sizeof(char));
 
 	config *game_config = NULL;
 	game_config = (config *) malloc(sizeof(config));
@@ -34,9 +34,10 @@ config *read_config(char *filename)
 		exit(EXIT_FAILURE);
 	}
 
-	fgets(buffer, MAX_LEN, fp);
+	fgets(buffer, MAX_PLAYER_NAME, fp);
 	sscanf(buffer, "%d-%d", &(game_config->num_decks),
 							&(game_config->num_players));
+	// TODO: checkar número máximo de players (MAX_PLAYERS)
 
 	if (game_config->num_decks > 8 || game_config->num_decks < 4){
 		puts("Erro: numero de baralhos invalido!");
@@ -48,7 +49,7 @@ config *read_config(char *filename)
 		exit(EXIT_FAILURE);
 	}
 
-	for (int i=0; fgets(buffer, MAX_LEN, fp) != NULL && i < game_config->num_players; i++) {
+	for (int i=0; fgets(buffer, MAX_PLAYER_NAME, fp) != NULL && i < game_config->num_players; i++) {
 		str = strtok(buffer, "-");
 		if (!strcmp(str, "HU"))
 			game_config->player_type[i] = HU;
@@ -63,6 +64,7 @@ config *read_config(char *filename)
 		strcpy(game_config->player_names[i], str);
 
 		str = strtok(NULL, "\0");
+		// TODO: segfault aqui? freitas help
 		sscanf(str, "%f-%f", &game_config->money[i], &game_config->bets[i]);
 
 		if (game_config->money[i] < 10 || game_config->money[i] > 500) {
