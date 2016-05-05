@@ -1,12 +1,9 @@
 #ifndef STACK_H
 #define STACK_H
 
-typedef struct stack {
-	void *payload;
-	struct stack *next;
-} stack;
+#include "structs.h"
 
-void stack_push(stack **sp, void *payload);
-void *stack_pop(stack **sp);
+void stack_push(Stack **sp, Card *card);
+Card *stack_pop(Stack **sp);
 
 #endif

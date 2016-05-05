@@ -2,16 +2,15 @@
 #define LIST_H
 
 // Doubly-linked list with dummy head nodes
-typedef struct list {
+struct List {
 	void *payload; // payload genérica
-	struct list *next;
-	struct list *prev;
-} list;
+	struct List *next;
+	struct List *prev;
+};
+typedef struct List List;
 
-static list default_dummy_head = {NULL, NULL, NULL};
-
-void list_prepend(list *head, void *payload);
-void list_append(list *head, void *payload);
-void *list_remove(list *node);
+//void list_prepend(List *head, void *payload);
+void list_append(List *head, void *payload);
+void *list_remove(List *node);
 
 #endif

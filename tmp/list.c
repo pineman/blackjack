@@ -19,25 +19,14 @@
 #include <stdbool.h>
 #include "list.h"
 
-void list_prepend(list *head, void *payload)
+void list_append(List *head, void *payload)
 {
-	list *new = (list *) calloc((size_t) 1, sizeof(list));
-
-	new->payload = payload;
-
-	new->next = head->next;
-	new->prev = head;
-	head->next = new;
-}
-
-void list_append(list *head, void *payload)
-{
-	list *aux = head;
+	List *aux = head;
 	while(aux->next)
 		aux = aux->next;
-	list *tail = aux;
+	List *tail = aux;
 
-	list *new_tail = (list *) calloc((size_t) 1, sizeof(list));
+	List *new_tail = (List *) calloc((size_t) 1, sizeof(List));
 
 	new_tail->payload = payload;
 
@@ -46,9 +35,9 @@ void list_append(list *head, void *payload)
 	tail->next = new_tail;
 }
 
-void *list_remove(list *node)
+void *list_remove(List *node)
 {
-	list *to_rm = node;
+	List *to_rm = node;
 	void *payload = to_rm->payload;
 
 	if (node->next) {
