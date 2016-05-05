@@ -34,7 +34,7 @@ config *read_config(char *filename)
 		exit(EXIT_FAILURE);
 	}
 
-	fgets(buffer, MAX_PLAYER_NAME, fp);
+	fgets(buffer, MAX, fp);
 	sscanf(buffer, "%d-%d", &(game_config->num_decks),
 							&(game_config->num_players));
 	// TODO: checkar número máximo de players (MAX_PLAYERS)
@@ -49,7 +49,7 @@ config *read_config(char *filename)
 		exit(EXIT_FAILURE);
 	}
 
-	for (int i=0; fgets(buffer, MAX_PLAYER_NAME, fp) != NULL && i < game_config->num_players; i++) {
+	for (int i=0; fgets(buffer, MAX, fp) != NULL && i < game_config->num_players; i++) {
 		str = strtok(buffer, "-");
 		if (!strcmp(str, "HU"))
 			game_config->player_type[i] = HU;
@@ -79,14 +79,13 @@ config *read_config(char *filename)
 			exit(EXIT_FAILURE);
 		}
 	}
-
+	puts("butterfly1");
 	return game_config;
 }
 
 int main()
 {
 	config *game_config = read_config("parametros.txt");
-
 	printf("num_decks = %d\n", game_config->num_decks);
 	printf("num_players = %d\n", game_config->num_players);
 	for (int i = 0; i < game_config->num_players; i++) {
