@@ -35,7 +35,7 @@ void RenderTable(int _money[], SDL_Surface *_img[], SDL_Renderer* _renderer)
     SDL_RenderClear( _renderer );
 
     // this opens a font style and sets a size
-    serif = TTF_OpenFont("FreeSerif.ttf", 16);
+    serif = TTF_OpenFont("assets//FreeSerif.ttf", 16);
     if(!serif)
     {
         printf("TTF_OpenFont: %s\n", TTF_GetError());
@@ -179,7 +179,7 @@ void LoadCards(SDL_Surface **_cards)
     for (i = 0 ; i < MAX_DECK_SIZE; i++ )
     {
         // create the filename !
-        sprintf(filename, ".//cartas//carta_%02d.png", i+1);
+        sprintf(filename, ".//assets//cartas//carta_%02d.png", i+1);
         // loads the image !
         _cards[i] = IMG_Load(filename);
         // check for errors: deleted files ?
@@ -190,7 +190,7 @@ void LoadCards(SDL_Surface **_cards)
         }
     }
     // loads the card back
-    _cards[i] = IMG_Load(".//cartas//carta_back.jpg");
+    _cards[i] = IMG_Load(".//assets//cartas//carta_back.jpg");
     if (_cards[i] == NULL)
     {
         printf("Unable to load image: %s\n", SDL_GetError());
@@ -290,7 +290,7 @@ void InitEverything(int width, int height, SDL_Surface *_img[], SDL_Window** _wi
     *_renderer = CreateRenderer(width, height, *_window);
 
     // load the table texture
-    _img[0] = IMG_Load("table_texture.png");
+    _img[0] = IMG_Load("assets//table_texture.png");
     if (_img[0] == NULL)
     {
         printf("Unable to load image: %s\n", SDL_GetError());
@@ -298,7 +298,7 @@ void InitEverything(int width, int height, SDL_Surface *_img[], SDL_Window** _wi
     }
 
     // load IST logo
-    _img[1] = SDL_LoadBMP("ist_logo.bmp");
+    _img[1] = SDL_LoadBMP("assets//ist_logo.bmp");
     if (_img[1] == NULL)
     {
         printf("Unable to load bitmap: %s\n", SDL_GetError());

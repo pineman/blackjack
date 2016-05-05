@@ -2,6 +2,8 @@
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_image.h>
 #include "main.h"
+#include "logic.h"
+#include "file.h"
 #include "sdl.h"
 
 /**
@@ -27,7 +29,7 @@ int main(int argc, char *argv[])
     // loads the cards images
     LoadCards(cards);
 
-	// parse_args(argc, argv); ?
+	// parse_args(argc, argv); ? --> this should be in file.c
 
 	// list dummy_head_players = default_dummy_head;
 	// list *players = &dummy_head_players;

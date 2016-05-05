@@ -8,7 +8,6 @@ enum suits {clubs, diamonds, hearts, spades};
 enum player_type {EA, HU};
 //enum status {blackjack, bust, stand, hit} // double, surrender
 
-
 typedef struct Card {
 	int suit;
 	int id;
