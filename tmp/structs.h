@@ -13,23 +13,32 @@ typedef struct card {
 	int id;
 } card;
 
-struct player_struct {
+struct _player {
 	int player_type;
 	char name[MAX_PLAYER_NAME+1];
 	int position;
 	bool playing;
 	int money;
 	int bet;
-	int points;
 	stack *cards;
 	int num_cards;
+	int points;
 	int wins;
 	int losses;
 	int draws;
 	//enum status;
 };
-static struct player_struct default_player = {0, {0}, 0, false, 0, 0, 0, NULL, 0, 0, 0, 0};
-typedef struct player_struct player;
+static struct _player default_player = {0, {0}, 0, false, 0, 0, 0, NULL, 0, 0, 0, 0};
+typedef struct _player player;
+
+struct __house {
+	int money;
+	stack *cards;
+	int num_cards;
+	int points;
+}
+static struct _house default_house = {0, NULL, 0, 0};
+typedef struct __house _house;
 
 typedef struct config {
 	int num_decks;

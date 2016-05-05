@@ -27,6 +27,20 @@ int main(int argc, char *argv[])
     // loads the cards images
     LoadCards(cards);
 
+	// parse_args(argc, argv); ?
+
+	// list dummy_head_players = default_dummy_head;
+	// list *players = &dummy_head_players;
+
+	// this shall call read_config, update players list and num_decks
+	// const int num_decks = init_game(players, filename);
+
+	// list dummy_head_megadeck = default_dummy_head;
+	// o give_card faz init do megadeck automagicamente
+	// list *megadeck = &dummy_head_megadeck;
+
+	// _house house = default_player; // struct _house para a casa??
+
     // put down some cards just for testing purposes: for you to remove !
     player_cards[0][0] = 0;
     player_cards[0][1] = 15;
@@ -61,14 +75,24 @@ int main(int argc, char *argv[])
 				switch (event.key.keysym.sym)
 				{
 					case SDLK_q:
+						// write_stats(players, house);
 						quit = 1;
 						break;
 					case SDLK_s:
-                        // stand !
-						// todo
+                        // stand(players, house, megadeck);
 					case SDLK_h:
-						// hit !
-                        // todo
+						// hit(players, house, megadeck);
+					case SDLK_n:
+						// new(players, house, megadeck);
+					case SDLK_a:
+						// this is tricky.
+						// do we keep old players (i.e.in the list players,
+						// and know if theyre playing and their position
+						// by special vars?
+						// or do we remove them from the list and
+						// copy their information to a static list
+						// in write_stats?
+						// add_player(players);
 					default:
 						break;
 				}
