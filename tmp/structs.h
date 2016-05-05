@@ -2,8 +2,7 @@
 #include "stack.h"
 
 #define MAX_PLAYERS 4
-#define MAX_PLAYER_NAME 8+1
-#define MAX 64
+#define MAX_PLAYER_NAME 8
 
 enum suits {clubs, diamonds, hearts, spades};
 enum player_type {EA, HU};
@@ -16,7 +15,7 @@ typedef struct card {
 
 struct player_struct {
 	int player_type;
-	char name[MAX_PLAYER_NAME];
+	char name[MAX_PLAYER_NAME+1];
 	int position;
 	bool playing;
 	int money;
@@ -36,9 +35,9 @@ typedef struct config {
 	int num_decks;
 	int num_players;
 	int player_type[MAX_PLAYERS];
-	char player_names[MAX_PLAYERS][MAX_PLAYER_NAME];
-	float money[MAX_PLAYERS];
-	float bets[MAX_PLAYERS];
+	char player_names[MAX_PLAYERS][MAX_PLAYER_NAME+1];
+	int money[MAX_PLAYERS];
+	int bets[MAX_PLAYERS];
 } config;
 
 #endif

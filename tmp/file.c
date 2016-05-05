@@ -17,11 +17,12 @@ typedef struct config {
 	float bets[MAX_PLAYERS];
 } config;
 
+// TODO: fazer print da linha com erro
+
 config *read_config(char *filename)
 {
 	char *str;
-	char *buffer;
-	buffer = (char *) malloc(MAX_PLAYER_NAME*sizeof(char));
+	char buffer[MAX_LINE_LEN];
 
 	config *game_config = NULL;
 	game_config = (config *) malloc(sizeof(config));
@@ -34,10 +35,9 @@ config *read_config(char *filename)
 		exit(EXIT_FAILURE);
 	}
 
-	fgets(buffer, MAX, fp);
+	fgets(buffer, MAX_LINE_LEN, fp);
 	sscanf(buffer, "%d-%d", &(game_config->num_decks),
 							&(game_config->num_players));
-	// TODO: checkar número máximo de players (MAX_PLAYERS)
 
 	if (game_config->num_decks > 8 || game_config->num_decks < 4){
 		puts("Erro: numero de baralhos invalido!");
@@ -49,7 +49,7 @@ config *read_config(char *filename)
 		exit(EXIT_FAILURE);
 	}
 
-	for (int i=0; fgets(buffer, MAX, fp) != NULL && i < game_config->num_players; i++) {
+	for (int i=0; fgets(buffer, MAX_LINE_LEN, fp) != NULL && i < game_config->num_players; i++) {
 		str = strtok(buffer, "-");
 		if (!strcmp(str, "HU"))
 			game_config->player_type[i] = HU;
@@ -61,11 +61,15 @@ config *read_config(char *filename)
 		}
 
 		str = strtok(NULL, "-");
+		// TODO: player_name é no máximo MAX_PLAYER_NAME
+		if (strlen(str) > MAX_PLAYER_NAME) {
+			puts("Erro: Nome do jogador demasiado grande!");
+			exit(EXIT_FAILURE);
+		}
 		strcpy(game_config->player_names[i], str);
 
 		str = strtok(NULL, "\0");
-		// TODO: segfault aqui? freitas help
-		sscanf(str, "%f-%f", &game_config->money[i], &game_config->bets[i]);
+		sscanf(str, "%d-%d", &game_config->money[i], &game_config->bets[i]);
 
 		if (game_config->money[i] < 10 || game_config->money[i] > 500) {
 			puts("Erro: Valor inicial de dinheiro invalido!");
@@ -91,7 +95,7 @@ int main()
 	for (int i = 0; i < game_config->num_players; i++) {
 		printf("player_type[%d] = %s\n", i, game_config->player_type[i] == HU ? "HU" : "EA");
 		printf("player_names[%d] = %s\n", i, game_config->player_names[i]);
-		printf("money[%d] = %f\n", i, game_config->money[i]);
-		printf("bets[%d] = %f\n", i, game_config->bets[i]);
+		printf("money[%d] = %d\n", i, game_config->money[i]);
+		printf("bets[%d] = %d\n", i, game_config->bets[i]);
 	}
 }
