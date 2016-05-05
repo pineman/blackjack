@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "file.h"
-#include "logic.h"
+#include "structs.h"
 
 // TODO: fazer print da linha com erro
 
@@ -74,4 +74,17 @@ Config *read_config(char *filename)
 	}
 
 	return game_config;
+}
+
+int main()
+{
+	Config *game_config = read_config("parametros.txt");
+	printf("num_decks = %d\n", game_config->num_decks);
+	printf("num_players = %d\n", game_config->num_players);
+	for (int i = 0; i < game_config->num_players; i++) {
+		printf("player_type[%d] = %s\n", i, game_config->player_type[i] == HU ? "HU" : "EA");
+		printf("player_names[%d] = %s\n", i, game_config->player_names[i]);
+		printf("money[%d] = %d\n", i, game_config->money[i]);
+		printf("bets[%d] = %d\n", i, game_config->bets[i]);
+	}
 }
