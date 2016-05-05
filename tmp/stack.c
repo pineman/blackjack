@@ -1,25 +1,26 @@
 #include <stdlib.h>
 #include "stack.h"
+#include "structs.h"
 
-void stack_push(stack **sp, void *payload)
+void stack_push(Stack **sp, Card *card)
 {
-	stack *old = *sp;
-	stack *new = (stack *) calloc((size_t) 1, sizeof(stack));
+	Stack *old = *sp;
+	Stack *new = (Stack *) calloc((size_t) 1, sizeof(Stack));
 	new->next = old;
-	new->payload = payload;
+	new->card = card;
 	*sp = new;
 }
 
-void *stack_pop(stack **sp)
+Card *stack_pop(Stack **sp)
 {
 	if (!*sp)
 		// TODO: trying to remove NULL stack
 		return NULL;
 
-	stack *pop = *sp;
-	void *payload = pop->payload;
+	Stack *pop = *sp;
+	Card *card = pop->card;
 	*sp = pop->next;
 	free(pop);
 
-	return payload;
+	return card;
 }

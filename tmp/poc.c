@@ -22,17 +22,15 @@ int main()
 	// generate 'fake' data
 	// in the real program, these will be initialized once the game begins
 	// init megadeck and players list
-	list dummy_head_megadeck = default_dummy_head;
-	list dummy_head_players = default_dummy_head;
-	list *megadeck = &dummy_head_megadeck;
-	list *players = &dummy_head_players;
+	List *megadeck = (List *) calloc((size_t) 1, sizeof(List));
+	List *players = (List *) calloc((size_t) 1, sizeof(List));
 
 	// init config
 	int cards_left = 0;
 	int num_decks = 2;
 
 	// init player
-	player *pineman = (player *) calloc((size_t) 1, sizeof(player));
+	Player *pineman = (Player *) calloc((size_t) 1, sizeof(Player));
 	// append him to the players list
 	list_append(players, pineman);
 
@@ -42,21 +40,21 @@ int main()
 	// this var is not directly reusable because the stack pointer
 	// will change all the time, so we need to fetch the current version
 	// using the same big ass expression...
-	stack *player_cards = ((player *) players->next->payload)->cards;
+	Stack *player_cards = ((Player *) players->next->payload)->cards;
 	printf("stack: %p\n\n", player_cards);
 
 	for (int i = 0; i < 11; i++) {
-		give_card(megadeck, &cards_left, num_decks, (player *) players->next->payload);
+		give_card(megadeck, &cards_left, num_decks, (Player *) players->next->payload);
 		// ...right here.
-		player_cards = ((player *) players->next->payload)->cards;
+		player_cards = ((Player *) players->next->payload)->cards;
 		printf("stack: %p\n", player_cards);
 		printf("got suit: %d id: %d\n",
-			  ((card *) player_cards->payload)->suit,
-			  ((card *) player_cards->payload)->id);
+			  player_cards->card->suit,
+			  player_cards->card->id);
 		printf("cards_left = %d\n\n", cards_left);
 	}
 
-	print_reverse_stack(((player *) players->next->payload)->cards);
+	print_reverse_stack(((Player *) players->next->payload)->cards);
 
 	destroy_stack(&player_cards);
 	destroy_list(players);
@@ -66,7 +64,7 @@ int main()
 	// WE LOVE POINTERS!!!
 }
 
-int give_card(list *megadeck, int *cards_left, int num_decks, player *player)
+int give_card(List *megadeck, int *cards_left, int num_decks, Player *player)
 {
 	int random = 0;
 
@@ -84,24 +82,24 @@ int give_card(list *megadeck, int *cards_left, int num_decks, player *player)
 	// nós a partir do dummy head node, chegamos à tail)
 	random = rand() % *cards_left + 1;
 
-	list *random_node = megadeck;
+	List *random_card = megadeck;
 	for (int i = 0; i < random; i++) {
-		if (random_node->next)
-			random_node = random_node->next;
+		if (random_card->next)
+			random_card = random_card->next;
 		else
 			// TODO: a carta que queremos dar não existe
 			return -1;
 	}
 
-	stack_push(&(player->cards), random_node->payload);
-	printf("given suit: %d id: %d\n", ((card *) random_node->payload)->suit, ((card *) random_node->payload)->id);
+	stack_push(&(player->cards), random_card->payload);
+	printf("given suit: %d id: %d\n", ((Card *) random_card->payload)->suit, ((Card *) random_card->payload)->id);
 	player->num_cards++;
-	list_remove(random_node);
+	list_remove(random_card);
 	--*cards_left;
 	return 0;
 }
 
-int create_megadeck(list *megadeck, int num_decks)
+int create_megadeck(List *megadeck, int num_decks)
 {
 	int total_cards = 0;
 
@@ -109,7 +107,7 @@ int create_megadeck(list *megadeck, int num_decks)
 		for(int j = clubs; j <= spades; j++)
 			for(int k = 0; k < SUIT_SIZE; k++) {
 				//cur_card = cards[i*DECK_SIZE + j*SUIT_SIZE + k];
-				card *cur_card = (card *) calloc(1, sizeof(card));
+				Card *cur_card = (Card *) calloc(1, sizeof(Card));
 				cur_card->suit = j;
 				cur_card->id = k;
 				list_append(megadeck, cur_card);
@@ -119,19 +117,20 @@ int create_megadeck(list *megadeck, int num_decks)
 	return total_cards;
 }
 
-void destroy_list(list *head)
+void destroy_list(List *head)
 {
-	list *aux = head->next; // dummy head
-	list *tmp = NULL;
+	List *aux = head->next; // dummy head
+	List *tmp = NULL;
 	while (aux) {
 		tmp = aux;
 		aux = tmp->next;
 		free(tmp->payload);
 		free(tmp);
 	}
+	free(head);
 }
 
-void destroy_stack(stack **cards)
+void destroy_stack(Stack **cards)
 {
 	while (*cards) {
 		printf("stack: %p\n", *cards);
@@ -140,29 +139,29 @@ void destroy_stack(stack **cards)
 	printf("stack: %p\n", *cards);
 }
 
-void print_list(list *megadeck)
+void print_list(List *megadeck)
 {
-	list *aux = megadeck;
+	List *aux = megadeck;
 	int i = 1;
 	while (aux) {
 		printf("elements = %d ", i++);
 		printf("node: %p, node->prev: %p, node->next: %p\n", aux, aux->prev, aux->next);
 		if (aux->payload)
-			printf("suit: %d id: %d\n", ((card *) aux->payload)->suit, ((card *) aux->payload)->id);
+			printf("suit: %d id: %d\n", ((Card *) aux->payload)->suit, ((Card *) aux->payload)->id);
 		aux = aux->next;
 	}
 }
 
-void print_reverse_stack(stack *sp)
+void print_reverse_stack(Stack *sp)
 {
-	stack *aux = sp;
-	stack *tmp = NULL;
+	Stack *aux = sp;
+	Stack *tmp = NULL;
 
 	while (tmp != sp) {
 		aux = sp;
 		while (aux->next != tmp)
 			aux = aux->next;
-		printf("suit: %d id: %d\n", ((card *) aux->payload)->suit, ((card *) aux->payload)->id);
+		printf("suit: %d id: %d\n", aux->card->suit, aux->card->id);
 		tmp = aux;
 	}
 }

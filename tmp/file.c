@@ -2,30 +2,18 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
-#define MAX_PLAYERS 4
-#define	MAX_LEN	64
-
-enum type_player {EA, HU};
-
-typedef struct config {
-	int num_decks;
-	int num_players;
-	int player_type[MAX_PLAYERS];
-	char player_names[MAX_PLAYERS][MAX_LEN];
-	float money[MAX_PLAYERS];
-	float bets[MAX_PLAYERS];
-} config;
+#include "file.h"
+#include "structs.h"
 
 // TODO: fazer print da linha com erro
 
-config *read_config(char *filename)
+Config *read_config(char *filename)
 {
 	char *str;
 	char buffer[MAX_LINE_LEN];
 
-	config *game_config = NULL;
-	game_config = (config *) malloc(sizeof(config));
+	Config *game_config = NULL;
+	game_config = (Config *) malloc(sizeof(Config));
 
 	FILE *fp = NULL;
 	fp = fopen(filename, "r");
@@ -83,13 +71,13 @@ config *read_config(char *filename)
 			exit(EXIT_FAILURE);
 		}
 	}
-	puts("butterfly1");
+
 	return game_config;
 }
 
 int main()
 {
-	config *game_config = read_config("parametros.txt");
+	Config *game_config = read_config("parametros.txt");
 	printf("num_decks = %d\n", game_config->num_decks);
 	printf("num_players = %d\n", game_config->num_players);
 	for (int i = 0; i < game_config->num_players; i++) {
