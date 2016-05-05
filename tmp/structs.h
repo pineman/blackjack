@@ -3,6 +3,7 @@
 
 #define MAX_PLAYERS 4
 #define MAX_PLAYER_NAME 8+1
+#define MAX 64
 
 enum suits {clubs, diamonds, hearts, spades};
 enum player_type {EA, HU};
