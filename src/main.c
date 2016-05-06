@@ -29,19 +29,17 @@ int main(int argc, char *argv[])
     // loads the cards images
     LoadCards(cards);
 
-	// parse_args(argc, argv); ? --> this should be in file.c
+	// parse_args(argc, argv); ? --> this should be defined in file.c
 
-	// list dummy_head_players = default_dummy_head;
-	// list *players = &dummy_head_players;
+	// List *players = (List *) calloc((size_t) 1, sizeof(List));
 
-	// this shall call read_config, update players list and num_decks
+	// this shall call read_config, update players list and return num_decks
 	// const int num_decks = init_game(players, filename);
 
-	// list dummy_head_megadeck = default_dummy_head;
 	// o give_card faz init do megadeck automagicamente
-	// list *megadeck = &dummy_head_megadeck;
+	// List *megadeck = (List *) calloc((size_t) 1, sizeof(List));
 
-	// _house house = default_player; // struct _house para a casa??
+	// House *house = (House *) calloc((size_t) 1, sizeof(House));
 
     // put down some cards just for testing purposes: for you to remove !
     player_cards[0][0] = 0;
