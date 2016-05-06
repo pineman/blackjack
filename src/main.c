@@ -1,3 +1,6 @@
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_image.h>
@@ -24,17 +27,22 @@ int main(int argc, char *argv[])
     int pos_house_hand = 0;
     int pos_player_hand[MAX_PLAYERS] = {0};
 
+	if (argc != 2)
+		// TODO: error msg
+		exit(EXIT_FAILURE);
+
+	char *filename = argv[1];
+
 	// initialize graphics
 	InitEverything(WIDTH_WINDOW, HEIGHT_WINDOW, imgs, &window, &renderer);
     // loads the cards images
     LoadCards(cards);
 
-	// parse_args(argc, argv); ? --> this should be defined in file.c
+	Config *config = read_config(filename);
 
-	// List *players = (List *) calloc((size_t) 1, sizeof(List));
-
-	// this shall call read_config, update players list and return num_decks
-	// const int num_decks = init_game(players, filename);
+	List *players = (List *) calloc((size_t) 1, sizeof(List));
+	// this shall update players list and return num_decks
+	const int num_decks = init_game(config, players, filename);
 
 	// o give_card faz init do megadeck automagicamente
 	// List *megadeck = (List *) calloc((size_t) 1, sizeof(List));
@@ -75,24 +83,24 @@ int main(int argc, char *argv[])
 				switch (event.key.keysym.sym)
 				{
 					case SDLK_q:
-						// write_stats(players, house);
+						// write_stats(players, house); --> in file.c
 						quit = 1;
 						break;
 					case SDLK_s:
-                        // stand(players, house, megadeck);
+                        // stand(players, house, megadeck); --> in logic.c
 					case SDLK_h:
-						// hit(players, house, megadeck);
+						// hit(players, house, megadeck); --> in logic.c
 					case SDLK_n:
-						// new(players, house, megadeck);
+						// new(players, house, megadeck); --> in logic.c
 					case SDLK_a:
 						// this is tricky.
-						// do we keep old players (i.e.in the list players,
+						// do we keep old players (i.e. in the list players,
 						// and know if theyre playing and their position
 						// by special vars?
 						// or do we remove them from the list and
 						// copy their information to a static list
 						// in write_stats?
-						// add_player(players);
+						// add_player(players); // ler info do jogador de stdin --> in logic.c
 					default:
 						break;
 				}

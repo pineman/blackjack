@@ -9,9 +9,8 @@
 #define	DECK_SIZE 52
 #define SUIT_SIZE 13
 #define MAX_CARD_HAND 11
-#define MAX_PLAYER_NAME 9
+#define MAX_PLAYER_NAME 8
 
-enum suits {clubs, diamonds, hearts, spades};
 enum player_type {EA, HU};
 //enum status {blackjack, bust, stand, hit} // double, surrender
 
@@ -26,7 +25,7 @@ typedef struct Stack {
 } Stack;
 
 typedef struct Player {
-	int player_type;
+	int type;
 	char name[MAX_PLAYER_NAME+1];
 	int position;
 	bool playing;
@@ -48,13 +47,21 @@ typedef struct House {
 	int points;
 } House;
 
+typedef struct Config {
+	int num_decks;
+	int num_players;
+	int player_type[MAX_PLAYERS];
+	char player_names[MAX_PLAYERS][MAX_PLAYER_NAME+1];
+	int money[MAX_PLAYERS];
+	int bets[MAX_PLAYERS];
+} Config;
+
+int init_game(Config *config, List *players, char *filename);
 void stack_push(Stack **sp, Card *card);
 Card *stack_pop(Stack **sp);
-int give_card(List *megadeck, int *cards_left, int num_decks, Player *player);
-int create_megadeck(List *megadeck, int num_decks);
+int give_card(List *megadeck, int *cards_left, const int num_decks, Player *player);
+int create_megadeck(List *megadeck, const int num_decks);
 void destroy_list(List *head);
 void destroy_stack(Stack **cards);
-void print_list(List *megadeck);
-void print_reverse_stack(Stack *sp);
 
 #endif

@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <time.h>
+#include <string.h>
 #include "logic.h"
 #include "list.h"
 
@@ -11,6 +12,23 @@
  *
  * kek
  */
+
+int init_game(Config *config, List *players, char *filename)
+{
+	Player *new_player = NULL;
+	const int num_decks = config->num_decks;
+
+	for (int i = 0; i < config->num_players; i++) {
+		new_player = (Player *) calloc((size_t) 1, sizeof(Player));
+		strcpy(new_player->name, config->player_names[i]);
+		new_player->type = config->player_type[i];
+		new_player->money = config->money[i];
+		new_player->bet = config->bets[i];
+		list_append(players, new_player);
+	}
+
+	return num_decks;
+}
 
 void stack_push(Stack **sp, Card *card)
 {
@@ -35,7 +53,7 @@ Card *stack_pop(Stack **sp)
 	return card;
 }
 
-int give_card(List *megadeck, int *cards_left, int num_decks, Player *player)
+int give_card(List *megadeck, int *cards_left, const int num_decks, Player *player)
 {
 	int random = 0;
 
@@ -69,15 +87,15 @@ int give_card(List *megadeck, int *cards_left, int num_decks, Player *player)
 	return 0;
 }
 
-int create_megadeck(List *megadeck, int num_decks)
+int create_megadeck(List *megadeck, const int num_decks)
 {
 	int total_cards = 0;
+	Card *cur_card = NULL;
 
 	for(int i = 0; i < num_decks; i++)
-		for(int j = clubs; j <= spades; j++)
+		for(int j = 0; j < 3; j++)
 			for(int k = 0; k < SUIT_SIZE; k++) {
-				//cur_card = cards[i*DECK_SIZE + j*SUIT_SIZE + k];
-				Card *cur_card = (Card *) calloc(1, sizeof(Card));
+				cur_card = (Card *) calloc(1, sizeof(Card));
 				cur_card->suit = j;
 				cur_card->id = k;
 				list_append(megadeck, cur_card);
