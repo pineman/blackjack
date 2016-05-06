@@ -31,7 +31,7 @@ void RenderTable(List *players, SDL_Surface *_img[], SDL_Renderer* _renderer)
     SDL_Rect tableSrc, tableDest, playerRect;
     int separatorPos = (int)(0.95f*WIDTH_WINDOW); // seperates the left from the right part of the window
     int height;
-    int money
+    int money;
 
     // set color of renderer to some color
     SDL_SetRenderDrawColor( _renderer, 255, 255, 255, 255 );
@@ -71,9 +71,8 @@ void RenderTable(List *players, SDL_Surface *_img[], SDL_Renderer* _renderer)
     SDL_SetRenderDrawColor(_renderer, 255, 255, 255, 255 );
 
     // renders the areas for each player: names and money too !
-    for ( int i = 0; i < MAX_PLAYERS; i++)
-    {
-        players = players->next
+    for ( int i = 0; i < MAX_PLAYERS; i++) {
+        players = players->next;
         playerRect.x = i*(separatorPos/4-5)+10;
         playerRect.y = (int) (0.55f*HEIGHT_WINDOW);
         playerRect.w = separatorPos/4-5;
@@ -82,7 +81,6 @@ void RenderTable(List *players, SDL_Surface *_img[], SDL_Renderer* _renderer)
         sprintf(name_money_str,"%s -- %d euros", playerNames[i], ((Player *) players->payload)->money);
         RenderText(playerRect.x+20, playerRect.y-30, name_money_str, serif, &white, _renderer);
         SDL_RenderDrawRect(_renderer, &playerRect);
-
     }
 
     // destroy everything
@@ -107,7 +105,7 @@ void RenderHouseCards(House *house, SDL_Surface **_cards, SDL_Renderer* _rendere
     int div = WIDTH_WINDOW/CARD_WIDTH;
 
     Stack *tmp = NULL;
-    Stack *aux = house->cards; 
+    Stack *aux = house->cards;
 
     // drawing all house cards
     for ( card = 0; tmp != house->cards; card++) //TODO change here
@@ -142,14 +140,14 @@ void RenderHouseCards(House *house, SDL_Surface **_cards, SDL_Renderer* _rendere
 void RenderPlayerCards(List *players, SDL_Surface **_cards, SDL_Renderer* _renderer)
 {
     int pos, x, y, num_player, card;
-    Stack *head = ((Player * ) players->payload->cards);
+    Stack *head = ((Player * ) players->payload)->cards;
     Stack *aux = head;
-    Stack *tmp = NULL; 
+    Stack *tmp = NULL;
 
     // for every card of every player
     for ( num_player = 0; tmp != aux; num_player++)
     {
-        aux = head; 
+        aux = head;
         while (aux->next != tmp)
             aux = aux->next;
         for ( card = 0; card < ((Player *) players->payload)->num_cards; card++)  // change here
