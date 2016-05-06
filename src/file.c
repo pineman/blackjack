@@ -6,9 +6,46 @@
 #include "logic.h"
 
 // TODO: fazer print da linha com erro
+
+Config *read_line(char *line, Config *game_config, int count)
+{
+	char *str = strtok(line, "-");
+	if (!strcmp(str, "HU"))
+		game_config->player_type[count] = HU;
+	else if (!strcmp(str, "EA"))
+		game_config->player_type[count] = EA;
+	else {
+		puts("Erro: Tipo de jogador invalido!");
+		exit(EXIT_FAILURE);
+	}
+
+	str = strtok(NULL, "-");
+	// TODO: player_name é no máximo MAX_PLAYER_NAME
+	if (strlen(str) > MAX_PLAYER_NAME) {
+		puts("Erro: Nome do jogador demasiado grande!");
+		exit(EXIT_FAILURE);
+	}
+	strcpy(game_config->player_names[count], str);
+	str = strtok(NULL, "\0");
+	sscanf(str, "%d-%d", &game_config->money[count], &game_config->bets[count]);
+	if (game_config->money[count] < 10 || game_config->money[count] > 500) {
+		puts("Erro: Valor inicial de dinheiro invalido!");
+		exit(EXIT_FAILURE);
+	}
+
+	if (game_config->bets[count] < 2 ||
+		game_config->bets[count] > game_config->money[count] / 4)
+	{
+		puts("Valor da aposta invalido!");
+		exit(EXIT_FAILURE);
+	}
+
+	return game_config;
+
+}
+
 Config *read_config(char *filename)
 {
-	char *str;
 	char buffer[MAX_LINE_LEN];
 
 	Config *game_config = NULL;
@@ -37,40 +74,9 @@ Config *read_config(char *filename)
 	}
 
 
-	for (int i=0; fgets(buffer, MAX_LINE_LEN, fp) != NULL && i < game_config->num_players; i++) {
-		str = strtok(buffer, "-");
-		if (!strcmp(str, "HU"))
-			game_config->player_type[i] = HU;
-		else if (!strcmp(str, "EA"))
-			game_config->player_type[i] = EA;
-		else {
-			puts("Erro: Tipo de jogador invalido!");
-			exit(EXIT_FAILURE);
-		}
-
-		str = strtok(NULL, "-");
-		// TODO: player_name é no máximo MAX_PLAYER_NAME
-		if (strlen(str) > MAX_PLAYER_NAME) {
-			puts("Erro: Nome do jogador demasiado grande!");
-			exit(EXIT_FAILURE);
-		}
-		strcpy(game_config->player_names[i], str);
-
-		str = strtok(NULL, "\0");
-		sscanf(str, "%d-%d", &game_config->money[i], &game_config->bets[i]);
-
-		if (game_config->money[i] < 10 || game_config->money[i] > 500) {
-			puts("Erro: Valor inicial de dinheiro invalido!");
-			exit(EXIT_FAILURE);
-		}
-
-		if (game_config->bets[i] < 2 ||
-			game_config->bets[i] > game_config->money[i] * 0.25)
-		{
-			puts("Valor da aposta invalido!");
-			exit(EXIT_FAILURE);
-		}
-	}
+	for (int i=0; fgets(buffer, MAX_LINE_LEN, fp) != NULL && i < game_config->num_players; i++)
+		game_config = read_line(buffer, game_config, i);
 
 	return game_config;
 }
+
