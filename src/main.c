@@ -21,11 +21,6 @@ int main(int argc, char *argv[])
     SDL_Event event;
     int delay = 300;
     int quit = 0;
-    int money[MAX_PLAYERS] = {110, 110, 110, 110};
-	int player_cards[MAX_PLAYERS][MAX_CARD_HAND] = {{0}};
-    int house_cards[MAX_CARD_HAND] = {0};
-    int pos_house_hand = 0;
-    int pos_player_hand[MAX_PLAYERS] = {0};
 
 	if (argc != 2)
 		// TODO: error msg
@@ -47,28 +42,7 @@ int main(int argc, char *argv[])
 	// o give_card faz init do megadeck automagicamente
 	// List *megadeck = (List *) calloc((size_t) 1, sizeof(List));
 
-	// House *house = (House *) calloc((size_t) 1, sizeof(House));
-
-    // put down some cards just for testing purposes: for you to remove !
-    player_cards[0][0] = 0;
-    player_cards[0][1] = 15;
-    player_cards[1][0] = 10;
-    player_cards[1][1] = 34;
-    player_cards[1][2] = 0;
-    player_cards[1][3] = 15;
-    player_cards[1][4] = 10;
-    player_cards[2][0] = 34;
-    player_cards[2][1] = 0;
-    player_cards[3][0] = 15;
-    player_cards[3][1] = 10;
-    pos_player_hand[0] = 2;
-    pos_player_hand[1] = 5;
-    pos_player_hand[2] = 2;
-    pos_player_hand[3] = 2;
-
-    house_cards[0] = 0;
-    house_cards[1] = 12;
-    pos_house_hand = 1;
+	 House *house = (House *) calloc((size_t) 1, sizeof(House));
 
  	while (quit == 0)
     {
@@ -107,11 +81,11 @@ int main(int argc, char *argv[])
 			}
         }
         // render game table
-        RenderTable(money, imgs, renderer);
+        RenderTable(players, imgs, renderer);
         // render house cards
-        RenderHouseCards(house_cards, pos_house_hand, cards, renderer);
+        RenderHouseCards(house, cards, renderer);
         // render player cards
-        RenderPlayerCards(player_cards, pos_player_hand, cards, renderer);
+        RenderPlayerCards(players, cards, renderer);
         // render in the screen all changes above
         SDL_RenderPresent(renderer);
     	// add a delay

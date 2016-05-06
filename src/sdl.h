@@ -3,6 +3,7 @@
 
 #include "main.h"
 #include "logic.h"
+#include "list.h"
 
 #define STRING_SIZE 100       // max size for some strings
 #define CARD_WIDTH 67         // card width
@@ -17,14 +18,19 @@
 void InitEverything(int , int , SDL_Surface **, SDL_Window **, SDL_Renderer **);
 void InitSDL();
 void InitFont();
+
 SDL_Window *CreateWindow(int , int);
 SDL_Renderer *CreateRenderer(int, int, SDL_Window *);
+
 int RenderText(int, int, const char *, TTF_Font *, SDL_Color *, SDL_Renderer *);
 int RenderLogo(int, int, SDL_Surface *, SDL_Renderer *);
-void RenderTable(int [], SDL_Surface **, SDL_Renderer *);
+
+void RenderTable(List *players, SDL_Surface **, SDL_Renderer *);
+
 void RenderCard(int, int, int, SDL_Surface **, SDL_Renderer *);
-void RenderHouseCards(int [], int, SDL_Surface **, SDL_Renderer *);
-void RenderPlayerCards(int [][MAX_CARD_HAND], int [], SDL_Surface **, SDL_Renderer *);
+void RenderHouseCards(House *house, SDL_Surface **_cards, SDL_Renderer* _renderer);
+void RenderPlayerCards(List *players, SDL_Surface **_cards, SDL_Renderer* _renderer);
+
 void LoadCards(SDL_Surface **);
 void UnLoadCards(SDL_Surface **);
 
