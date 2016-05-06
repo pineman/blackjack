@@ -7,7 +7,7 @@
 
 const char myName[] = "João Pinheiro João Freitas";
 const char myNumber[] = "ist84086          ist84093";
-const char * playerNames[] = {"Player 1", "Player 2", "Player 3", "Player 4"};
+const char *playerNames[] = {"Player 1", "Player 2", "Player 3", "Player 4"};
 
 /**
  * RenderTable: Draws the table where the game will be played, namely:
@@ -71,13 +71,16 @@ void RenderTable(List *players, SDL_Surface *_img[], SDL_Renderer* _renderer)
     SDL_SetRenderDrawColor(_renderer, 255, 255, 255, 255 );
 
     // renders the areas for each player: names and money too !
+    puts("butterfly1");
     for ( int i = 0; i < MAX_PLAYERS; i++) {
+        printf("butterfly%d\n", i); 
         players = players->next;
         playerRect.x = i*(separatorPos/4-5)+10;
         playerRect.y = (int) (0.55f*HEIGHT_WINDOW);
         playerRect.w = separatorPos/4-5;
         playerRect.h = (int) (0.42f*HEIGHT_WINDOW);
         //TODO: mudar money aqui lista de Players
+        //int money = 10;
         sprintf(name_money_str,"%s -- %d euros", playerNames[i], ((Player *) players->payload)->money);
         RenderText(playerRect.x+20, playerRect.y-30, name_money_str, serif, &white, _renderer);
         SDL_RenderDrawRect(_renderer, &playerRect);

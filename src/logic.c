@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <stdio.h>
 #include <time.h>
 #include <string.h>
 #include "logic.h"
@@ -26,6 +27,9 @@ int init_game(Config *config, List *players, char *filename)
 		new_player->bet = config->bets[i];
 		list_append(players, new_player);
 	}
+
+	while (players = players->next)
+		printf("%d", ((Player *) players->payload)->money);
 
 	return num_decks;
 }
