@@ -83,9 +83,9 @@ int main(int argc, char *argv[])
         // render game table
         RenderTable(players, imgs, renderer);
         // render house cards
-        //RenderHouseCards(house, cards, renderer);
+        // RenderHouseCards(house, cards, renderer);
         // render player cards
-        //RenderPlayerCards(players, cards, renderer);
+        // RenderPlayerCards(players, cards, renderer);
         // render in the screen all changes above
         SDL_RenderPresent(renderer);
     	// add a delay

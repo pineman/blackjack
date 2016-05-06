@@ -20,7 +20,6 @@ const char *playerNames[] = {"Player 1", "Player 2", "Player 3", "Player 4"};
  * \param _renderer renderer to handle all rendering in a window
  */
 
-// TODO: Player list
 void RenderTable(List *players, SDL_Surface *_img[], SDL_Renderer* _renderer)
 {
     SDL_Color black = {0, 0, 0, 255}; // black
@@ -79,8 +78,6 @@ void RenderTable(List *players, SDL_Surface *_img[], SDL_Renderer* _renderer)
         playerRect.y = (int) (0.55f*HEIGHT_WINDOW);
         playerRect.w = separatorPos/4-5;
         playerRect.h = (int) (0.42f*HEIGHT_WINDOW);
-        //TODO: mudar money aqui lista de Players
-        //int money = 10;
         sprintf(name_money_str,"%s -- %d euros", playerNames[i], ((Player *) players->payload)->money);
         RenderText(playerRect.x+20, playerRect.y-30, name_money_str, serif, &white, _renderer);
         SDL_RenderDrawRect(_renderer, &playerRect);
@@ -100,8 +97,6 @@ void RenderTable(List *players, SDL_Surface *_img[], SDL_Renderer* _renderer)
  * \param _cards vector with all loaded card images
  * \param _renderer renderer to handle all rendering in a window
  */
-
- //TODO house cards passar struct house
 void RenderHouseCards(House *house, SDL_Surface **_cards, SDL_Renderer* _renderer)
 {
     int card, x, y;
@@ -111,21 +106,21 @@ void RenderHouseCards(House *house, SDL_Surface **_cards, SDL_Renderer* _rendere
     Stack *aux = house->cards;
 
     // drawing all house cards
-    for ( card = 0; tmp != house->cards; card++) //TODO change here
+    for ( card = 0; tmp != house->cards; card++)
     {
         while (aux->next != tmp)
             aux = aux->next;
         // calculate its position
-        x = (div/2-house->num_cards/2+card)*CARD_WIDTH + 15; //TODO change here
+        x = (div/2-house->num_cards/2+card)*CARD_WIDTH + 15;
         y = (int) (0.26f*HEIGHT_WINDOW);
         // render it !
-        RenderCard(x, y, aux->card->id + (aux->card->suit)*SUIT_SIZE, _cards, _renderer); // TODO change here
+        RenderCard(x, y, aux->card->id + (aux->card->suit)*SUIT_SIZE, _cards, _renderer);
         tmp = aux;
     }
     // just one card ?: draw a card face down
     if (house->num_cards == 1)
     {
-        x = (div/2-house->num_cards/2+1)*CARD_WIDTH + 15; // TODO change here
+        x = (div/2-house->num_cards/2+1)*CARD_WIDTH + 15;
         y = (int) (0.26f*HEIGHT_WINDOW);
         RenderCard(x, y, MAX_DECK_SIZE, _cards, _renderer);
     }
@@ -138,8 +133,6 @@ void RenderHouseCards(House *house, SDL_Surface **_cards, SDL_Renderer* _rendere
  * \param _cards vector with all loaded card images
  * \param _renderer renderer to handle all rendering in a window
  */
-
- // TODO lista de jogadores
 void RenderPlayerCards(List *players, SDL_Surface **_cards, SDL_Renderer* _renderer)
 {
     int pos, x, y, num_player, card;
@@ -176,7 +169,6 @@ void RenderPlayerCards(List *players, SDL_Surface **_cards, SDL_Renderer* _rende
  * \param _cards vector with all loaded card images
  * \param _renderer renderer to handle all rendering in a window
  */
-
 void RenderCard(int _x, int _y, int _num_card, SDL_Surface **_cards, SDL_Renderer* _renderer)
 {
     SDL_Texture *card_text;
