@@ -101,30 +101,30 @@ void RenderTable(List *players, SDL_Surface *_img[], SDL_Renderer* _renderer)
  */
 
  //TODO house cards passar struct house
-void RenderHouseCards(House house, SDL_Surface **_cards, SDL_Renderer* _renderer)
+void RenderHouseCards(House *house, SDL_Surface **_cards, SDL_Renderer* _renderer)
 {
     int card, x, y;
     int div = WIDTH_WINDOW/CARD_WIDTH;
 
     Stack *tmp = NULL;
-    Stack *aux = house.cards; 
+    Stack *aux = house->cards; 
 
     // drawing all house cards
-    for ( card = 0; tmp != house.cards; card++) //TODO change here
+    for ( card = 0; tmp != house->cards; card++) //TODO change here
     {
         while (aux->next != tmp)
             aux = aux->next;
         // calculate its position
-        x = (div/2-house.num_cards/2+card)*CARD_WIDTH + 15; //TODO change here
+        x = (div/2-house->num_cards/2+card)*CARD_WIDTH + 15; //TODO change here
         y = (int) (0.26f*HEIGHT_WINDOW);
         // render it !
         RenderCard(x, y, aux->card->id + (aux->card->suit)*SUIT_SIZE, _cards, _renderer); // TODO change here
         tmp = aux;
     }
     // just one card ?: draw a card face down
-    if (_pos_house_hand == 1)
+    if (house->num_cards == 1)
     {
-        x = (div/2-house.cards/2+1)*CARD_WIDTH + 15; // TODO change here
+        x = (div/2-house->num_cards/2+1)*CARD_WIDTH + 15; // TODO change here
         y = (int) (0.26f*HEIGHT_WINDOW);
         RenderCard(x, y, MAX_DECK_SIZE, _cards, _renderer);
     }
@@ -142,13 +142,17 @@ void RenderHouseCards(House house, SDL_Surface **_cards, SDL_Renderer* _renderer
 void RenderPlayerCards(List *players, SDL_Surface **_cards, SDL_Renderer* _renderer)
 {
     int pos, x, y, num_player, card;
-    Stack *aux = ((Player *) players->payload)->cards;
-    Stack *tmp = NULL;
+    Stack *head = ((Player * ) players->payload->cards);
+    Stack *aux = head;
+    Stack *tmp = NULL; 
 
     // for every card of every player
     for ( num_player = 0; tmp != aux; num_player++)
     {
-        for ( card = 0; card < _pos_player_hand[num_player]; card++)  // change here
+        aux = head; 
+        while (aux->next != tmp)
+            aux = aux->next;
+        for ( card = 0; card < ((Player *) players->payload)->num_cards; card++)  // change here
         {
             // draw all cards of the player: calculate its position: only 4 positions are available !
             pos = card % 4;
@@ -157,8 +161,9 @@ void RenderPlayerCards(List *players, SDL_Surface **_cards, SDL_Renderer* _rende
             if ( pos == 1 || pos == 3) x += CARD_WIDTH + 30;
             if ( pos == 2 || pos == 3) y += CARD_HEIGHT+ 10;
             // render it !
-            RenderCard(x, y, _player_cards[num_player][card], _cards, _renderer); // change here
+            RenderCard(x, y, aux->card->id + (aux->card->suit)*SUIT_SIZE, _cards, _renderer); // change here
         }
+        tmp = aux;
     }
 }
 
