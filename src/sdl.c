@@ -72,7 +72,6 @@ void RenderTable(List *players, SDL_Surface *_img[], SDL_Renderer* _renderer)
     // renders the areas for each player: names and money too !
     puts("butterfly1");
     for ( int i = 0; i < MAX_PLAYERS; i++) {
-        printf("butterfly%d\n", i); 
         players = players->next;
         playerRect.x = i*(separatorPos/4-5)+10;
         playerRect.y = (int) (0.55f*HEIGHT_WINDOW);
