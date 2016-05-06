@@ -2,6 +2,7 @@
 #define SDL_H
 
 #include "main.h"
+#include "logic.h"
 
 #define STRING_SIZE 100       // max size for some strings
 #define CARD_WIDTH 67         // card width
@@ -12,7 +13,6 @@
 #define HEIGHT_WINDOW 525     // window height
 #define EXTRASPACE 150
 #define MARGIN 5
-#define SUIT_SIZE 13		  // tirado do logic.h
 
 void InitEverything(int , int , SDL_Surface **, SDL_Window **, SDL_Renderer **);
 void InitSDL();
