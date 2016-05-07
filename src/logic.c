@@ -123,3 +123,33 @@ void destroy_stack(Stack **cards)
 	while (*cards)
 		free(stack_pop(cards)); // remover carta da lista e a carta
 }
+
+/*********************************MECHANICSSSSSSSS****************************/
+
+void count_points(Player *player)
+{
+    cards = player->cards;;
+    int num_ace;
+    while(cards) {
+        player->points += point_index(cards->card->id);
+        if (cards->card->id == 12)
+            num_ace++;
+        cards = cards->next;
+
+    while (player->points > 21 && num_ace > 0) 
+        player->points -= 10;
+        --num_ace;
+}
+
+int point_index(int id)
+{
+    int points = 0;
+    id %= 13;
+    if (id == 12)
+        points = 11;
+    else if (id <12 && id>8)
+        points = 10;
+    else
+        points = id + 2;
+    return points;
+}

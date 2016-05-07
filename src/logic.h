@@ -56,5 +56,7 @@ int give_card(Player *player, List *megadeck, int *cards_left, const int num_dec
 int create_megadeck(List *megadeck, const int num_decks);
 void destroy_list(List *head);
 void destroy_stack(Stack **cards);
+void count_points(Player *player)
+int point_index(int id)
 
 #endif
