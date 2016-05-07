@@ -25,11 +25,9 @@ int init_game(Config *config, List *players, char *filename)
 		new_player->type = config->player_type[i];
 		new_player->money = config->money[i];
 		new_player->bet = config->bets[i];
+		new_player->num_cards = 0;
 		list_append(players, new_player);
 	}
-
-	while (players = players->next)
-		printf("%d", ((Player *) players->payload)->money);
 
 	return num_decks;
 }
@@ -60,7 +58,6 @@ Card *stack_pop(Stack **sp)
 int give_card(List *megadeck, int *cards_left, const int num_decks, Player *player)
 {
 	int random = 0;
-
 	if (player->num_cards == MAX_CARD_HAND)
 		// TODO: o jogador não pode receber mais cartas
 		return -1;
@@ -73,8 +70,8 @@ int give_card(List *megadeck, int *cards_left, const int num_decks, Player *play
 	// tem de ser pelo menos 1 (dummy head node),
 	// ou no máximo o número de nós (se seguirmos *cards_left
 	// nós a partir do dummy head node, chegamos à tail)
-	random = rand() % *cards_left + 1;
 
+	random = rand() % *cards_left + 1;
 	List *random_card = megadeck;
 	for (int i = 0; i < random; i++) {
 		if (random_card->next)
@@ -97,7 +94,7 @@ int create_megadeck(List *megadeck, const int num_decks)
 	Card *cur_card = NULL;
 
 	for(int i = 0; i < num_decks; i++)
-		for(int j = 0; j < 3; j++)
+		for(int j = 0; j < 4; j++)
 			for(int k = 0; k < SUIT_SIZE; k++) {
 				cur_card = (Card *) calloc(1, sizeof(Card));
 				cur_card->suit = j;

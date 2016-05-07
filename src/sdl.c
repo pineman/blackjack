@@ -70,7 +70,6 @@ void RenderTable(List *players, SDL_Surface *_img[], SDL_Renderer* _renderer)
     SDL_SetRenderDrawColor(_renderer, 255, 255, 255, 255 );
 
     // renders the areas for each player: names and money too !
-    puts("butterfly1");
     for ( int i = 0; i < MAX_PLAYERS; i++) {
         players = players->next;
         playerRect.x = i*(separatorPos/4-5)+10;
@@ -135,9 +134,9 @@ void RenderHouseCards(House *house, SDL_Surface **_cards, SDL_Renderer* _rendere
 void RenderPlayerCards(List *players, SDL_Surface **_cards, SDL_Renderer* _renderer)
 {
     int pos, x, y, num_player, card;
-    Stack *head = ((Player * ) players->payload)->cards;
-    Stack *aux = head;
-    Stack *tmp = NULL;
+    Player *head = ((Player *) players->next->payload);
+    Player *aux = head;
+    Player *tmp = NULL;
 
     // for every card of every player
     for ( num_player = 0; tmp != aux; num_player++)
@@ -145,7 +144,7 @@ void RenderPlayerCards(List *players, SDL_Surface **_cards, SDL_Renderer* _rende
         aux = head;
         while (aux->next != tmp)
             aux = aux->next;
-        for ( card = 0; card < ((Player *) players->payload)->num_cards; card++)  // change here
+        for ( card = 0; card < (aux->num_cards; card++)  // change here
         {
             // draw all cards of the player: calculate its position: only 4 positions are available !
             pos = card % 4;
