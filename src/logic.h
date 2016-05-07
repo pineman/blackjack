@@ -40,13 +40,6 @@ typedef struct Player {
 	//enum status;
 } Player;
 
-typedef struct House {
-	int money;
-	Stack *cards;
-	int num_cards;
-	int points;
-} House;
-
 typedef struct Config {
 	int num_decks;
 	int num_players;
@@ -56,10 +49,10 @@ typedef struct Config {
 	int bets[MAX_PLAYERS];
 } Config;
 
-int init_game(Config *config, List *players, char *filename);
+int init_game(Config *config, List *players);
 void stack_push(Stack **sp, Card *card);
 Card *stack_pop(Stack **sp);
-int give_card(List *megadeck, int *cards_left, const int num_decks, Player *player);
+int give_card(Player *player, List *megadeck, int *cards_left, const int num_decks);
 int create_megadeck(List *megadeck, const int num_decks);
 void destroy_list(List *head);
 void destroy_stack(Stack **cards);

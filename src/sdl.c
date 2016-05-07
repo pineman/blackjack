@@ -20,28 +20,24 @@ const char *playerNames[] = {"Player 1", "Player 2", "Player 3", "Player 4"};
  * \param _renderer renderer to handle all rendering in a window
  */
 
-void RenderTable(List *players, SDL_Surface *_img[], SDL_Renderer* _renderer)
+void RenderTable(List *players, SDL_Surface *_img[], SDL_Renderer *_renderer)
 {
     SDL_Color black = {0, 0, 0, 255}; // black
-    SDL_Color white = {255, 255, 255, 255}; // white
-    char name_money_str[STRING_SIZE];
     TTF_Font *serif = NULL;
     SDL_Texture *table_texture;
-    SDL_Rect tableSrc, tableDest, playerRect;
+    SDL_Rect tableSrc, tableDest;
     int separatorPos = (int)(0.95f*WIDTH_WINDOW); // seperates the left from the right part of the window
     int height;
-    int money;
 
-    // set color of renderer to some color
-    SDL_SetRenderDrawColor( _renderer, 255, 255, 255, 255 );
+    // set color of renderer to white
+    SDL_SetRenderDrawColor(_renderer, 255, 255, 255, 255);
 
     // clear the window
-    SDL_RenderClear( _renderer );
+    SDL_RenderClear(_renderer);
 
     // this opens a font style and sets a size
     serif = TTF_OpenFont("assets//FreeSerif.ttf", 16);
-    if(!serif)
-    {
+    if (!serif) {
         printf("TTF_OpenFont: %s\n", TTF_GetError());
         exit(EXIT_FAILURE);
     }
@@ -66,21 +62,7 @@ void RenderTable(List *players, SDL_Surface *_img[], SDL_Renderer* _renderer)
     // this renders the student number
     RenderText(separatorPos+3*MARGIN, height, myNumber, serif, &black, _renderer);
 
-    // renders the squares + name for each player
-    SDL_SetRenderDrawColor(_renderer, 255, 255, 255, 255 );
-
-    // renders the areas for each player: names and money too !
-    for ( int i = 0; i < MAX_PLAYERS; i++) {
-        players = players->next;
-        playerRect.x = i*(separatorPos/4-5)+10;
-        playerRect.y = (int) (0.55f*HEIGHT_WINDOW);
-        playerRect.w = separatorPos/4-5;
-        playerRect.h = (int) (0.42f*HEIGHT_WINDOW);
-        sprintf(name_money_str,"%s -- %d euros", playerNames[i], ((Player *) players->payload)->money);
-        RenderText(playerRect.x+20, playerRect.y-30, name_money_str, serif, &white, _renderer);
-        SDL_RenderDrawRect(_renderer, &playerRect);
-    }
-
+	RenderPlayerArea(players, _renderer, serif, separatorPos);
     // destroy everything
     SDL_DestroyTexture(table_texture);
 
@@ -88,6 +70,33 @@ void RenderTable(List *players, SDL_Surface *_img[], SDL_Renderer* _renderer)
     TTF_CloseFont(serif);
 }
 
+void RenderPlayerArea(List *players, SDL_Renderer* _renderer, TTF_Font *serif, int separatorPos)
+{
+    SDL_Color white = {255, 255, 255, 255};
+    SDL_Rect playerRect;
+    char name_bet_str[STRING_SIZE];
+    List *aux = players->next;
+    Player *cur_player = NULL;
+    int num_player = 0;
+
+	while (aux) {
+		cur_player = (Player *) aux->payload;
+
+        playerRect.x = num_player++ * (separatorPos/4-5)+10;
+        playerRect.y = (int) (0.55f*HEIGHT_WINDOW);
+        playerRect.w = separatorPos/4-5;
+        playerRect.h = (int) (0.42f*HEIGHT_WINDOW);
+
+        sprintf(name_bet_str,"%s -- bet: %d, points: %d",
+				cur_player->name, cur_player->bet, cur_player->points);
+        RenderText(playerRect.x, playerRect.y-30, name_bet_str, serif, &white, _renderer);
+        SDL_RenderDrawRect(_renderer, &playerRect);
+
+        aux = aux->next;
+    }
+}
+
+// TODO: código repetido com RenderPlayerCards
 /**
  * RenderHouseCards: Renders cards of the house
  * \param _house vector with the house cards
@@ -95,28 +104,36 @@ void RenderTable(List *players, SDL_Surface *_img[], SDL_Renderer* _renderer)
  * \param _cards vector with all loaded card images
  * \param _renderer renderer to handle all rendering in a window
  */
-void RenderHouseCards(House *house, SDL_Surface **_cards, SDL_Renderer* _renderer)
+void RenderHouseCards(Player *house, SDL_Surface **_cards, SDL_Renderer* _renderer)
 {
-    int card, x, y;
+    int x = 0, y = 0;
     int div = WIDTH_WINDOW/CARD_WIDTH;
+	Card *cur_card = NULL;
+	int card_id = 0;
+	int num_cards = 0;
 
-    Stack *tmp = NULL;
     Stack *aux = house->cards;
-
+    Stack *tmp = NULL;
     // drawing all house cards
-    for ( card = 0; tmp != house->cards; card++)
-    {
+	while (tmp != house->cards) {
+		aux = house->cards;
         while (aux->next != tmp)
             aux = aux->next;
+
+		cur_card = aux->card;
+		card_id = cur_card->id + cur_card->suit * SUIT_SIZE;
+
         // calculate its position
-        x = (div/2-house->num_cards/2+card)*CARD_WIDTH + 15;
+        x = (div/2 - house->num_cards/2 + num_cards)*CARD_WIDTH + 15;
         y = (int) (0.26f*HEIGHT_WINDOW);
-        // render it !
-        RenderCard(x, y, aux->card->id + (aux->card->suit)*SUIT_SIZE, _cards, _renderer);
+        RenderCard(x, y, card_id, _cards, _renderer);
+
+		num_cards++;
         tmp = aux;
     }
-    // just one card ?: draw a card face down
-    if (house->num_cards == 1)
+
+    // If the dealer has only 2 cards, draw the second card face down
+    if (house->num_cards == 2)
     {
         x = (div/2-house->num_cards/2+1)*CARD_WIDTH + 15;
         y = (int) (0.26f*HEIGHT_WINDOW);
@@ -133,33 +150,46 @@ void RenderHouseCards(House *house, SDL_Surface **_cards, SDL_Renderer* _rendere
  */
 void RenderPlayerCards(List *players, SDL_Surface **_cards, SDL_Renderer* _renderer)
 {
-    int pos, x, y, num_player, card;
-    players = players->next;
-    Player *player = NULL;
+    int pos, x, y, num_player;
+    List *aux_players = players->next; // dummy head
+    Player *cur_player = NULL;
+    Card *cur_card = 0;
+	Stack *aux = NULL;
+	Stack *tmp = NULL;
+    int num_cards = 0;
+    int card_id = 0;
 
-    // for every card of every player
-    for ( num_player = 0; players; num_player++)
-    {
-        player = (Player *) players->payload;
-        Stack *aux = player->cards;
-        Stack *tmp = NULL;
-        while (tmp != player->cards) {
+    // Iterate over all players
+    while (aux_players) {
+        cur_player = (Player *) aux_players->payload;
+
+		// Iterate over the stack backwards
+		tmp = NULL;
+        while (tmp != cur_player->cards) {
+			aux = cur_player->cards;
+
+			// iterar até à posição tmp da stack (inicialmente é o fim)
             while (aux->next != tmp)
                 aux = aux->next;
-            for ( card = 0; card < player->num_cards; card++)  // change here
-            {
-                // draw all cards of the player: calculate its position: only 4 positions are available !
-                pos = card % 4;
-                x = (int) num_player*((0.95f*WIDTH_WINDOW)/4-5)+(card/4)*12+15;
-                y = (int) (0.55f*HEIGHT_WINDOW)+10;
-                if ( pos == 1 || pos == 3) x += CARD_WIDTH + 30;
-                if ( pos == 2 || pos == 3) y += CARD_HEIGHT+ 10;
-                // render it !
-                RenderCard(x, y, aux->card->id + (aux->card->suit)*SUIT_SIZE, _cards, _renderer); // change here
-            }
+
+			// get the card
+			cur_card = aux->card;
+			card_id = cur_card->id + cur_card->suit * SUIT_SIZE;
+
+			// draw the card
+			pos = num_cards % 4;
+			x = (int) num_player * ((0.95f*WIDTH_WINDOW)/4-5)+(num_cards/4)*12+15;
+			y = (int) (0.55f*HEIGHT_WINDOW)+10;
+			if ( pos == 1 || pos == 3) x += CARD_WIDTH + 30;
+			if ( pos == 2 || pos == 3) y += CARD_HEIGHT+ 10;
+			RenderCard(x, y, card_id, _cards, _renderer);
+
+			num_cards++;
             tmp = aux;
         }
-        players = players->next;
+        num_cards = 0;
+		num_player++;
+        aux_players = aux_players->next;
     }
 }
 

@@ -22,50 +22,43 @@ int main(int argc, char *argv[])
     SDL_Event event;
     int delay = 300;
     int quit = 0;
-    int check=0;  
-    //Dummy node
-    
-    srand(time(NULL));
+    int cards_left = 0;
 
 	if (argc != 2)
 		// TODO: error msg
 		exit(EXIT_FAILURE);
 
+    srand(time(NULL));
+
 	char *filename = argv[1];
+
+	// Ler configuração (TODO: PODE FALHAR EARLY)
+	Config *config = read_config(filename);
+
+	// Declarar a lista de jogadores e enchê-la
+	List *players = (List *) calloc((size_t) 1, sizeof(List));
+	const int num_decks = init_game(config, players);
+
+	// Declarar o megabaralho (give_card enche-o automaticate)
+	List *megadeck = (List *) calloc((size_t) 1, sizeof(List));
+
+	// TODO: há mal a casa ser do tipo 'Player'?
+	Player *house = (Player *) calloc((size_t) 1, sizeof(Player));
+
+	give_card(house, megadeck, &cards_left, num_decks);
+	give_card(house, megadeck, &cards_left, num_decks);
+
+    List *aux = players->next;
+    while (aux) {
+        give_card((Player *) aux->payload, megadeck, &cards_left, num_decks);
+        give_card((Player *) aux->payload, megadeck, &cards_left, num_decks);
+        aux = aux->next;
+    }
 
 	// initialize graphics
 	InitEverything(WIDTH_WINDOW, HEIGHT_WINDOW, imgs, &window, &renderer);
     // loads the cards images
     LoadCards(cards);
-
-	Config *config = read_config(filename);
-
-	List *players = (List *) calloc((size_t) 1, sizeof(List));
-	// this shall update players list and return num_decks
-	const int num_decks = init_game(config, players, filename);
-
-	// o give_card faz init do megadeck automagicamente
-	// List *megadeck = (List *) calloc((size_t) 1, sizeof(List));
-
-	House *house = (House *) calloc((size_t) 1, sizeof(House));
-    
-    List *dummy = malloc(sizeof(List));
-    List *megadeck = dummy;
-    dummy->payload = NULL;
-    dummy->next = NULL;
-    dummy->prev = NULL;
-    
-    int cardsleft = 0;
-    List *aux = players;
-    int i = 0;
-    while (aux->next != NULL) {
-        aux = aux->next;
-        check = give_card(megadeck, &cardsleft, num_decks, (Player *) aux->payload);
-        if (check == -1) {
-            puts("Erro carta não existe");
-            exit(EXIT_FAILURE);
-        }
-    }
 
  	while (quit == 0)
     {
@@ -106,7 +99,7 @@ int main(int argc, char *argv[])
         // render game table
         RenderTable(players, imgs, renderer);
         // render house cards
-        //RenderHouseCards(house, cards, renderer);
+        RenderHouseCards(house, cards, renderer);
         // render player cards
         RenderPlayerCards(players, cards, renderer);
         // render in the screen all changes above
@@ -115,7 +108,15 @@ int main(int argc, char *argv[])
 		SDL_Delay(delay);
     }
 
-    // free memory allocated for images and textures and close everything
+	// TODO: remember to free the list of old players too!
+    aux = players->next;
+    while (aux) {
+		destroy_stack( &( ((Player *)aux->payload)->cards ) );
+		aux = aux->next;
+    }
+	destroy_list(players);
+	destroy_list(megadeck);
+
     UnLoadCards(cards);
     SDL_FreeSurface(imgs[0]);
     SDL_FreeSurface(imgs[1]);

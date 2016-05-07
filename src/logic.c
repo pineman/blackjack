@@ -14,7 +14,7 @@
  * kek
  */
 
-int init_game(Config *config, List *players, char *filename)
+int init_game(Config *config, List *players)
 {
 	Player *new_player = NULL;
 	const int num_decks = config->num_decks;
@@ -25,7 +25,6 @@ int init_game(Config *config, List *players, char *filename)
 		new_player->type = config->player_type[i];
 		new_player->money = config->money[i];
 		new_player->bet = config->bets[i];
-		new_player->num_cards = 0;
 		list_append(players, new_player);
 	}
 
@@ -55,7 +54,7 @@ Card *stack_pop(Stack **sp)
 	return card;
 }
 
-int give_card(List *megadeck, int *cards_left, const int num_decks, Player *player)
+int give_card(Player *player, List *megadeck, int *cards_left, const int num_decks)
 {
 	int random = 0;
 	if (player->num_cards == MAX_CARD_HAND)
