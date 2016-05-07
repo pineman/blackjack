@@ -134,28 +134,32 @@ void RenderHouseCards(House *house, SDL_Surface **_cards, SDL_Renderer* _rendere
 void RenderPlayerCards(List *players, SDL_Surface **_cards, SDL_Renderer* _renderer)
 {
     int pos, x, y, num_player, card;
-    Player *head = ((Player *) players->next->payload);
-    Player *aux = head;
-    Player *tmp = NULL;
+    players = players->next;
+    Player *player = NULL;
 
     // for every card of every player
-    for ( num_player = 0; tmp != aux; num_player++)
+    for ( num_player = 0; players->next; num_player++)
     {
-        aux = head;
-        while (aux->next != tmp)
-            aux = aux->next;
-        for ( card = 0; card < (aux->num_cards; card++)  // change here
-        {
-            // draw all cards of the player: calculate its position: only 4 positions are available !
-            pos = card % 4;
-            x = (int) num_player*((0.95f*WIDTH_WINDOW)/4-5)+(card/4)*12+15;
-            y = (int) (0.55f*HEIGHT_WINDOW)+10;
-            if ( pos == 1 || pos == 3) x += CARD_WIDTH + 30;
-            if ( pos == 2 || pos == 3) y += CARD_HEIGHT+ 10;
-            // render it !
-            RenderCard(x, y, aux->card->id + (aux->card->suit)*SUIT_SIZE, _cards, _renderer); // change here
+        player = (Player *) players->payload;
+        Stack *aux = player->cards;
+        Stack *tmp = NULL;
+        while (tmp != player->cards) {
+            while (aux->next != tmp)
+                aux = aux->next;
+            for ( card = 0; card < player->num_cards; card++)  // change here
+            {
+                // draw all cards of the player: calculate its position: only 4 positions are available !
+                pos = card % 4;
+                x = (int) num_player*((0.95f*WIDTH_WINDOW)/4-5)+(card/4)*12+15;
+                y = (int) (0.55f*HEIGHT_WINDOW)+10;
+                if ( pos == 1 || pos == 3) x += CARD_WIDTH + 30;
+                if ( pos == 2 || pos == 3) y += CARD_HEIGHT+ 10;
+                // render it !
+                RenderCard(x, y, aux->card->id + (aux->card->suit)*SUIT_SIZE, _cards, _renderer); // change here
+            }
+            tmp = aux;
         }
-        tmp = aux;
+        players = players->next;
     }
 }
 
