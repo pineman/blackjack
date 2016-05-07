@@ -36,7 +36,6 @@ typedef struct Stack {
 
 
 typedef struct Player {
-<<<<<<< Updated upstream
 	Type type;
 	bool playing;
 	char name[MAX_PLAYER_NAME+1];
