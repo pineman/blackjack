@@ -150,12 +150,13 @@ void RenderHouseCards(Player *house, SDL_Surface **_cards, SDL_Renderer* _render
  */
 void RenderPlayerCards(List *players, SDL_Surface **_cards, SDL_Renderer* _renderer)
 {
-    int pos, x, y, num_player;
+    int pos = 0, x = 0, y = 0;
     List *aux_players = players->next; // dummy head
     Player *cur_player = NULL;
     Card *cur_card = 0;
 	Stack *aux = NULL;
 	Stack *tmp = NULL;
+    int num_player = 0;
     int num_cards = 0;
     int card_id = 0;
 
