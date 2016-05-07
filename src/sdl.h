@@ -23,13 +23,14 @@ SDL_Window *CreateWindow(int , int);
 SDL_Renderer *CreateRenderer(int, int, SDL_Window *);
 
 int RenderText(int, int, const char *, TTF_Font *, SDL_Color *, SDL_Renderer *);
+void RenderPlayerArea(List *players, SDL_Renderer* _renderer, TTF_Font *serif, int separatorPos);
 int RenderLogo(int, int, SDL_Surface *, SDL_Renderer *);
 
 void RenderTable(List *players, SDL_Surface **, SDL_Renderer *);
 
-void RenderCard(int, int, int, SDL_Surface **, SDL_Renderer *);
-void RenderHouseCards(House *house, SDL_Surface **_cards, SDL_Renderer* _renderer);
+void RenderHouseCards(Player *house, SDL_Surface **_cards, SDL_Renderer* _renderer);
 void RenderPlayerCards(List *players, SDL_Surface **_cards, SDL_Renderer* _renderer);
+void RenderCard(int, int, int, SDL_Surface **, SDL_Renderer *);
 
 void LoadCards(SDL_Surface **);
 void UnLoadCards(SDL_Surface **);
