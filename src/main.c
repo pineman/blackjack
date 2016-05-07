@@ -4,6 +4,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_image.h>
+#include <time.h>
 #include "main.h"
 #include "logic.h"
 #include "file.h"
@@ -21,6 +22,10 @@ int main(int argc, char *argv[])
     SDL_Event event;
     int delay = 300;
     int quit = 0;
+    int check=0;  
+    //Dummy node
+    
+    srand(time(NULL));
 
 	if (argc != 2)
 		// TODO: error msg
@@ -43,6 +48,24 @@ int main(int argc, char *argv[])
 	// List *megadeck = (List *) calloc((size_t) 1, sizeof(List));
 
 	House *house = (House *) calloc((size_t) 1, sizeof(House));
+    
+    List *dummy = malloc(sizeof(List));
+    List *megadeck = dummy;
+    dummy->payload = NULL;
+    dummy->next = NULL;
+    dummy->prev = NULL;
+    
+    int cardsleft = 0;
+    List *aux = players;
+    int i = 0;
+    while (aux->next != NULL) {
+        aux = aux->next;
+        check = give_card(megadeck, &cardsleft, num_decks, (Player *) aux->payload);
+        if (check == -1) {
+            puts("Erro carta não existe");
+            exit(EXIT_FAILURE);
+        }
+    }
 
  	while (quit == 0)
     {
@@ -62,7 +85,7 @@ int main(int argc, char *argv[])
 						break;
 					case SDLK_s:
                         // stand(players, house, megadeck); --> in logic.c
-					case SDLK_h:
+    				case SDLK_h:
 						// hit(players, house, megadeck); --> in logic.c
 					case SDLK_n:
 						// new(players, house, megadeck); --> in logic.c
@@ -83,9 +106,9 @@ int main(int argc, char *argv[])
         // render game table
         RenderTable(players, imgs, renderer);
         // render house cards
-        // RenderHouseCards(house, cards, renderer);
+        //RenderHouseCards(house, cards, renderer);
         // render player cards
-        // RenderPlayerCards(players, cards, renderer);
+        RenderPlayerCards(players, cards, renderer);
         // render in the screen all changes above
         SDL_RenderPresent(renderer);
     	// add a delay
