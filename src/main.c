@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <stdbool.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_image.h>
@@ -45,15 +46,8 @@ int main(int argc, char *argv[])
 	// TODO: há mal a casa ser do tipo 'Player'?
 	Player *house = (Player *) calloc((size_t) 1, sizeof(Player));
 
-	give_card(house, megadeck, &cards_left, num_decks);
-	give_card(house, megadeck, &cards_left, num_decks);
-
-    List *aux = players->next;
-    while (aux) {
-        give_card((Player *) aux->payload, megadeck, &cards_left, num_decks);
-        give_card((Player *) aux->payload, megadeck, &cards_left, num_decks);
-        aux = aux->next;
-    }
+	new_game(players, house, megadeck, &cards_left, num_decks);
+	((Player *) players->next->payload)->playing = false;
 
 	// initialize graphics
 	InitEverything(WIDTH_WINDOW, HEIGHT_WINDOW, imgs, &window, &renderer);
@@ -78,10 +72,13 @@ int main(int argc, char *argv[])
 						break;
 					case SDLK_s:
                         // stand(players, house, megadeck); --> in logic.c
+						break;
     				case SDLK_h:
 						// hit(players, house, megadeck); --> in logic.c
+						break;
 					case SDLK_n:
-						// new(players, house, megadeck); --> in logic.c
+						new_game(players, house, megadeck, &cards_left, num_decks);
+						break;
 					case SDLK_a:
 						// this is tricky.
 						// do we keep old players (i.e. in the list players,
@@ -91,6 +88,7 @@ int main(int argc, char *argv[])
 						// copy their information to a static list
 						// in write_stats?
 						// add_player(players); // ler info do jogador de stdin --> in logic.c
+						break;
 					default:
 						break;
 				}
@@ -109,11 +107,14 @@ int main(int argc, char *argv[])
     }
 
 	// TODO: remember to free the list of old players too!
-    aux = players->next;
+    List *aux = players->next;
+    Player *cur_player = NULL;
     while (aux) {
-		destroy_stack( &( ((Player *)aux->payload)->cards ) );
+		cur_player = (Player *) aux->payload;
+		destroy_stack(&cur_player->cards);
 		aux = aux->next;
     }
+    destroy_stack(&house->cards);
 	destroy_list(players);
 	destroy_list(megadeck);
 

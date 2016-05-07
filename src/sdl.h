@@ -38,6 +38,5 @@ void UnLoadCards(SDL_Surface **);
 // definition of some strings: they cannot be changed when the program is executed !
 extern const char myName[];
 extern const char myNumber[];
-extern const char *playerNames[];
 
 #endif
