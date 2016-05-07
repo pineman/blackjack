@@ -138,7 +138,7 @@ void RenderPlayerCards(List *players, SDL_Surface **_cards, SDL_Renderer* _rende
     Player *player = NULL;
 
     // for every card of every player
-    for ( num_player = 0; players->next; num_player++)
+    for ( num_player = 0; players; num_player++)
     {
         player = (Player *) players->payload;
         Stack *aux = player->cards;
