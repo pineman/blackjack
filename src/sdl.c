@@ -3,11 +3,11 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_image.h>
+#include <stdbool.h>
 #include "sdl.h"
 
-const char myName[] = "João Pinheiro João Freitas";
-const char myNumber[] = "ist84086          ist84093";
-const char *playerNames[] = {"Player 1", "Player 2", "Player 3", "Player 4"};
+const char myName[] = "João Pinheiro, João Freitas";
+const char myNumber[] = "84086, 84093";
 
 /**
  * RenderTable: Draws the table where the game will be played, namely:
@@ -19,7 +19,6 @@ const char *playerNames[] = {"Player 1", "Player 2", "Player 3", "Player 4"};
  * \param _img surfaces where the table background and IST logo were loaded
  * \param _renderer renderer to handle all rendering in a window
  */
-
 void RenderTable(List *players, SDL_Surface *_img[], SDL_Renderer *_renderer)
 {
     SDL_Color black = {0, 0, 0, 255}; // black
@@ -28,6 +27,7 @@ void RenderTable(List *players, SDL_Surface *_img[], SDL_Renderer *_renderer)
     SDL_Rect tableSrc, tableDest;
     int separatorPos = (int)(0.95f*WIDTH_WINDOW); // seperates the left from the right part of the window
     int height;
+    char money_str[STRING_SIZE];
 
     // set color of renderer to white
     SDL_SetRenderDrawColor(_renderer, 255, 255, 255, 255);
@@ -60,9 +60,20 @@ void RenderTable(List *players, SDL_Surface *_img[], SDL_Renderer *_renderer)
     height += RenderText(separatorPos+3*MARGIN, height, myName, serif, &black, _renderer);
 
     // this renders the student number
-    RenderText(separatorPos+3*MARGIN, height, myNumber, serif, &black, _renderer);
+    height += RenderText(separatorPos+3*MARGIN, height, myNumber, serif, &black, _renderer);
+
+	List *aux = players->next;
+	Player *cur_player = NULL;
+	while (aux) {
+		cur_player = (Player *) aux->payload;
+		sprintf(money_str, "%s (%s): %d euros",
+				cur_player->name, cur_player->type == HU ? "HU" : "EA", cur_player->money);
+		height += RenderText(separatorPos+3*MARGIN, height, money_str, serif, &black, _renderer);
+		aux = aux->next;
+	}
 
 	RenderPlayerArea(players, _renderer, serif, separatorPos);
+
     // destroy everything
     SDL_DestroyTexture(table_texture);
 
@@ -74,24 +85,38 @@ void RenderPlayerArea(List *players, SDL_Renderer* _renderer, TTF_Font *serif, i
 {
     SDL_Color white = {255, 255, 255, 255};
     SDL_Rect playerRect;
-    char name_bet_str[STRING_SIZE];
+    char points_str[STRING_SIZE];
+    char status_str[STRING_SIZE];
     List *aux = players->next;
     Player *cur_player = NULL;
     int num_player = 0;
 
 	while (aux) {
 		cur_player = (Player *) aux->payload;
+		if (!cur_player->playing) {
+			aux = aux->next;
+			num_player++;
+			continue;
+		}
 
-        playerRect.x = num_player++ * (separatorPos/4-5)+10;
+        playerRect.x = num_player * (separatorPos/4-5)+10;
         playerRect.y = (int) (0.55f*HEIGHT_WINDOW);
         playerRect.w = separatorPos/4-5;
         playerRect.h = (int) (0.42f*HEIGHT_WINDOW);
 
-        sprintf(name_bet_str,"%s -- bet: %d, points: %d",
-				cur_player->name, cur_player->bet, cur_player->points);
-        RenderText(playerRect.x, playerRect.y-30, name_bet_str, serif, &white, _renderer);
+		if (cur_player->status == NA || cur_player->status == ST)
+			sprintf(points_str, "%d", cur_player->points);
+		else if (cur_player->status == BJ)
+			sprintf(points_str, "BJ");
+		else if (cur_player->status == BU)
+			sprintf(points_str, "BU");
+
+        sprintf(status_str, "%s -- bet: %d, points: %s",
+				cur_player->name, cur_player->bet, points_str);
+        RenderText(playerRect.x, playerRect.y-30, status_str, serif, &white, _renderer);
         SDL_RenderDrawRect(_renderer, &playerRect);
 
+		num_player++;
         aux = aux->next;
     }
 }
@@ -151,30 +176,35 @@ void RenderHouseCards(Player *house, SDL_Surface **_cards, SDL_Renderer* _render
 void RenderPlayerCards(List *players, SDL_Surface **_cards, SDL_Renderer* _renderer)
 {
     int pos = 0, x = 0, y = 0;
-    List *aux_players = players->next; // dummy head
+    List *aux = players->next; // dummy head
     Player *cur_player = NULL;
     Card *cur_card = 0;
-	Stack *aux = NULL;
+	Stack *aux_cards = NULL;
 	Stack *tmp = NULL;
     int num_player = 0;
     int num_cards = 0;
     int card_id = 0;
 
     // Iterate over all players
-    while (aux_players) {
-        cur_player = (Player *) aux_players->payload;
+    while (aux) {
+        cur_player = (Player *) aux->payload;
+		if (!cur_player->playing) {
+			aux = aux->next;
+			num_player++;
+			continue;
+		}
 
 		// Iterate over the stack backwards
 		tmp = NULL;
         while (tmp != cur_player->cards) {
-			aux = cur_player->cards;
+			aux_cards = cur_player->cards;
 
 			// iterar até à posição tmp da stack (inicialmente é o fim)
-            while (aux->next != tmp)
-                aux = aux->next;
+            while (aux_cards->next != tmp)
+                aux_cards = aux_cards->next;
 
 			// get the card
-			cur_card = aux->card;
+			cur_card = aux_cards->card;
 			card_id = cur_card->id + cur_card->suit * SUIT_SIZE;
 
 			// draw the card
@@ -186,11 +216,11 @@ void RenderPlayerCards(List *players, SDL_Surface **_cards, SDL_Renderer* _rende
 			RenderCard(x, y, card_id, _cards, _renderer);
 
 			num_cards++;
-            tmp = aux;
+            tmp = aux_cards;
         }
         num_cards = 0;
 		num_player++;
-        aux_players = aux_players->next;
+        aux = aux->next;
     }
 }
 

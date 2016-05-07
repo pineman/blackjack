@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <time.h>
 #include <string.h>
+#include <stdbool.h>
 #include "logic.h"
 #include "list.h"
 
@@ -21,6 +22,7 @@ int init_game(Config *config, List *players)
 
 	for (int i = 0; i < config->num_players; i++) {
 		new_player = (Player *) calloc((size_t) 1, sizeof(Player));
+		new_player->playing = true;
 		strcpy(new_player->name, config->player_names[i]);
 		new_player->type = config->player_type[i];
 		new_player->money = config->money[i];
@@ -92,9 +94,9 @@ int create_megadeck(List *megadeck, const int num_decks)
 	int total_cards = 0;
 	Card *cur_card = NULL;
 
-	for(int i = 0; i < num_decks; i++)
-		for(int j = 0; j < 4; j++)
-			for(int k = 0; k < SUIT_SIZE; k++) {
+	for (int i = 0; i < num_decks; i++)
+		for (int j = 0; j < 4; j++)
+			for (int k = 0; k < SUIT_SIZE; k++) {
 				cur_card = (Card *) calloc(1, sizeof(Card));
 				cur_card->suit = j;
 				cur_card->id = k;
@@ -103,6 +105,29 @@ int create_megadeck(List *megadeck, const int num_decks)
 
 	total_cards = num_decks * DECK_SIZE;
 	return total_cards;
+}
+
+void new_game(List *players, Player *house, List *megadeck, int *cards_left, const int num_decks)
+{
+	destroy_stack(&house->cards);
+	for (int i = 0; i < 2; i++)
+		give_card(house, megadeck, cards_left, num_decks);
+	house->num_cards = 2;
+	house->status = NA;
+	count_points(house);
+
+    List *aux = players->next;
+    Player *cur_player = NULL;
+    while (aux) {
+		cur_player = (Player *) aux->payload;
+		destroy_stack(&cur_player->cards);
+		for (int i = 0; i < 2; i++)
+			give_card(cur_player, megadeck, cards_left, num_decks);
+        cur_player->num_cards = 2;
+		cur_player->status = NA;
+		count_points(cur_player);
+        aux = aux->next;
+    }
 }
 
 void destroy_list(List *head)
@@ -121,24 +146,35 @@ void destroy_list(List *head)
 void destroy_stack(Stack **cards)
 {
 	while (*cards)
-		free(stack_pop(cards)); // remover carta da lista e a carta
+		free(stack_pop(cards));
 }
 
 /*********************************MECHANICSSSSSSSS****************************/
+// que raio de comentário é esse mano
+// tás bué excitado né
 
 void count_points(Player *player)
 {
-    cards = player->cards;;
-    int num_ace;
-    while(cards) {
+    Stack *cards = player->cards;
+    int num_ace = 0;
+
+	player->points = 0;
+    while (cards) {
         player->points += point_index(cards->card->id);
         if (cards->card->id == 12)
             num_ace++;
         cards = cards->next;
+	}
 
-    while (player->points > 21 && num_ace > 0) 
+    while (player->points > 21 && num_ace > 0) {
         player->points -= 10;
         --num_ace;
+    }
+
+    if (player->points == 21)
+		player->status = BJ;
+	else if (player->points > 21)
+		player->status = BU;
 }
 
 int point_index(int id)

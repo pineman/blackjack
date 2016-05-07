@@ -11,8 +11,8 @@
 #define MAX_CARD_HAND 11
 #define MAX_PLAYER_NAME 8
 
-enum player_type {EA, HU};
-//enum status {blackjack, bust, stand, hit} // double, surrender
+typedef enum {EA, HU} Type;
+typedef enum {NA, BJ, BU, ST} Status; // double, surrender
 
 typedef struct Card {
 	int suit;
@@ -25,15 +25,15 @@ typedef struct Stack {
 } Stack;
 
 typedef struct Player {
-	int type;
-	char name[MAX_PLAYER_NAME+1];
-	int position;
+	Type type;
 	bool playing;
+	char name[MAX_PLAYER_NAME+1];
 	int money;
 	int bet;
 	Stack *cards;
 	int num_cards;
 	int points;
+	Status status;
 	int wins;
 	int losses;
 	int draws;
@@ -54,9 +54,10 @@ void stack_push(Stack **sp, Card *card);
 Card *stack_pop(Stack **sp);
 int give_card(Player *player, List *megadeck, int *cards_left, const int num_decks);
 int create_megadeck(List *megadeck, const int num_decks);
+void new_game(List *players, Player *house, List *megadeck, int *cards_left, const int num_decks);
 void destroy_list(List *head);
 void destroy_stack(Stack **cards);
-void count_points(Player *player)
-int point_index(int id)
+void count_points(Player *player);
+int point_index(int id);
 
 #endif
