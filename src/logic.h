@@ -14,6 +14,15 @@
 typedef enum {EA, HU} Type;
 typedef enum {NA, BJ, BU, ST} Status; // double, surrender
 
+/* 0-active
+ * 2-blackjack
+ * 3-bust
+ * 4-bankrupt
+ * 5-stand
+ * 6-hit
+ */
+/*typedef enum modes {active, blackjack, bust, bankrupt, stand, hit} Status;*/
+
 typedef struct Card {
 	int suit;
 	int id;
@@ -24,16 +33,20 @@ typedef struct Stack {
 	struct Stack *next;
 } Stack;
 
+
+
 typedef struct Player {
+<<<<<<< Updated upstream
 	Type type;
 	bool playing;
 	char name[MAX_PLAYER_NAME+1];
+	int position;
+    Status status;
 	int money;
 	int bet;
 	Stack *cards;
 	int num_cards;
 	int points;
-	Status status;
 	int wins;
 	int losses;
 	int draws;

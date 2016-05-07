@@ -171,6 +171,7 @@ void count_points(Player *player)
         --num_ace;
     }
 
+    //Ito ta mal so e verdade se as duas primeiras cartas forem 21
     if (player->points == 21)
 		player->status = BJ;
 	else if (player->points > 21)
@@ -189,3 +190,14 @@ int point_index(int id)
         points = id + 2;
     return points;
 }
+
+
+/*void pay_debts(List *players, Player *house)
+{
+	players = players->next;
+	while (players) {
+		aux = ((Player *) players->payload);
+
+		switch(aux->status)
+	}
+}*/

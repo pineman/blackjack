@@ -49,6 +49,8 @@ int main(int argc, char *argv[])
 	new_game(players, house, megadeck, &cards_left, num_decks);
 	((Player *) players->next->payload)->playing = false;
 
+    //printf("%d", ((Player *) aux->prev->payload)->cards->card->id);
+
 	// initialize graphics
 	InitEverything(WIDTH_WINDOW, HEIGHT_WINDOW, imgs, &window, &renderer);
     // loads the cards images
