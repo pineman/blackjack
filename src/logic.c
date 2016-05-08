@@ -117,10 +117,12 @@ void new_game(List *players, Player *house, List *megadeck, int *cards_left, con
 	house->status = WW;
 
 	count_points(house);
+	printf("house->points = %d\n", house->points);
     if (house->points == 21)
 		house->status = BJ;
 	else if (house->points > 21)
 		house->status = BU;
+	printf("house->status = %d\n", house->status);
 
     List *aux = players->next;
     Player *cur_player = NULL;
@@ -137,15 +139,12 @@ void new_game(List *players, Player *house, List *megadeck, int *cards_left, con
 			count_points(cur_player);
 			if (cur_player->points == 21)
 				cur_player->status = BJ;
-			else if (cur_player->points > 21)
-				cur_player->status = BU;
 
-			if (i == 0)
-				cur_player->playing = 1;
+			if (i == 0 && house->status != BJ)
+				cur_player->playing = true;
+			else
+				cur_player->playing = false;
 			i++;
-		}
-		else {
-			cur_player->playing = 0;
 		}
 		aux = aux->next;
     }
