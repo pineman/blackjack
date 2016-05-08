@@ -245,23 +245,23 @@ int point_index(int id)
     return points;
 }
 
-void pay_bets(list *players, player *house)
+void pay_bets(List *players, Player *house)
 {
-    list *aux = players->next;
+    List *aux = players->next;
 	while (aux) {
-		cur_player = ((player *) aux->payload);
+		cur_player = ((Player *) aux->payload);
         
         // blackjack casa e do jogador
-        if (cur_player->status == bj && house->status = bj)
+        if (cur_player->status == BJ && house->status = BJ)
             cur_player->money += cur_player->bet;
         // blackjack do jogador
-        else if (cur_player->status == bj)
+        else if (cur_player->status == BJ)
             cur_player->money += 2*cur_player->bet + cur_player/2;
         // bust da casa e do jogador
-        else if (cur_player->status == bu && house->status == bu)
+        else if (cur_player->status == BU && house->status == BU)
             cur_player->money += cur_player->bet; 
         // bust da casa
-        else if (house->status == bu)
+        else if (house->status == BU)
             cur_player->money += 2*cur_player->bet;
         // empate mesmos pontos
         else if (cur_player->points == house->points)
