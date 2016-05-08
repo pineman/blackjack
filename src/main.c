@@ -75,8 +75,14 @@ int main(int argc, char *argv[])
 	}
 	*/
 
+	int i = 0;
  	while (quit == 0)
     {
+		if (i == 10)
+			((Player *) players->next->next->payload)->ingame = false;
+		if (i++ == 20)
+			((Player *) players->next->payload)->ingame = false;
+
         // while there's events to handle
         while (SDL_PollEvent(&event))
         {
