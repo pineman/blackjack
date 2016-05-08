@@ -22,11 +22,12 @@ int init_game(Config *config, List *players)
 
 	for (int i = 0; i < config->num_players; i++) {
 		new_player = (Player *) calloc((size_t) 1, sizeof(Player));
-		new_player->playing = true;
+		new_player->ingame = true;
 		strcpy(new_player->name, config->player_names[i]);
 		new_player->type = config->player_type[i];
 		new_player->money = config->money[i];
 		new_player->bet = config->bets[i];
+		new_player->playing = i == 0 ? true : false;
 		list_append(players, new_player);
 	}
 
@@ -113,20 +114,40 @@ void new_game(List *players, Player *house, List *megadeck, int *cards_left, con
 	for (int i = 0; i < 2; i++)
 		give_card(house, megadeck, cards_left, num_decks);
 	house->num_cards = 2;
-	house->status = NA;
+	house->status = WW;
+
 	count_points(house);
+    if (house->points == 21)
+		house->status = BJ;
+	else if (house->points > 21)
+		house->status = BU;
 
     List *aux = players->next;
     Player *cur_player = NULL;
+    int i = 0;
     while (aux) {
 		cur_player = (Player *) aux->payload;
-		destroy_stack(&cur_player->cards);
-		for (int i = 0; i < 2; i++)
-			give_card(cur_player, megadeck, cards_left, num_decks);
-        cur_player->num_cards = 2;
-		cur_player->status = NA;
-		count_points(cur_player);
-        aux = aux->next;
+		if (cur_player->ingame) {
+			destroy_stack(&cur_player->cards);
+			for (int i = 0; i < 2; i++)
+				give_card(cur_player, megadeck, cards_left, num_decks);
+			cur_player->num_cards = 2;
+			cur_player->status = WW;
+
+			count_points(cur_player);
+			if (cur_player->points == 21)
+				cur_player->status = BJ;
+			else if (cur_player->points > 21)
+				cur_player->status = BU;
+
+			if (i == 0)
+				cur_player->playing = 1;
+			i++;
+		}
+		else {
+			cur_player->playing = 0;
+		}
+		aux = aux->next;
     }
 }
 
@@ -149,10 +170,6 @@ void destroy_stack(Stack **cards)
 		free(stack_pop(cards));
 }
 
-/*********************************MECHANICSSSSSSSS****************************/
-// que raio de comentário é esse mano
-// tás bué excitado né
-
 void count_points(Player *player)
 {
     Stack *cards = player->cards;
@@ -170,12 +187,6 @@ void count_points(Player *player)
         player->points -= 10;
         --num_ace;
     }
-
-    //Ito ta mal so e verdade se as duas primeiras cartas forem 21
-    if (player->points == 21)
-		player->status = BJ;
-	else if (player->points > 21)
-		player->status = BU;
 }
 
 int point_index(int id)
@@ -190,7 +201,6 @@ int point_index(int id)
         points = id + 2;
     return points;
 }
-
 
 /*void pay_debts(List *players, Player *house)
 {

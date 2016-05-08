@@ -93,29 +93,29 @@ void RenderPlayerArea(List *players, SDL_Renderer* _renderer, TTF_Font *serif, i
 
 	while (aux) {
 		cur_player = (Player *) aux->payload;
-		if (!cur_player->playing) {
-			aux = aux->next;
-			num_player++;
-			continue;
+		if (cur_player->ingame) {
+			if (cur_player->playing)
+				SDL_SetRenderDrawColor(_renderer, 255, 0, 0, 255);
+			else
+				SDL_SetRenderDrawColor(_renderer, 255, 255, 255, 255);
+
+			playerRect.x = num_player * (separatorPos/4-5)+10;
+			playerRect.y = (int) (0.55f*HEIGHT_WINDOW);
+			playerRect.w = separatorPos/4-5;
+			playerRect.h = (int) (0.42f*HEIGHT_WINDOW);
+
+			if (cur_player->status == WW || cur_player->status == ST)
+				sprintf(points_str, "%d", cur_player->points);
+			else if (cur_player->status == BJ)
+				sprintf(points_str, "BJ");
+			else if (cur_player->status == BU)
+				sprintf(points_str, "BU");
+
+			sprintf(status_str, "%s -- bet: %d, points: %s",
+					cur_player->name, cur_player->bet, points_str);
+			RenderText(playerRect.x, playerRect.y-30, status_str, serif, &white, _renderer);
+			SDL_RenderDrawRect(_renderer, &playerRect);
 		}
-
-        playerRect.x = num_player * (separatorPos/4-5)+10;
-        playerRect.y = (int) (0.55f*HEIGHT_WINDOW);
-        playerRect.w = separatorPos/4-5;
-        playerRect.h = (int) (0.42f*HEIGHT_WINDOW);
-
-		if (cur_player->status == NA || cur_player->status == ST)
-			sprintf(points_str, "%d", cur_player->points);
-		else if (cur_player->status == BJ)
-			sprintf(points_str, "BJ");
-		else if (cur_player->status == BU)
-			sprintf(points_str, "BU");
-
-        sprintf(status_str, "%s -- bet: %d, points: %s",
-				cur_player->name, cur_player->bet, points_str);
-        RenderText(playerRect.x, playerRect.y-30, status_str, serif, &white, _renderer);
-        SDL_RenderDrawRect(_renderer, &playerRect);
-
 		num_player++;
         aux = aux->next;
     }
@@ -157,9 +157,8 @@ void RenderHouseCards(Player *house, SDL_Surface **_cards, SDL_Renderer* _render
         tmp = aux;
     }
 
-    // If the dealer has only 2 cards, draw the second card face down
-    if (house->num_cards == 2)
-    {
+    // If the dealer has only 2 cards and no blackjack, draw the second card face down
+    if (house->num_cards == 2 && house->status != BJ) {
         x = (div/2-house->num_cards/2+1)*CARD_WIDTH + 15;
         y = (int) (0.26f*HEIGHT_WINDOW);
         RenderCard(x, y, MAX_DECK_SIZE, _cards, _renderer);
@@ -188,39 +187,35 @@ void RenderPlayerCards(List *players, SDL_Surface **_cards, SDL_Renderer* _rende
     // Iterate over all players
     while (aux) {
         cur_player = (Player *) aux->payload;
-		if (!cur_player->playing) {
-			aux = aux->next;
-			num_player++;
-			continue;
+		if (cur_player->ingame) {
+			// Iterate over the stack backwards
+			tmp = NULL;
+			while (tmp != cur_player->cards) {
+				aux_cards = cur_player->cards;
+
+				// iterar até à posição tmp da stack (inicialmente é o fim)
+				while (aux_cards->next != tmp)
+					aux_cards = aux_cards->next;
+
+				// get the card
+				cur_card = aux_cards->card;
+				card_id = cur_card->id + cur_card->suit * SUIT_SIZE;
+
+				// draw the card
+				pos = num_cards % 4;
+				x = (int) num_player * ((0.95f*WIDTH_WINDOW)/4-5)+(num_cards/4)*12+15;
+				y = (int) (0.55f*HEIGHT_WINDOW)+10;
+				if ( pos == 1 || pos == 3) x += CARD_WIDTH + 30;
+				if ( pos == 2 || pos == 3) y += CARD_HEIGHT+ 10;
+				RenderCard(x, y, card_id, _cards, _renderer);
+
+				num_cards++;
+				tmp = aux_cards;
+			}
+			num_cards = 0;
 		}
-
-		// Iterate over the stack backwards
-		tmp = NULL;
-        while (tmp != cur_player->cards) {
-			aux_cards = cur_player->cards;
-
-			// iterar até à posição tmp da stack (inicialmente é o fim)
-            while (aux_cards->next != tmp)
-                aux_cards = aux_cards->next;
-
-			// get the card
-			cur_card = aux_cards->card;
-			card_id = cur_card->id + cur_card->suit * SUIT_SIZE;
-
-			// draw the card
-			pos = num_cards % 4;
-			x = (int) num_player * ((0.95f*WIDTH_WINDOW)/4-5)+(num_cards/4)*12+15;
-			y = (int) (0.55f*HEIGHT_WINDOW)+10;
-			if ( pos == 1 || pos == 3) x += CARD_WIDTH + 30;
-			if ( pos == 2 || pos == 3) y += CARD_HEIGHT+ 10;
-			RenderCard(x, y, card_id, _cards, _renderer);
-
-			num_cards++;
-            tmp = aux_cards;
-        }
-        num_cards = 0;
+		aux = aux->next;
 		num_player++;
-        aux = aux->next;
     }
 }
 

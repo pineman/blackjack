@@ -12,16 +12,8 @@
 #define MAX_PLAYER_NAME 8
 
 typedef enum {EA, HU} Type;
-typedef enum {NA, BJ, BU, ST} Status; // double, surrender
-
-/* 0-active
- * 2-blackjack
- * 3-bust
- * 4-bankrupt
- * 5-stand
- * 6-hit
- */
-/*typedef enum modes {active, blackjack, bust, bankrupt, stand, hit} Status;*/
+// waiting, blackjack, busted, stand'ed'
+typedef enum {WW, BJ, BU, ST} Status; // double, surrender
 
 typedef struct Card {
 	int suit;
@@ -33,12 +25,11 @@ typedef struct Stack {
 	struct Stack *next;
 } Stack;
 
-
-
 typedef struct Player {
 	Type type;
-	bool playing;
 	char name[MAX_PLAYER_NAME+1];
+	bool ingame;
+	bool playing;
 	int position;
     Status status;
 	int money;
@@ -49,7 +40,6 @@ typedef struct Player {
 	int wins;
 	int losses;
 	int draws;
-	//enum status;
 } Player;
 
 typedef struct Config {
