@@ -61,7 +61,7 @@ void new_game_players(List *players, Player *house, List *megadeck, int *cards_l
 void stand(List *players, Player *house, List *megadeck, int *cards_left, const int num_decks);
 void count_points(Player *player);
 int point_index(int id);
-void pay_bets(list *players, player *house);
+void pay_bets(List *players, Player *house);
 void destroy_list(List *head);
 void destroy_stack(Stack **cards);
 
