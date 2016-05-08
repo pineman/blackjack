@@ -110,6 +110,7 @@ int create_megadeck(List *megadeck, const int num_decks)
 
 void new_game(List *players, Player *house, List *megadeck, int *cards_left, const int num_decks)
 {
+	// só fazer new_game quando já toda a gente jogou
 	bool found = false;
     List *aux = players->next;
     Player *cur_player = NULL;
@@ -127,6 +128,10 @@ void new_game(List *players, Player *house, List *megadeck, int *cards_left, con
 	new_game_house(house, megadeck, cards_left, num_decks);
 
 	new_game_players(players, house, megadeck, cards_left, num_decks);
+
+	if (house->status == BJ)
+		// a ronda acaba mais cedo
+		pay_bets(players, house);
 }
 
 void new_game_house(Player *house, List *megadeck, int *cards_left, const int num_decks)
@@ -138,6 +143,7 @@ void new_game_house(Player *house, List *megadeck, int *cards_left, const int nu
 	house->status = WW;
 
 	count_points(house);
+	printf("house->points = %d\n", house->points);
     if (house->points == 21)
 		house->status = BJ;
 }
@@ -152,17 +158,31 @@ void new_game_players(List *players, Player *house, List *megadeck, int *cards_l
 		if (cur_player->money < cur_player->bet)
 			cur_player->ingame = false;
 
+		// Se o jogador jogou na ronda antes
 		if (cur_player->ingame) {
+			// Limpar cartas antigas
 			destroy_stack(&cur_player->cards);
+
+			// Verificar se o jogador pode jogar outra vez
+			if (cur_player->money < cur_player->bet)
+				cur_player->ingame = false;
+		}
+
+		// se puder jogar...
+		if (cur_player->ingame) {
+			// Distribuir cartas novas
 			for (int i = 0; i < 2; i++)
 				give_card(cur_player, megadeck, cards_left, num_decks);
 			cur_player->num_cards = 2;
 			cur_player->status = WW;
 
+			// Contar pontos e verificar se tem blackjack
 			count_points(cur_player);
 			if (cur_player->points == 21)
 				cur_player->status = BJ;
 
+			// Dar a vez ao primeiro jogador sem blackjack
+			// E não dar a vez a ninguém se a casa tiver blackjack
 			if (!(house->status == BJ) && !(cur_player->status == BJ) && !found) {
 				cur_player->playing = true;
 				found = true;
@@ -170,13 +190,15 @@ void new_game_players(List *players, Player *house, List *megadeck, int *cards_l
 			else
 				cur_player->playing = false;
 
+			// Retirar as apostas a todos os jogadores
+			// (apenas fazemos o cálculo dos dinheiros no final da ronda!)
 			cur_player->money -= cur_player->bet;
 		}
 		aux = aux->next;
     }
 }
 
-void stand(List *players, Player *house, List *megadeck, int *cards_left, const int num_decks)
+void stand(List *players, Player *house)
 {
 	List *aux = players->next; // dummy head
 	Player *cur_player = NULL;
@@ -207,10 +229,67 @@ void stand(List *players, Player *house, List *megadeck, int *cards_left, const 
 		}
 		// se ele existir, dar-lhe a vez
 		if (aux) cur_player->playing = true;
+		else
+			// não existe um próximo jogador válido para jogar
+			// TODO: se não existir, é o hit da casa
+			pay_bets(players, house);
 	}
 	else {
+		// último jogador
 		// TODO: se não existir, é o hit da casa
+		pay_bets(players, house);
 	}
+}
+
+void pay_bets(List *players, Player *house)
+{
+    List *aux = players->next;
+	Player *cur_player = NULL;
+	while (aux) {
+		cur_player = ((Player *) aux->payload);
+
+		//surrender
+		if (cur_player->status == SU) {
+		 	house->money -= cur_player->bet / 2;
+		 	cur_player->money += cur_player->bet / 2;
+		}
+		// blackjack casa e do jogador
+        else if (cur_player->status == BJ && house->status == BJ)
+            cur_player->money += cur_player->bet;
+        // blackjack do jogador
+        else if (cur_player->status == BJ && !(house->status == BJ)){
+        	cur_player->money += 2*cur_player->bet + cur_player->bet/2;
+            house->money -= cur_player->bet + cur_player->bet/2;
+        }
+        // blackjack da casa
+        else if (!(cur_player->status == BJ) && house->status == BJ)
+        	house->money += cur_player->bet;
+        // bust da casa e do jogador
+        else if (cur_player->status == BU)
+            house->money += cur_player->bet;
+        // bust da casa
+        else if (!(cur_player->status == BU) && house->status == BU) {
+            cur_player->money += 2*cur_player->bet;
+        	house->money -= cur_player->bet;
+        }
+        // empate mesmos pontos
+        else if (cur_player->points == house->points)
+            cur_player->money += cur_player->bet;
+        // jogador ganha com mais pontos
+        else if (cur_player->points > house->points) {
+            cur_player->money += 2*cur_player->bet;
+            house->money -= cur_player->bet;
+        }
+        // house ganha com mais pontos
+        else if (cur_player->points < house->points)
+        	house->money += cur_player->bet;
+        else {
+        	puts("WTF!");
+        	// exit(EXIT_FAILURE);
+        }
+
+        aux = aux->next;
+    }
 }
 
 void count_points(Player *player)
@@ -245,54 +324,6 @@ int point_index(int id)
     return points;
 }
 
-void pay_bets(List *players, Player *house)
-{
-    List *aux = players->next;
-	while (aux) {
-		cur_player = ((Player *) aux->payload);
-        
-		//surrender
-		if (cur_player->status == SU) {
-		 	house->money -= cur_player->bet / 2;
-		 	cur_player->money += cur_player->bet / 2;
-		}
-		// blackjack casa e do jogador
-        else if (cur_player->status == BJ && house->status == BJ)
-            cur_player->money += cur_player->bet;
-        // blackjack do jogador
-        else if (cur_player->status == BJ && !(house->status == BJ)){
-        	cur_player->money += 2*cur_player->bet + cur_player/2;
-            house->money -= cur_player->bet + cur_player->bet / 2;
-        }
-        // blackjack da casa
-        else if (!(cur_player->status == BJ) && house->status == BJ)
-        	house->money += cur_player->bet;
-        // bust da casa e do jogador
-        else if (cur_player->status == BU)
-            house->money += cur_player->bet; 
-        // bust da casa
-        else if (!(cur_player->status == BU) house->status == BU) {
-            cur_player->money += 2*cur_player->bet;
-        	house->money -= cur_player->bet;
-        }
-        // empate mesmos pontos
-        else if (cur_player->points == house->points)
-            cur_player->money += cur_player->bet;
-        // jogador ganha com mais pontos
-        else if (cur_player->points > house->points) {
-            cur_player->money += 2*cur_player->bet;
-            house->money -= cur_player->bet;
-        }
-        // house ganha com mais pontos
-        else if (cur_player->points < house->points)
-        	house->money += cur_player->bet;
-        else {
-        	puts("WTF!");
-        	// exit(EXIT_FAILURE);
-        }
-    }
-}
-
 void destroy_list(List *head)
 {
 	List *aux = head->next; // dummy head
@@ -311,4 +342,3 @@ void destroy_stack(Stack **cards)
 	while (*cards)
 		free(stack_pop(cards));
 }
-
