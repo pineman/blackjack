@@ -13,7 +13,7 @@
 
 typedef enum {EA, HU} Type;
 // waiting, blackjack, busted, stand'ed'
-typedef enum {WW, BJ, BU, ST} Status; // double, surrender
+typedef enum {WW, BJ, BU, ST, SU} Status; // double, surrender
 
 typedef struct Card {
 	int suit;

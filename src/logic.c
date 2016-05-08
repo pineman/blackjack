@@ -251,24 +251,45 @@ void pay_bets(List *players, Player *house)
 	while (aux) {
 		cur_player = ((Player *) aux->payload);
         
-        // blackjack casa e do jogador
-        if (cur_player->status == BJ && house->status = BJ)
+		//surrender
+		if (cur_player->status == SU) {
+		 	house->money -= cur_player->bet / 2;
+		 	cur_player->money += cur_player->bet / 2;
+		}
+		// blackjack casa e do jogador
+        else if (cur_player->status == BJ && house->status == BJ)
             cur_player->money += cur_player->bet;
         // blackjack do jogador
-        else if (cur_player->status == BJ)
-            cur_player->money += 2*cur_player->bet + cur_player/2;
+        else if (cur_player->status == BJ && !(house->status == BJ)){
+        	cur_player->money += 2*cur_player->bet + cur_player/2;
+            house->money -= cur_player->bet + cur_player->bet / 2;
+        }
+        // blackjack da casa
+        else if (!(cur_player->status == BJ) && house->status == BJ)
+        	house->money += cur_player->bet;
         // bust da casa e do jogador
-        else if (cur_player->status == BU && house->status == BU)
-            cur_player->money += cur_player->bet; 
+        else if (cur_player->status == BU)
+            house->money += cur_player->bet; 
         // bust da casa
-        else if (house->status == BU)
+        else if (!(cur_player->status == BU) house->status == BU) {
             cur_player->money += 2*cur_player->bet;
+        	house->money -= cur_player->bet;
+        }
         // empate mesmos pontos
         else if (cur_player->points == house->points)
             cur_player->money += cur_player->bet;
         // jogador ganha com mais pontos
-        else if (cur_player->points > house->points)
-            cur_player->money += 2*cur_player->bet;     
+        else if (cur_player->points > house->points) {
+            cur_player->money += 2*cur_player->bet;
+            house->money -= cur_player->bet;
+        }
+        // house ganha com mais pontos
+        else if (cur_player->points < house->points)
+        	house->money += cur_player->bet;
+        else {
+        	puts("WTF!");
+        	// exit(EXIT_FAILURE);
+        }
     }
 }
 
