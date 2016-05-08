@@ -110,6 +110,7 @@ int create_megadeck(List *megadeck, const int num_decks)
 
 void new_game(List *players, Player *house, List *megadeck, int *cards_left, const int num_decks)
 {
+	// TODO: remove bets when the game starts
 	destroy_stack(&house->cards);
 	for (int i = 0; i < 2; i++)
 		give_card(house, megadeck, cards_left, num_decks);
@@ -146,23 +147,41 @@ void new_game(List *players, Player *house, List *megadeck, int *cards_left, con
     }
 }
 
-void destroy_list(List *head)
+void stand(List *players, Player *house, List *megadeck, int *cards_left, const int num_decks)
 {
-	List *aux = head->next; // dummy head
-	List *tmp = NULL;
+	List *aux = players->next; // dummy head
+	Player *cur_player = NULL;
 	while (aux) {
-		tmp = aux;
-		aux = tmp->next;
-		free(tmp->payload);
-		free(tmp);
+		// iterar até ao jogador que está a jogar
+		cur_player = (Player *) aux->payload;
+		if (cur_player->playing)
+			break;
+		else
+			aux = aux->next;
 	}
-	free(head);
-}
 
-void destroy_stack(Stack **cards)
-{
-	while (*cards)
-		free(stack_pop(cards));
+	// tirar-lhe a vez
+	cur_player->status = ST;
+	cur_player->playing = false;
+
+	// Passar ao próximo jogador
+	if (aux) aux = aux->next;
+
+	if (aux) {
+		// se ele existir, procurar o próximo jogador válido a seguir
+		while (aux) {
+			cur_player = (Player *) aux->payload;
+			if (cur_player->ingame)
+				break;
+			else
+				aux = aux->next;
+		}
+		// e dar-lhe a vez
+		cur_player->playing = true;
+	}
+	else {
+		// TODO: se não existir, é o hit da casa
+	}
 }
 
 void count_points(Player *player)
@@ -206,3 +225,23 @@ int point_index(int id)
 		switch(aux->status)
 	}
 }*/
+
+void destroy_list(List *head)
+{
+	List *aux = head->next; // dummy head
+	List *tmp = NULL;
+	while (aux) {
+		tmp = aux;
+		aux = tmp->next;
+		free(tmp->payload);
+		free(tmp);
+	}
+	free(head);
+}
+
+void destroy_stack(Stack **cards)
+{
+	while (*cards)
+		free(stack_pop(cards));
+}
+

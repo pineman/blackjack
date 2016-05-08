@@ -57,9 +57,10 @@ Card *stack_pop(Stack **sp);
 int give_card(Player *player, List *megadeck, int *cards_left, const int num_decks);
 int create_megadeck(List *megadeck, const int num_decks);
 void new_game(List *players, Player *house, List *megadeck, int *cards_left, const int num_decks);
-void destroy_list(List *head);
-void destroy_stack(Stack **cards);
+void stand(List *players, Player *house, List *megadeck, int *cards_left, const int num_decks);
 void count_points(Player *player);
 int point_index(int id);
+void destroy_list(List *head);
+void destroy_stack(Stack **cards);
 
 #endif
