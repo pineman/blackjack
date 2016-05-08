@@ -51,17 +51,24 @@ typedef struct Config {
 } Config;
 
 int init_game(Config *config, List *players);
+
 void stack_push(Stack **sp, Card *card);
 Card *stack_pop(Stack **sp);
+
 int give_card(Player *player, List *megadeck, int *cards_left, const int num_decks);
 int create_megadeck(List *megadeck, const int num_decks);
+
 void new_game(List *players, Player *house, List *megadeck, int *cards_left, const int num_decks);
 void new_game_house(Player *house, List *megadeck, int *cards_left, const int num_decks);
 void new_game_players(List *players, Player *house, List *megadeck, int *cards_left, const int num_decks);
-void stand(List *players, Player *house, List *megadeck, int *cards_left, const int num_decks);
+
+void stand(List *players, Player *house);
+
+void pay_bets(List *players, Player *house);
+
 void count_points(Player *player);
 int point_index(int id);
-void pay_bets(List *players, Player *house);
+
 void destroy_list(List *head);
 void destroy_stack(Stack **cards);
 

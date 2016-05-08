@@ -53,6 +53,7 @@ int main(int argc, char *argv[])
     // loads the cards images
     LoadCards(cards);
 
+	((Player *) players->next->next->next->next->payload)->status = BJ;
  	while (quit == 0)
     {
         // while there's events to handle
@@ -70,7 +71,7 @@ int main(int argc, char *argv[])
 						quit = 1;
 						break;
 					case SDLK_s:
-                        stand(players, house, megadeck, &cards_left, num_decks);
+                        stand(players, house);
 						break;
     				case SDLK_h:
 						// hit(players, house, megadeck); --> in logic.c
@@ -102,7 +103,7 @@ int main(int argc, char *argv[])
         // render in the screen all changes above
         SDL_RenderPresent(renderer);
     	// add a delay
-		//SDL_Delay(delay);
+		SDL_Delay(delay);
     }
 
 	// TODO: remember to free the list of old players too!
