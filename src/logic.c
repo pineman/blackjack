@@ -27,7 +27,7 @@ int init_game(Config *config, List *players)
 		new_player->type = config->player_type[i];
 		new_player->money = config->money[i];
 		new_player->bet = config->bets[i];
-		new_player->playing = i == 0 ? true : false;
+		new_player->playing = false;
 		list_append(players, new_player);
 	}
 
@@ -110,7 +110,27 @@ int create_megadeck(List *megadeck, const int num_decks)
 
 void new_game(List *players, Player *house, List *megadeck, int *cards_left, const int num_decks)
 {
-	// TODO: remove bets when the game starts
+	bool found = false;
+    List *aux = players->next;
+    Player *cur_player = NULL;
+    while (aux) {
+		cur_player = (Player *) aux->payload;
+		if (cur_player->playing) {
+			found = true;
+			break;
+		}
+		aux = aux->next;
+    }
+    if (found)
+		return;
+
+	new_game_house(house, megadeck, cards_left, num_decks);
+
+	new_game_players(players, house, megadeck, cards_left, num_decks);
+}
+
+void new_game_house(Player *house, List *megadeck, int *cards_left, const int num_decks)
+{
 	destroy_stack(&house->cards);
 	for (int i = 0; i < 2; i++)
 		give_card(house, megadeck, cards_left, num_decks);
@@ -120,12 +140,18 @@ void new_game(List *players, Player *house, List *megadeck, int *cards_left, con
 	count_points(house);
     if (house->points == 21)
 		house->status = BJ;
+}
 
+void new_game_players(List *players, Player *house, List *megadeck, int *cards_left, const int num_decks)
+{
+    bool found = 0;
     List *aux = players->next;
     Player *cur_player = NULL;
-    int i = 0;
     while (aux) {
 		cur_player = (Player *) aux->payload;
+		if (cur_player->money < cur_player->bet)
+			cur_player->ingame = false;
+
 		if (cur_player->ingame) {
 			destroy_stack(&cur_player->cards);
 			for (int i = 0; i < 2; i++)
@@ -137,11 +163,14 @@ void new_game(List *players, Player *house, List *megadeck, int *cards_left, con
 			if (cur_player->points == 21)
 				cur_player->status = BJ;
 
-			if (i == 0 && house->status != BJ)
+			if (!(house->status == BJ) && !(cur_player->status == BJ) && !found) {
 				cur_player->playing = true;
+				found = true;
+			}
 			else
 				cur_player->playing = false;
-			i++;
+
+			cur_player->money -= cur_player->bet;
 		}
 		aux = aux->next;
     }
@@ -160,7 +189,7 @@ void stand(List *players, Player *house, List *megadeck, int *cards_left, const 
 			aux = aux->next;
 	}
 
-	// tirar-lhe a vez
+	// fazer-lhe stand
 	cur_player->status = ST;
 	cur_player->playing = false;
 
@@ -171,13 +200,13 @@ void stand(List *players, Player *house, List *megadeck, int *cards_left, const 
 		// se ele existir, procurar o próximo jogador válido a seguir
 		while (aux) {
 			cur_player = (Player *) aux->payload;
-			if (cur_player->ingame)
+			if (cur_player->ingame && !(cur_player->status == BJ))
 				break;
 			else
 				aux = aux->next;
 		}
-		// e dar-lhe a vez
-		cur_player->playing = true;
+		// se ele existir, dar-lhe a vez
+		if (aux) cur_player->playing = true;
 	}
 	else {
 		// TODO: se não existir, é o hit da casa

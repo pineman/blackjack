@@ -48,32 +48,10 @@ int main(int argc, char *argv[])
 
 	new_game(players, house, megadeck, &cards_left, num_decks);
 
-    //printf("%d", ((Player *) aux->prev->payload)->cards->card->id);
-
 	// initialize graphics
 	InitEverything(WIDTH_WINDOW, HEIGHT_WINDOW, imgs, &window, &renderer);
     // loads the cards images
     LoadCards(cards);
-
-	// um bool diz se o jogador está currentemente a jogar!
-	// cuidado para desativar um quando se ativa o outro!
-	// portanto para passar a vez a outro jogador temos de verificar:
-	/*
-	// isto é basicamente o stand()
-	while (players)
-	{
-		if (players->payload->playing) {
-			aux = players;
-			while (aux) {
-				if (aux->payload->ingame)
-					aux->payload->playing = true;
-					players->payload->playing = false;
-				aux = aux->next;
-			{
-		{
-		players = players->next;
-	}
-	*/
 
  	while (quit == 0)
     {
@@ -124,7 +102,7 @@ int main(int argc, char *argv[])
         // render in the screen all changes above
         SDL_RenderPresent(renderer);
     	// add a delay
-		SDL_Delay(delay);
+		//SDL_Delay(delay);
     }
 
 	// TODO: remember to free the list of old players too!
