@@ -37,7 +37,7 @@ typedef struct Player {
 	int points;
 	int wins;
 	int losses;
-	int draws;
+	int ties;
 } Player;
 
 typedef struct Config {
