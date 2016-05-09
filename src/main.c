@@ -25,7 +25,7 @@ int main(int argc, char *argv[])
     int quit = 0;
     int cards_left = 0;
     Player *cur_player = NULL;
-    
+
 	if (argc != 2)
 		// TODO: error msg
 		exit(EXIT_FAILURE);
@@ -49,7 +49,9 @@ int main(int argc, char *argv[])
 	// TODO: há mal a casa ser do tipo 'Player'?
 	Player *house = (Player *) calloc((size_t) 1, sizeof(Player));
 
-	new_game(players, house, megadeck); 
+	// Inicializar um novo jogo
+	new_game(players, house, megadeck);
+
 	// initialize graphics
 	InitEverything(WIDTH_WINDOW, HEIGHT_WINDOW, imgs, &window, &renderer);
     // loads the cards images
@@ -71,16 +73,19 @@ int main(int argc, char *argv[])
 						// write_stats(players, house); --> in file.c
 						quit = 1;
 						break;
+
 					case SDLK_s:
-                        stand(players, house);
+                        stand(players, house, megadeck);
 						break;
+
     				case SDLK_h:
-						// hit(players, house, megadeck); --> in logic.c
-                        //hit(cur_player, megadeck, &cards_left, num_decks, players, house);
+						player_hit(players, house, megadeck);
 						break;
+
 					case SDLK_n:
 						new_game(players, house, megadeck);
 						break;
+
 					case SDLK_a:
 						// this is tricky.
 						// do we keep old players (i.e. in the list players,
@@ -91,6 +96,13 @@ int main(int argc, char *argv[])
 						// in write_stats?
 						// add_player(players); // ler info do jogador de stdin --> in logic.c
 						break;
+
+					case SDLK_r:
+						break;
+
+					case SDLK_d:
+						break;
+
 					default:
 						break;
 				}
