@@ -22,9 +22,7 @@ int main(int argc, char *argv[])
     SDL_Surface *cards[MAX_DECK_SIZE+1], *imgs[2];
     SDL_Event event;
     int delay = 300;
-    int quit = 0;
-    int cards_left = 0;
-    Player *cur_player = NULL;
+    bool quit = false;
 
 	if (argc != 2)
 		// TODO: error msg
@@ -42,6 +40,7 @@ int main(int argc, char *argv[])
 	const int num_decks = init_game(config, players);
 
 	// Declarar o megabaralho (give_card enche-o automaticate)
+    int cards_left = 0;
 	List *deck = (List *) calloc((size_t) 1, sizeof(List));
     Megadeck megadeck_real = {cards_left, num_decks, deck};
     Megadeck *megadeck = &megadeck_real;
@@ -52,26 +51,31 @@ int main(int argc, char *argv[])
 	// Inicializar um novo jogo
 	new_game(players, house, megadeck);
 
-	// initialize graphics
-	InitEverything(WIDTH_WINDOW, HEIGHT_WINDOW, imgs, &window, &renderer);
     // loads the cards images
     LoadCards(cards);
 
- 	while (quit == 0)
+	// initialize graphics
+	InitEverything(WIDTH_WINDOW, HEIGHT_WINDOW, imgs, &window, &renderer);
+
+	char test[100] = {0};
+ 	while (!quit)
     {
+		sprintf(test, "%d", house->points);
+		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "freitas", test, window);
+
         // while there's events to handle
         while (SDL_PollEvent(&event))
         {
 			if (event.type == SDL_QUIT) {
                 // quit the program
-				quit = 1;
+				quit = true;
 			}
 			else if (event.type == SDL_KEYDOWN) {
 				switch (event.key.keysym.sym)
 				{
 					case SDLK_q:
 						// write_stats(players, house); --> in file.c
-						quit = 1;
+						quit = true;
 						break;
 
 					case SDLK_s:
@@ -122,6 +126,7 @@ int main(int argc, char *argv[])
 
 	// TODO: remember to free the list of old players too!
     List *aux = players->next;
+    Player *cur_player = NULL;
     while (aux) {
 		cur_player = (Player *) aux->payload;
 		destroy_stack(&cur_player->cards);
