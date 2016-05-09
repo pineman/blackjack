@@ -209,16 +209,17 @@ Player *stand(List *players, Player *house)
 			break;
 		else
 			aux = aux->next;
-	}
-    if (cur_player->status == ST || cur_player->status == BJ || cur_player->status == BU)
-        return NULL;
-
-	// fazer-lhe stand
-	cur_player->status = ST;
-	cur_player->playing = false;
+    }
 
 	// Passar ao próximo jogador
-	if (aux) aux = aux->next;
+	if (aux) 
+        aux = aux->next;
+    else
+        return NULL; 
+
+    // fazer-lhe stand
+	cur_player->status = ST;
+	cur_player->playing = false;
 
 	if (aux) {
 		// se ele existir, procurar o próximo jogador válido a seguir
@@ -244,14 +245,19 @@ Player *stand(List *players, Player *house)
     return cur_player;
 }
 
-void hit(Player *player, List *megadeck, int *cardsleft, int num_decks)
+int hit(Player *player, List *megadeck, int *cardsleft, int num_decks, List *Players, Player *house)
 {
+    if(!player)
+        return 0; 
+       
     if (player->points <= 21) { 
         give_card(player, megadeck, cardsleft, num_decks);
         count_points(player);
     }
-    else 
-        player->status = BU; 
+    else
+        player = stand(Players, house);
+    
+    return 1;
 } 
 
 void pay_bets(List *players, Player *house)
@@ -322,6 +328,9 @@ void count_points(Player *player)
         player->points -= 10;
         --num_ace;
     }
+
+    if (player->points > 21)
+        player->status = BU;
 }
 
 int point_index(int id)

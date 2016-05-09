@@ -25,7 +25,7 @@ int main(int argc, char *argv[])
     int quit = 0;
     int cards_left = 0;
     Player *cur_player = NULL;
-
+    
 	if (argc != 2)
 		// TODO: error msg
 		exit(EXIT_FAILURE);
@@ -47,9 +47,8 @@ int main(int argc, char *argv[])
 	// TODO: há mal a casa ser do tipo 'Player'?
 	Player *house = (Player *) calloc((size_t) 1, sizeof(Player));
 
-	new_game(players, house, megadeck, &cards_left, num_decks);
-    cur_player = ((Player *)players->next->payload);
-
+	new_game(players, house, megadeck, &cards_left, num_decks); 
+    cur_player = (Player *)players->next->payload;
 	// initialize graphics
 	InitEverything(WIDTH_WINDOW, HEIGHT_WINDOW, imgs, &window, &renderer);
     // loads the cards images
@@ -77,10 +76,11 @@ int main(int argc, char *argv[])
 						break;
     				case SDLK_h:
 						// hit(players, house, megadeck); --> in logic.c
-                        hit(cur_player, megadeck, &cards_left, num_decks);
+                        hit(cur_player, megadeck, &cards_left, num_decks, players, house);
 						break;
 					case SDLK_n:
 						new_game(players, house, megadeck, &cards_left, num_decks);
+                        cur_player = (Player *)players->next->payload;
 						break;
 					case SDLK_a:
 						// this is tricky.

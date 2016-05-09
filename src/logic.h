@@ -50,7 +50,7 @@ typedef struct Config {
 	int bets[MAX_PLAYERS];
 } Config;
 
-int init_game(Config *config, List *players);
+int   init_game(Config *config, List *players);
 
 void stack_push(Stack **sp, Card *card);
 Card *stack_pop(Stack **sp);
@@ -63,7 +63,7 @@ void new_game_house(Player *house, List *megadeck, int *cards_left, const int nu
 void new_game_players(List *players, Player *house, List *megadeck, int *cards_left, const int num_decks);
 
 Player *stand(List *players, Player *house);
-void hit(Player *player, List *megadeck, int *cardsleft, int num_decks);
+int hit(Player *player, List *megadeck, int *cardsleft, int num_decks, List *Players, Player *house);
 
 void pay_bets(List *players, Player *house);
 
