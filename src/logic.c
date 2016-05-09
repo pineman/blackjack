@@ -57,15 +57,15 @@ Card *stack_pop(Stack **sp)
 	return card;
 }
 
-int give_card(Player *player, List *megadeck, int *cards_left, const int num_decks)
+int give_card(Player *player, Megadeck *megadeck)
 {
 	int random = 0;
 	if (player->num_cards == MAX_CARD_HAND)
 		// TODO: o jogador não pode receber mais cartas
 		return -1;
 
-	if (!*cards_left)
-		*cards_left = create_megadeck(megadeck, num_decks);
+	if (!megadeck->cards_left)
+		megadeck->cards_left = create_megadeck(megadeck);
 
 	// random: 1 - cards_left
 	// random é o número de nós a seguir na lista, por isso,
@@ -73,8 +73,8 @@ int give_card(Player *player, List *megadeck, int *cards_left, const int num_dec
 	// ou no máximo o número de nós (se seguirmos *cards_left
 	// nós a partir do dummy head node, chegamos à tail)
 
-	random = rand() % *cards_left + 1;
-	List *random_card = megadeck;
+	random = rand() % megadeck->cards_left + 1;
+	List *random_card = megadeck->deck;
 	for (int i = 0; i < random; i++) {
 		if (random_card->next)
 			random_card = random_card->next;
@@ -86,29 +86,29 @@ int give_card(Player *player, List *megadeck, int *cards_left, const int num_dec
 	stack_push(&(player->cards), random_card->payload);
 	player->num_cards++;
 	list_remove(random_card);
-	--*cards_left;
+	--megadeck->cards_left;
 	return 0;
 }
 
-int create_megadeck(List *megadeck, const int num_decks)
+int create_megadeck(Megadeck *megadeck)
 {
 	int total_cards = 0;
 	Card *cur_card = NULL;
 
-	for (int i = 0; i < num_decks; i++)
+	for (int i = 0; i < megadeck->num_decks; i++)
 		for (int j = 0; j < 4; j++)
 			for (int k = 0; k < SUIT_SIZE; k++) {
 				cur_card = (Card *) calloc(1, sizeof(Card));
 				cur_card->suit = j;
 				cur_card->id = k;
-				list_append(megadeck, cur_card);
+				list_append(megadeck->deck, cur_card);
 			}
 
-	total_cards = num_decks * DECK_SIZE;
+	total_cards = megadeck->num_decks * DECK_SIZE;
 	return total_cards;
 }
 
-void new_game(List *players, Player *house, List *megadeck, int *cards_left, const int num_decks)
+void new_game(List *players, Player *house, Megadeck *megadeck)
 {
 	// só fazer new_game quando já toda a gente jogou
 	bool found = false;
@@ -125,20 +125,20 @@ void new_game(List *players, Player *house, List *megadeck, int *cards_left, con
     if (found)
 		return;
 
-	new_game_house(house, megadeck, cards_left, num_decks);
+	new_game_house(house, megadeck);
 
-	new_game_players(players, house, megadeck, cards_left, num_decks);
+	new_game_players(players, house, megadeck);
 
 	if (house->status == BJ)
 		// a ronda acaba mais cedo
 		pay_bets(players, house);
 }
 
-void new_game_house(Player *house, List *megadeck, int *cards_left, const int num_decks)
+void new_game_house(Player *house, Megadeck *megadeck)
 {
 	destroy_stack(&house->cards);
 	for (int i = 0; i < 2; i++)
-		give_card(house, megadeck, cards_left, num_decks);
+		give_card(house, megadeck);
 	house->num_cards = 2;
 	house->status = WW;
 
@@ -148,7 +148,7 @@ void new_game_house(Player *house, List *megadeck, int *cards_left, const int nu
 		house->status = BJ;
 }
 
-void new_game_players(List *players, Player *house, List *megadeck, int *cards_left, const int num_decks)
+void new_game_players(List *players, Player *house, Megadeck *megadeck)
 {
     bool found = 0;
     List *aux = players->next;
@@ -172,7 +172,7 @@ void new_game_players(List *players, Player *house, List *megadeck, int *cards_l
 		if (cur_player->ingame) {
 			// Distribuir cartas novas
 			for (int i = 0; i < 2; i++)
-				give_card(cur_player, megadeck, cards_left, num_decks);
+				give_card(cur_player, megadeck);
 			cur_player->num_cards = 2;
 			cur_player->status = WW;
 
@@ -198,7 +198,7 @@ void new_game_players(List *players, Player *house, List *megadeck, int *cards_l
     }
 }
 
-Player *stand(List *players, Player *house)
+void stand(List *players, Player *house)
 {
 	List *aux = players->next; // dummy head
 	Player *cur_player = NULL;
@@ -215,7 +215,7 @@ Player *stand(List *players, Player *house)
 	if (aux) 
         aux = aux->next;
     else
-        return NULL; 
+        return; 
 
     // fazer-lhe stand
 	cur_player->status = ST;
@@ -242,10 +242,9 @@ Player *stand(List *players, Player *house)
 		// TODO: se não existir, é o hit da casa
 		pay_bets(players, house);
 	}
-    return cur_player;
 }
 
-int hit(Player *player, List *megadeck, int *cardsleft, int num_decks, List *Players, Player *house)
+/*int hit(List *megadeck, int *cardsleft, int num_decks, List *Players, Player *house)
 {
     if(!player)
         return 0; 
@@ -259,6 +258,7 @@ int hit(Player *player, List *megadeck, int *cardsleft, int num_decks, List *Pla
     
     return 1;
 } 
+*/
 
 void pay_bets(List *players, Player *house)
 {
