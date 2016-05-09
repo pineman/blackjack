@@ -454,3 +454,45 @@ SDL_Renderer* CreateRenderer(int width, int height, SDL_Window *_window)
 
 	return renderer;
 }
+
+void render_status(List *players, SDL_Renderer *renderer)
+{
+    SDL_Rect rect;
+    TTF_Font *serif = TTF_OpenFont("assets//FreeSerif.ttf", 16);
+     if (!serif) {
+        printf("TTF_OpenFont: %s\n", TTF_GetError());
+        exit(EXIT_FAILURE);
+    }
+
+    char *bust = "BUST";
+    char *blackjack = "BLACKJACK";
+    List *aux = players->next;
+    Player *cur_player = (Player *) aux->payload;
+    SDL_Color white = { 255, 255, 255, 255};
+    for (int i=0; aux->next; i++) {
+        rect.y = 380;
+        rect.h = 30;
+        if (cur_player->status == BJ) { 
+            rect.x = 55 + 208*i;
+            rect.w = 115;
+            SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255 );
+            SDL_RenderFillRect(renderer, &rect);
+            SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255 );
+            SDL_RenderDrawRect(renderer, &rect);
+            RenderText(64+208*i, 380, blackjack, serif, &white, renderer);
+        }
+        if (cur_player->status == BU) { 
+            rect.x = 80 + 208*i;
+            rect.w = 70;               
+            SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255 );
+            SDL_RenderFillRect(renderer, &rect);
+            SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255 );
+            SDL_RenderDrawRect(renderer, &rect);
+            RenderText(94+(208*i), 380, bust, serif, &white,renderer); 
+        }             
+    
+        aux = aux->next;
+        cur_player = (Player *) aux->payload; 
+    }  
+    TTF_CloseFont(serif);
+}
