@@ -302,41 +302,54 @@ void pay_bets(List *players, Player *house)
 	while (aux) {
 		cur_player = ((Player *) aux->payload);
 
-		//surrender
+		// surrender
 		if (cur_player->status == SU) {
 		 	house->money -= cur_player->bet / 2;
 		 	cur_player->money += cur_player->bet / 2;
 		}
-		// blackjack casa e do jogador
-        else if (cur_player->status == BJ && house->status == BJ)
+		// blackjack casa e do jogador: tie
+        else if (cur_player->status == BJ && house->status == BJ) {
             cur_player->money += cur_player->bet;
-        // blackjack do jogador
-        else if (cur_player->status == BJ && !(house->status == BJ)){
+            cur_player->ties++;
+        }
+        // blackjack do jogador: win
+        else if (cur_player->status == BJ && !(house->status == BJ)) {
         	cur_player->money += 2*cur_player->bet + cur_player->bet/2;
             house->money -= cur_player->bet + cur_player->bet/2;
+            cur_player->wins++;
         }
-        // blackjack da casa
-        else if (!(cur_player->status == BJ) && house->status == BJ)
+        // blackjack da casa: loss
+        else if (!(cur_player->status == BJ) && house->status == BJ) {
         	house->money += cur_player->bet;
-        // bust da casa e do jogador
-        else if (cur_player->status == BU)
+        	cur_player->losses++;
+        }
+        // bust da casa e do jogador: tie
+        else if (cur_player->status == BU) {
             house->money += cur_player->bet;
-        // bust da casa
+            cur_player->ties++;
+        }
+        // bust da casa: win
         else if (!(cur_player->status == BU) && house->status == BU) {
             cur_player->money += 2*cur_player->bet;
         	house->money -= cur_player->bet;
+            cur_player->wins++;
         }
-        // empate mesmos pontos
-        else if (cur_player->points == house->points)
+        // empate mesmos pontos: tie
+        else if (cur_player->points == house->points) {
             cur_player->money += cur_player->bet;
-        // jogador ganha com mais pontos
+            cur_player->ties++;
+        }
+        // jogador ganha com mais pontos: win
         else if (cur_player->points > house->points) {
             cur_player->money += 2*cur_player->bet;
             house->money -= cur_player->bet;
+            cur_player->wins++;
         }
-        // house ganha com mais pontos
-        else if (cur_player->points < house->points)
+        // house ganha com mais pontos: loss
+        else if (cur_player->points < house->points) {
         	house->money += cur_player->bet;
+        	cur_player->losses++;
+        }
         else {
 			// TODO: this should never happen
         	// exit(EXIT_FAILURE);
