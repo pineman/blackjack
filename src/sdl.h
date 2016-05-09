@@ -35,6 +35,7 @@ void RenderCard(int, int, int, SDL_Surface **, SDL_Renderer *);
 void LoadCards(SDL_Surface **);
 void UnLoadCards(SDL_Surface **);
 
+void render_status(List *players, SDL_Renderer *renderer);
 // definition of some strings: they cannot be changed when the program is executed !
 extern const char myName[];
 extern const char myNumber[];

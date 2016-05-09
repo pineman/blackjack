@@ -61,7 +61,6 @@ int main(int argc, char *argv[])
  	while (!quit)
     {
 		sprintf(test, "%d", house->points);
-		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "freitas", test, window);
 
         // while there's events to handle
         while (SDL_PollEvent(&event))
@@ -117,10 +116,11 @@ int main(int argc, char *argv[])
         // render house cards
         RenderHouseCards(house, cards, renderer);
         // render player cards
-        RenderPlayerCards(players, cards, renderer);
+        RenderPlayerCards(players, cards, renderer); 
+    	render_status(players, renderer);
         // render in the screen all changes above
         SDL_RenderPresent(renderer);
-    	// add a delay
+        // add a delay
 		SDL_Delay(delay);
     }
 
