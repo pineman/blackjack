@@ -62,7 +62,8 @@ void new_game(List *players, Player *house, List *megadeck, int *cards_left, con
 void new_game_house(Player *house, List *megadeck, int *cards_left, const int num_decks);
 void new_game_players(List *players, Player *house, List *megadeck, int *cards_left, const int num_decks);
 
-void stand(List *players, Player *house);
+Player *stand(List *players, Player *house);
+void hit(Player *player, List *megadeck, int *cardsleft, int num_decks);
 
 void pay_bets(List *players, Player *house);
 

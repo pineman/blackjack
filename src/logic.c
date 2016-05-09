@@ -198,7 +198,7 @@ void new_game_players(List *players, Player *house, List *megadeck, int *cards_l
     }
 }
 
-void stand(List *players, Player *house)
+Player *stand(List *players, Player *house)
 {
 	List *aux = players->next; // dummy head
 	Player *cur_player = NULL;
@@ -210,6 +210,8 @@ void stand(List *players, Player *house)
 		else
 			aux = aux->next;
 	}
+    if (cur_player->status == ST || cur_player->status == BJ || cur_player->status == BU)
+        return NULL;
 
 	// fazer-lhe stand
 	cur_player->status = ST;
@@ -239,7 +241,18 @@ void stand(List *players, Player *house)
 		// TODO: se não existir, é o hit da casa
 		pay_bets(players, house);
 	}
+    return cur_player;
 }
+
+void hit(Player *player, List *megadeck, int *cardsleft, int num_decks)
+{
+    if (player->points <= 21) { 
+        give_card(player, megadeck, cardsleft, num_decks);
+        count_points(player);
+    }
+    else 
+        player->status = BU; 
+} 
 
 void pay_bets(List *players, Player *house)
 {
