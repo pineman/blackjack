@@ -24,6 +24,7 @@ int main(int argc, char *argv[])
     int delay = 300;
     int quit = 0;
     int cards_left = 0;
+    Player *cur_player = NULL;
 
 	if (argc != 2)
 		// TODO: error msg
@@ -47,6 +48,7 @@ int main(int argc, char *argv[])
 	Player *house = (Player *) calloc((size_t) 1, sizeof(Player));
 
 	new_game(players, house, megadeck, &cards_left, num_decks);
+    cur_player = ((Player *)players->next->payload);
 
 	// initialize graphics
 	InitEverything(WIDTH_WINDOW, HEIGHT_WINDOW, imgs, &window, &renderer);
@@ -71,10 +73,11 @@ int main(int argc, char *argv[])
 						quit = 1;
 						break;
 					case SDLK_s:
-                        stand(players, house);
+                        cur_player = stand(players, house);
 						break;
     				case SDLK_h:
 						// hit(players, house, megadeck); --> in logic.c
+                        hit(cur_player, megadeck, &cards_left, num_decks);
 						break;
 					case SDLK_n:
 						new_game(players, house, megadeck, &cards_left, num_decks);
@@ -108,7 +111,6 @@ int main(int argc, char *argv[])
 
 	// TODO: remember to free the list of old players too!
     List *aux = players->next;
-    Player *cur_player = NULL;
     while (aux) {
 		cur_player = (Player *) aux->payload;
 		destroy_stack(&cur_player->cards);
