@@ -50,20 +50,27 @@ typedef struct Config {
 	int bets[MAX_PLAYERS];
 } Config;
 
+typedef struct Megadeck {
+    int cards_left;
+    const int num_decks;
+    List *deck;
+} Megadeck;
+
 int   init_game(Config *config, List *players);
 
 void stack_push(Stack **sp, Card *card);
 Card *stack_pop(Stack **sp);
 
-int give_card(Player *player, List *megadeck, int *cards_left, const int num_decks);
-int create_megadeck(List *megadeck, const int num_decks);
 
-void new_game(List *players, Player *house, List *megadeck, int *cards_left, const int num_decks);
-void new_game_house(Player *house, List *megadeck, int *cards_left, const int num_decks);
-void new_game_players(List *players, Player *house, List *megadeck, int *cards_left, const int num_decks);
+int give_card(Player *player, Megadeck *megadeck);
+int create_megadeck(Megadeck *megadeck);
 
-Player *stand(List *players, Player *house);
-int hit(Player *player, List *megadeck, int *cardsleft, int num_decks, List *Players, Player *house);
+void new_game(List *players, Player *house, Megadeck *megadeck);
+void new_game_house(Player *house, Megadeck *megadeck);
+void new_game_players(List *players, Player *house, Megadeck *megadeck);
+
+void stand(List *players, Player *house);
+//int hit(Player *player, List *megadeck, int *cardsleft, int num_decks, List *Players, Player *house);
 
 void pay_bets(List *players, Player *house);
 

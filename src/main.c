@@ -42,19 +42,19 @@ int main(int argc, char *argv[])
 	const int num_decks = init_game(config, players);
 
 	// Declarar o megabaralho (give_card enche-o automaticate)
-	List *megadeck = (List *) calloc((size_t) 1, sizeof(List));
+	List *deck = (List *) calloc((size_t) 1, sizeof(List));
+    Megadeck megadeck_real = {cards_left, num_decks, deck};
+    Megadeck *megadeck = &megadeck_real;
 
 	// TODO: há mal a casa ser do tipo 'Player'?
 	Player *house = (Player *) calloc((size_t) 1, sizeof(Player));
 
-	new_game(players, house, megadeck, &cards_left, num_decks); 
-    cur_player = (Player *)players->next->payload;
+	new_game(players, house, megadeck); 
 	// initialize graphics
 	InitEverything(WIDTH_WINDOW, HEIGHT_WINDOW, imgs, &window, &renderer);
     // loads the cards images
     LoadCards(cards);
 
-	((Player *) players->next->next->next->next->payload)->status = BJ;
  	while (quit == 0)
     {
         // while there's events to handle
@@ -72,15 +72,14 @@ int main(int argc, char *argv[])
 						quit = 1;
 						break;
 					case SDLK_s:
-                        cur_player = stand(players, house);
+                        stand(players, house);
 						break;
     				case SDLK_h:
 						// hit(players, house, megadeck); --> in logic.c
-                        hit(cur_player, megadeck, &cards_left, num_decks, players, house);
+                        //hit(cur_player, megadeck, &cards_left, num_decks, players, house);
 						break;
 					case SDLK_n:
-						new_game(players, house, megadeck, &cards_left, num_decks);
-                        cur_player = (Player *)players->next->payload;
+						new_game(players, house, megadeck);
 						break;
 					case SDLK_a:
 						// this is tricky.
@@ -118,7 +117,7 @@ int main(int argc, char *argv[])
     }
     destroy_stack(&house->cards);
 	destroy_list(players);
-	destroy_list(megadeck);
+	destroy_list(megadeck->deck);
 
     UnLoadCards(cards);
     SDL_FreeSurface(imgs[0]);
