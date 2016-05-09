@@ -8,7 +8,6 @@
 #define MAX_LINE_LENGTH 64
 #define	DECK_SIZE 52
 #define SUIT_SIZE 13
-#define MAX_CARD_HAND 11
 #define MAX_PLAYER_NAME 8
 
 typedef enum {EA, HU} Type;
@@ -69,8 +68,10 @@ void new_game(List *players, Player *house, Megadeck *megadeck);
 void new_game_house(Player *house, Megadeck *megadeck);
 void new_game_players(List *players, Player *house, Megadeck *megadeck);
 
-void stand(List *players, Player *house);
-//int hit(Player *player, List *megadeck, int *cardsleft, int num_decks, List *Players, Player *house);
+List *find_active_player(List *players);
+void stand(List *players, Player *house, Megadeck *megadeck);
+void player_hit(List *players, Player *house, Megadeck *megadeck);
+void house_hit(Player *house, Megadeck *megadeck);
 
 void pay_bets(List *players, Player *house);
 

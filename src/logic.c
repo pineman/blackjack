@@ -60,9 +60,6 @@ Card *stack_pop(Stack **sp)
 int give_card(Player *player, Megadeck *megadeck)
 {
 	int random = 0;
-	if (player->num_cards == MAX_CARD_HAND)
-		// TODO: o jogador não pode receber mais cartas
-		return -1;
 
 	if (!megadeck->cards_left)
 		megadeck->cards_left = create_megadeck(megadeck);
@@ -126,6 +123,7 @@ void new_game(List *players, Player *house, Megadeck *megadeck)
 		return;
 
 	new_game_house(house, megadeck);
+	printf("house->points = %d\n", house->points);
 
 	new_game_players(players, house, megadeck);
 
@@ -139,11 +137,10 @@ void new_game_house(Player *house, Megadeck *megadeck)
 	destroy_stack(&house->cards);
 	for (int i = 0; i < 2; i++)
 		give_card(house, megadeck);
-	house->num_cards = 2;
+	house->num_cards = 1; // desenhar só uma carta
 	house->status = WW;
 
 	count_points(house);
-	printf("house->points = %d\n", house->points);
     if (house->points == 21)
 		house->status = BJ;
 }
@@ -198,7 +195,7 @@ void new_game_players(List *players, Player *house, Megadeck *megadeck)
     }
 }
 
-void stand(List *players, Player *house)
+List *find_active_player(List *players)
 {
 	List *aux = players->next; // dummy head
 	Player *cur_player = NULL;
@@ -211,18 +208,33 @@ void stand(List *players, Player *house)
 			aux = aux->next;
     }
 
-	// Passar ao próximo jogador
-	if (aux) 
-        aux = aux->next;
-    else
-        return; 
+    return aux;
+}
 
-    // fazer-lhe stand
-	cur_player->status = ST;
-	cur_player->playing = false;
+void stand(List *players, Player *house, Megadeck *megadeck)
+{
+	List *aux = find_active_player(players);
+	Player *cur_player = NULL;
+
+	// Se não encontrarmos um jogador a jogar...
+	if (!aux) {
+		// não fazer nada
+        return;
+    }
+    else {
+		// se encontrarmos, fazer-lhe stand
+		cur_player = (Player *) aux->payload;
+		if (cur_player->status == WW)
+			cur_player->status = ST;
+		cur_player->playing = false;
+
+		// passar ao próximo jogador
+        aux = aux->next;
+    }
 
 	if (aux) {
-		// se ele existir, procurar o próximo jogador válido a seguir
+		// se este próximo jogador existir,
+		// procurar o próximo jogador válido a seguir
 		while (aux) {
 			cur_player = (Player *) aux->payload;
 			if (cur_player->ingame && !(cur_player->status == BJ))
@@ -231,34 +243,57 @@ void stand(List *players, Player *house)
 				aux = aux->next;
 		}
 		// se ele existir, dar-lhe a vez
-		if (aux) cur_player->playing = true;
-		else
+		if (aux) {
+			cur_player->playing = true;
+		}
+		else {
 			// não existe um próximo jogador válido para jogar
 			// TODO: se não existir, é o hit da casa
+			house_hit(house, megadeck);
 			pay_bets(players, house);
+		}
 	}
 	else {
-		// último jogador
+		// se não existir um próximo jogador, fizemos stand do último jogador
 		// TODO: se não existir, é o hit da casa
+		house_hit(house, megadeck);
 		pay_bets(players, house);
 	}
 }
 
-/*int hit(List *megadeck, int *cardsleft, int num_decks, List *Players, Player *house)
+void player_hit(List *players, Player *house, Megadeck *megadeck)
 {
-    if(!player)
-        return 0; 
-       
-    if (player->points <= 21) { 
-        give_card(player, megadeck, cardsleft, num_decks);
-        count_points(player);
-    }
-    else
-        player = stand(Players, house);
-    
-    return 1;
-} 
-*/
+	List *aux = find_active_player(players);
+	Player *cur_player = NULL;
+
+	if (aux)
+		cur_player = (Player *) aux->payload;
+	else
+		return;
+
+	give_card(cur_player, megadeck);
+	count_points(cur_player);
+	printf("cur_player->points = %d\n", cur_player->points);
+
+	if (cur_player->points > 21)
+		cur_player->status = BU;
+	if (cur_player->points >= 21)
+		stand(players, house, megadeck);
+}
+
+void house_hit(Player *house, Megadeck *megadeck)
+{
+	house->num_cards = 2;
+
+	while (house->points < 17) {
+		give_card(house, megadeck);
+		count_points(house);
+		printf("house->points = %d\n", house->points);
+	}
+
+	if (house->points > 21)
+		house->status = BU;
+}
 
 void pay_bets(List *players, Player *house)
 {
@@ -303,7 +338,7 @@ void pay_bets(List *players, Player *house)
         else if (cur_player->points < house->points)
         	house->money += cur_player->bet;
         else {
-        	puts("WTF!");
+			// TODO: this should never happen
         	// exit(EXIT_FAILURE);
         }
 
@@ -328,9 +363,6 @@ void count_points(Player *player)
         player->points -= 10;
         --num_ace;
     }
-
-    if (player->points > 21)
-        player->status = BU;
 }
 
 int point_index(int id)

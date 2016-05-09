@@ -158,7 +158,7 @@ void RenderHouseCards(Player *house, SDL_Surface **_cards, SDL_Renderer* _render
     }
 
     // If the dealer has only 2 cards and no blackjack, draw the second card face down
-    if (house->num_cards == 2 && house->status != BJ) {
+    if (house->num_cards == 1 && house->status != BJ) {
         x = (div/2-house->num_cards/2+1)*CARD_WIDTH + 15;
         y = (int) (0.26f*HEIGHT_WINDOW);
         RenderCard(x, y, MAX_DECK_SIZE, _cards, _renderer);
