@@ -75,13 +75,13 @@ Config *read_player(char *line, Config *config, int count)
 
 	return config;
 }
-void stats(List *players, Player *house)
+void write_stats(List *players, Player *house)
 {
     FILE *stats = NULL;
     stats = fopen("stats.txt" , "w");
-    if (!stats) 
+    if (!stats)
         exit(EXIT_FAILURE);
-    
+
     List *aux = players->next;
     Player *cur_player = NULL;
     fprintf(stats, "Jogador\t\tTipo\tVitorias\tEmpates\tDerrotas\tDinheiro\n");
@@ -105,5 +105,12 @@ void stats(List *players, Player *house)
         aux = aux->next;
     }
 
-    fprintf(stats, "A casa lucrou: %d\n", house->money);
-} 
+	if (house->money < 0)
+		fprintf(stats, "A casa perdeu: %d euro%s\n", -1*house->money,
+				house->money == -1 ? "." : "s.");
+	else if (house->money > 0)
+		fprintf(stats, "A casa ganhou: %d euro%s\n", house->money,
+				house->money == 1 ? "." : "s.");
+	else if (house->money == 0)
+		fprintf(stats, "A casa não ganhou nem perdeu dinheiro.");
+}
