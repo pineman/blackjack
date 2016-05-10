@@ -114,6 +114,25 @@ int create_megadeck(Megadeck *megadeck)
 	return total_cards;
 }
 
+void test_quit(List *players, bool *quit)
+{
+    bool found = false;
+    List *aux = players->next;
+    Player *cur_player = NULL;
+    while (aux) {
+        cur_player = (Player *) aux->payload;
+        if (cur_player->playing) {
+            found = true;
+            break;
+        }
+        aux = aux->next;
+    }
+    if (found) 
+        return;
+    
+    *quit = true;
+}
+
 void new_game(List *players, Player *house, Megadeck *megadeck)
 {
 	// só fazer new_game quando já toda a gente jogou
@@ -220,6 +239,22 @@ List *find_active_player(List *players)
     return aux;
 }
 
+void double_bet(List *players, Player *house, Megadeck *megadeck)
+{
+    List *aux = find_active_player(players);
+    Player *cur_player = (Player *) aux->payload;
+
+    if (cur_player->money < cur_player->bet)
+        return;
+
+    cur_player->money -= cur_player->bet;
+    cur_player->bet += cur_player->bet;
+
+    player_hit(players, house, megadeck);
+    if (!(cur_player->status == BU))
+        stand(players, house, megadeck);
+}
+
 void stand(List *players, Player *house, Megadeck *megadeck)
 {
 	List *aux = find_active_player(players);
@@ -308,61 +343,68 @@ void pay_bets(List *players, Player *house)
     List *aux = players->next;
 	Player *cur_player = NULL;
 	while (aux) {
-		cur_player = ((Player *) aux->payload);
+        cur_player = ((Player *) aux->payload);
+        
+        // not playing
+        if (!cur_player->ingame) {
+            //don't do shit
+            aux = aux->next;
+            continue;
+        }
 
 		// surrender
 		if (cur_player->status == SU) {
 		 	house->money -= cur_player->bet / 2;
 		 	cur_player->money += cur_player->bet / 2;
-		}
+		    cur_player->losses += 1;
+        }
 		// blackjack casa e do jogador: tie
         else if (cur_player->status == BJ && house->status == BJ) {
             cur_player->money += cur_player->bet;
-            cur_player->ties++;
+            cur_player->ties += 1;
         }
         // blackjack do jogador: win
         else if (cur_player->status == BJ && !(house->status == BJ)) {
         	cur_player->money += 2*cur_player->bet + cur_player->bet/2;
             house->money -= cur_player->bet + cur_player->bet/2;
-            cur_player->wins++;
+            cur_player->wins += 1;
         }
         // blackjack da casa: loss
         else if (!(cur_player->status == BJ) && house->status == BJ) {
         	house->money += cur_player->bet;
-        	cur_player->losses++;
+        	cur_player->losses += 1;
         }
-        // bust da casa e do jogador: tie
+        // bust da casa e do jogador: ti
         else if (cur_player->status == BU) {
             house->money += cur_player->bet;
-            cur_player->ties++;
+            cur_player->ties += 1;
         }
         // bust da casa: win
         else if (!(cur_player->status == BU) && house->status == BU) {
             cur_player->money += 2*cur_player->bet;
         	house->money -= cur_player->bet;
-            cur_player->wins++;
+            cur_player->wins += 1;
         }
         // empate mesmos pontos: tie
         else if (cur_player->points == house->points) {
             cur_player->money += cur_player->bet;
-            cur_player->ties++;
+            cur_player->ties += 1;
         }
         // jogador ganha com mais pontos: win
         else if (cur_player->points > house->points) {
             cur_player->money += 2*cur_player->bet;
             house->money -= cur_player->bet;
-            cur_player->wins++;
+            cur_player->wins += 1;
         }
         // house ganha com mais pontos: loss
         else if (cur_player->points < house->points) {
         	house->money += cur_player->bet;
-        	cur_player->losses++;
+        	cur_player->losses += 1;
         }
         else {
 			// TODO: this should never happen
         	// exit(EXIT_FAILURE);
         }
-
         aux = aux->next;
     }
 }

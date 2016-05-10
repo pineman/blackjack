@@ -74,6 +74,8 @@ int main(int argc, char *argv[])
         {
 			if (event.type == SDL_QUIT) {
                 // quit the program
+                // don't write stats?
+                // quit regardless of context
 				quit = true;
 			}
 			else if (event.type == SDL_KEYDOWN) {
@@ -81,7 +83,10 @@ int main(int argc, char *argv[])
 				{
 					case SDLK_q:
 						// write_stats(players, house); --> in file.c
-						quit = true;
+                        // only quit when all plays have been made
+						test_quit(players, &quit);
+                        if (quit)
+                            stats(players, house);
 						break;
 
 					case SDLK_s:
@@ -96,7 +101,7 @@ int main(int argc, char *argv[])
 
 					case SDLK_n:
 						// new_game
-						new_game(players, house, megadeck);
+						new_game(players, house, megadeck); 
 						break;
 
 					case SDLK_a:
@@ -117,6 +122,7 @@ int main(int argc, char *argv[])
 
 					case SDLK_d:
 						// double
+                        double_bet(players, house, megadeck);
 						break;
 
 					case SDLK_b:

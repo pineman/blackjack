@@ -291,12 +291,13 @@ void render_status(List *players, TTF_Font *_font, SDL_Renderer *renderer)
     char no_money[] = "OUT OF MONEY";
 
     List *aux = players->next;
-    Player *cur_player = (Player *) aux->payload;
+    Player *cur_player = NULL;
     SDL_Color white = { 255, 255, 255, 255};
-    for (int i=0; aux->next; i++) {
+    for (int i=0; aux; i++) {
+        cur_player = (Player *) aux->payload;
         rect.y = 380;
         rect.h = 30;
-        if (!cur_player->ingame) {
+        if (!cur_player->ingame && cur_player->type != VA) {
             rect.x = 40 + 208*i;
             rect.w = 140;
             SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255 );
@@ -325,7 +326,6 @@ void render_status(List *players, TTF_Font *_font, SDL_Renderer *renderer)
         }
 
         aux = aux->next;
-        cur_player = (Player *) aux->payload;
     }
 }
 

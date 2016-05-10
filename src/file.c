@@ -75,3 +75,35 @@ Config *read_player(char *line, Config *config, int count)
 
 	return config;
 }
+void stats(List *players, Player *house)
+{
+    FILE *stats = NULL;
+    stats = fopen("stats.txt" , "w");
+    if (!stats) 
+        exit(EXIT_FAILURE);
+    
+    List *aux = players->next;
+    Player *cur_player = NULL;
+    fprintf(stats, "Jogador\t\tTipo\tVitorias\tEmpates\tDerrotas\tDinheiro\n");
+    while (aux) {
+        cur_player = (Player *) aux->payload;
+        if (cur_player->type == VA) {
+            aux = aux->next;
+            continue;
+        }
+        fprintf(stats, "%s\t", cur_player->name);
+        if (strlen(cur_player->name) < 8)
+            fprintf(stats, "\t");
+        if (cur_player->type == EA)
+            fprintf(stats, "EA\t");
+        else if (cur_player->type == HU)
+            fprintf(stats, "HU\t");
+        fprintf(stats, "%d\t\t", cur_player->wins);
+        fprintf(stats, "%d\t", cur_player->ties);
+        fprintf(stats, "%d\t\t", cur_player->losses);
+        fprintf(stats, "%d\n", cur_player->money);
+        aux = aux->next;
+    }
+
+    fprintf(stats, "A casa lucrou: %d\n", house->money);
+} 
