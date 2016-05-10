@@ -65,11 +65,14 @@ Card *stack_pop(Stack **sp);
 int give_card(Player *player, Megadeck *megadeck);
 int create_megadeck(Megadeck *megadeck);
 
+void test_quit(List *players, bool *quit);
+
 void new_game(List *players, Player *house, Megadeck *megadeck);
 void new_game_house(Player *house, Megadeck *megadeck);
 void new_game_players(List *players, Player *house, Megadeck *megadeck);
 
 List *find_active_player(List *players);
+void double_bet(List *players, Player *house, Megadeck *megadeck);
 void stand(List *players, Player *house, Megadeck *megadeck);
 void player_hit(List *players, Player *house, Megadeck *megadeck);
 void house_hit(Player *house, Megadeck *megadeck);
