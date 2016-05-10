@@ -316,7 +316,7 @@ long get_args_money(
 )
 {
 	long money_tmp = 0, max_bet_tmp = 0; // Temporárias para testar overflow
-	char buffer[100] = {0};; // Arbritário
+	char buffer[100] = {0}; // Arbritário
 
 	///* Como vamos escrever o dinheiro final da casa, que é signed,
 	// * o máximo de dinheiro que cada jogador poderá ter será o máximo

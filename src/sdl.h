@@ -8,8 +8,8 @@
 #define STRING_SIZE 100       // max size for some strings
 #define CARD_WIDTH 67         // card width
 #define CARD_HEIGHT 97        // card height
-#define WINDOW_POSX 500       // initial position of the window: x
-#define WINDOW_POSY 250       // initial position of the window: y
+#define WINDOW_POSX 100       // initial position of the window: x
+#define WINDOW_POSY 100       // initial position of the window: y
 #define WIDTH_WINDOW 900      // window width
 #define HEIGHT_WINDOW 525     // window height
 #define EXTRASPACE 150

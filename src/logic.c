@@ -116,38 +116,18 @@ int create_megadeck(Megadeck *megadeck)
 
 void test_quit(List *players, bool *quit)
 {
-    bool found = false;
-    List *aux = players->next;
-    Player *cur_player = NULL;
-    while (aux) {
-        cur_player = (Player *) aux->payload;
-        if (cur_player->playing) {
-            found = true;
-            break;
-        }
-        aux = aux->next;
-    }
-    if (found) 
+    List *aux = find_active_player(players);
+    if (aux)
         return;
-    
+
     *quit = true;
 }
 
 void new_game(List *players, Player *house, Megadeck *megadeck)
 {
 	// só fazer new_game quando já toda a gente jogou
-	bool found = false;
-    List *aux = players->next;
-    Player *cur_player = NULL;
-    while (aux) {
-		cur_player = (Player *) aux->payload;
-		if (cur_player->playing) {
-			found = true;
-			break;
-		}
-		aux = aux->next;
-    }
-    if (found)
+    List *aux = find_active_player(players);
+    if (aux)
 		return;
 
 	new_game_house(house, megadeck);
@@ -244,7 +224,7 @@ void double_bet(List *players, Player *house, Megadeck *megadeck)
     List *aux = find_active_player(players);
     Player *cur_player = (Player *) aux->payload;
 
-    if (cur_player->money < cur_player->bet)
+    if (cur_player->money < cur_player->bet || cur_player->num_cards > 2)
         return;
 
     cur_player->money -= cur_player->bet;
@@ -253,6 +233,55 @@ void double_bet(List *players, Player *house, Megadeck *megadeck)
     player_hit(players, house, megadeck);
     if (!(cur_player->status == BU))
         stand(players, house, megadeck);
+}
+
+void bet(List *players)
+{
+	char buffer[MAX_PLAYER_NAME+2];
+    List *aux = find_active_player(players);
+    Player *cur_player = NULL;
+    if (aux)
+		return;
+
+	aux = players->next;
+	printf("Insira o nome do jogador a modificar a aposta: ");
+	fgets(buffer, sizeof(buffer), stdin);
+	int newline = (int) strcspn(buffer, "\n");
+
+	if (newline == 9) {
+		puts("O nome do jogador tem no máximo 8 caracteres.");
+		return;
+	}
+	else
+		buffer[newline] = '\0';
+
+	bool found_player = false;
+	while (aux && !found_player) {
+		cur_player = (Player *) aux->payload;
+		if (strcmp(buffer, cur_player->name) == 0 && !found_player)
+			found_player = true;
+		else
+			aux = aux->next;
+	}
+
+	if (!aux) {
+		puts("Jogador não encontrado.");
+		return;
+	}
+
+	cur_player = (Player *) aux->payload;
+	printf("Insira o novo valor da aposta do jogador %s: ", cur_player->name);
+	fgets(buffer, sizeof(buffer), stdin);
+	long new_bet = strtol(buffer, NULL, 10);
+	// 25% ou 100% do dinheiro?
+	// o dinheiro do jogador está (essencialmente) garantido
+	// de estar abaixo de INT_MAX (a não ser que se jogue mesmo muito)
+	if (new_bet > cur_player->money || new_bet <= 0) {
+		puts("Nova aposta inválida.");
+		return;
+	}
+
+	cur_player->bet = (int) new_bet;
 }
 
 void stand(List *players, Player *house, Megadeck *megadeck)
@@ -344,10 +373,10 @@ void pay_bets(List *players, Player *house)
 	Player *cur_player = NULL;
 	while (aux) {
         cur_player = ((Player *) aux->payload);
-        
+
         // not playing
         if (!cur_player->ingame) {
-            //don't do shit
+            // skip this player
             aux = aux->next;
             continue;
         }
@@ -356,50 +385,50 @@ void pay_bets(List *players, Player *house)
 		if (cur_player->status == SU) {
 		 	house->money -= cur_player->bet / 2;
 		 	cur_player->money += cur_player->bet / 2;
-		    cur_player->losses += 1;
+		    cur_player->losses++;
         }
 		// blackjack casa e do jogador: tie
         else if (cur_player->status == BJ && house->status == BJ) {
             cur_player->money += cur_player->bet;
-            cur_player->ties += 1;
+            cur_player->ties++;
         }
         // blackjack do jogador: win
         else if (cur_player->status == BJ && !(house->status == BJ)) {
         	cur_player->money += 2*cur_player->bet + cur_player->bet/2;
             house->money -= cur_player->bet + cur_player->bet/2;
-            cur_player->wins += 1;
+            cur_player->wins++;
         }
         // blackjack da casa: loss
         else if (!(cur_player->status == BJ) && house->status == BJ) {
         	house->money += cur_player->bet;
-        	cur_player->losses += 1;
+        	cur_player->losses++;
         }
-        // bust da casa e do jogador: ti
+        // bust da casa e do jogador: loss
         else if (cur_player->status == BU) {
             house->money += cur_player->bet;
-            cur_player->ties += 1;
+            cur_player->losses++;
         }
         // bust da casa: win
         else if (!(cur_player->status == BU) && house->status == BU) {
             cur_player->money += 2*cur_player->bet;
         	house->money -= cur_player->bet;
-            cur_player->wins += 1;
+            cur_player->wins++;
         }
         // empate mesmos pontos: tie
         else if (cur_player->points == house->points) {
             cur_player->money += cur_player->bet;
-            cur_player->ties += 1;
+            cur_player->ties++;
         }
         // jogador ganha com mais pontos: win
         else if (cur_player->points > house->points) {
             cur_player->money += 2*cur_player->bet;
             house->money -= cur_player->bet;
-            cur_player->wins += 1;
+            cur_player->wins++;
         }
         // house ganha com mais pontos: loss
         else if (cur_player->points < house->points) {
         	house->money += cur_player->bet;
-        	cur_player->losses += 1;
+        	cur_player->losses++;
         }
         else {
 			// TODO: this should never happen

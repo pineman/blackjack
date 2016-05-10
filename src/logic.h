@@ -72,7 +72,9 @@ void new_game_house(Player *house, Megadeck *megadeck);
 void new_game_players(List *players, Player *house, Megadeck *megadeck);
 
 List *find_active_player(List *players);
+
 void double_bet(List *players, Player *house, Megadeck *megadeck);
+void bet(List *players);
 void stand(List *players, Player *house, Megadeck *megadeck);
 void player_hit(List *players, Player *house, Megadeck *megadeck);
 void house_hit(Player *house, Megadeck *megadeck);

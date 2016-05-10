@@ -6,5 +6,5 @@
 
 Config *read_player(char *line, Config *game_config, int count);
 Config *read_config(char * filename);
-void stats(List *players, Player *house);
+void write_stats(List *players, Player *house);
 #endif
