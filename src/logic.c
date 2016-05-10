@@ -20,13 +20,22 @@ int init_game(Config *config, List *players)
 	Player *new_player = NULL;
 	const int num_decks = config->num_decks;
 
-	for (int i = 0; i < config->num_players; i++) {
+	for (int i = 0; i < MAX_PLAYERS; i++) {
 		new_player = (Player *) calloc((size_t) 1, sizeof(Player));
-		new_player->ingame = true;
-		strcpy(new_player->name, config->player_names[i]);
-		new_player->type = config->player_type[i];
-		new_player->money = config->money[i];
-		new_player->bet = config->bets[i];
+		if (i + 1 <= config->num_players) {
+			// Jogadores efetivos
+			new_player->type = config->player_type[i];
+			new_player->ingame = true;
+			strcpy(new_player->name, config->player_names[i]);
+			new_player->money = config->money[i];
+			new_player->bet = config->bets[i];
+		}
+		else {
+			// Lugar não especificado na configuração.
+			strcpy(new_player->name, "Empty");
+			new_player->type = VA;
+			new_player->ingame = false;
+		}
 		new_player->playing = false;
 		list_append(players, new_player);
 	}
@@ -273,7 +282,6 @@ void player_hit(List *players, Player *house, Megadeck *megadeck)
 
 	give_card(cur_player, megadeck);
 	count_points(cur_player);
-	printf("cur_player->points = %d\n", cur_player->points);
 
 	if (cur_player->points > 21)
 		cur_player->status = BU;
