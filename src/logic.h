@@ -12,8 +12,8 @@
 
 // Entidade Artificial, Humano, Vazio
 typedef enum {EA, HU, VA} Type;
-// waiting, blackjack, busted, stand'ed'
-typedef enum {WW, BJ, BU, ST, SU} Status; // double, surrender
+// waiting, blackjack, busted, stand'ed', surrender
+typedef enum {WW, BJ, BU, ST, SU} Status;
 
 typedef struct Card {
 	int suit;
@@ -73,6 +73,7 @@ void new_game_players(List *players, Player *house, Megadeck *megadeck);
 
 List *find_active_player(List *players);
 
+void surrender(List *players, Player *house, Megadeck *megadeck);
 void double_bet(List *players, Player *house, Megadeck *megadeck);
 void bet(List *players);
 void stand(List *players, Player *house, Megadeck *megadeck);

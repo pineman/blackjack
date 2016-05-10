@@ -117,6 +117,7 @@ int main(int argc, char *argv[])
 
 					case SDLK_r:
 						// surrender
+						surrender(players, house, megadeck);
 						break;
 
 					case SDLK_d:
