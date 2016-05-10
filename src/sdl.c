@@ -19,10 +19,9 @@ const char myNumber[] = "84086, 84093";
  * \param _img surfaces where the table background and IST logo were loaded
  * \param _renderer renderer to handle all rendering in a window
  */
-void RenderTable(List *players, SDL_Surface *_img[], SDL_Renderer *_renderer)
+void RenderTable(List *players, TTF_Font *_font, SDL_Surface *_img[], SDL_Renderer *_renderer)
 {
     SDL_Color black = {0, 0, 0, 255}; // black
-    TTF_Font *serif = NULL;
     SDL_Texture *table_texture;
     SDL_Rect tableSrc, tableDest;
     int separatorPos = (int)(0.95f*WIDTH_WINDOW); // seperates the left from the right part of the window
@@ -34,13 +33,6 @@ void RenderTable(List *players, SDL_Surface *_img[], SDL_Renderer *_renderer)
 
     // clear the window
     SDL_RenderClear(_renderer);
-
-    // this opens a font style and sets a size
-    serif = TTF_OpenFont("assets//FreeSerif.ttf", 16);
-    if (!serif) {
-        printf("TTF_OpenFont: %s\n", TTF_GetError());
-        exit(EXIT_FAILURE);
-    }
 
     tableDest.x = tableSrc.x = 0;
     tableDest.y = tableSrc.y = 0;
@@ -57,31 +49,30 @@ void RenderTable(List *players, SDL_Surface *_img[], SDL_Renderer *_renderer)
     height = RenderLogo(separatorPos, 0, _img[1], _renderer);
 
     // render the student name
-    height += RenderText(separatorPos+3*MARGIN, height, myName, serif, &black, _renderer);
+    height += RenderText(separatorPos+3*MARGIN, height, myName, _font, &black, _renderer);
 
     // this renders the student number
-    height += RenderText(separatorPos+3*MARGIN, height, myNumber, serif, &black, _renderer);
+    height += RenderText(separatorPos+3*MARGIN, height, myNumber, _font, &black, _renderer);
 
 	List *aux = players->next;
 	Player *cur_player = NULL;
 	while (aux) {
 		cur_player = (Player *) aux->payload;
-		sprintf(money_str, "%s (%s): %d euros",
-				cur_player->name, cur_player->type == HU ? "HU" : "EA", cur_player->money);
-		height += RenderText(separatorPos+3*MARGIN, height, money_str, serif, &black, _renderer);
+		if (!(cur_player->type == VA)) {
+			sprintf(money_str, "%s (%s): %d euros",
+					cur_player->name, cur_player->type == HU ? "HU" : "EA", cur_player->money);
+			height += RenderText(separatorPos+3*MARGIN, height, money_str, _font, &black, _renderer);
+		}
 		aux = aux->next;
 	}
 
-	RenderPlayerArea(players, _renderer, serif, separatorPos);
+	RenderPlayerArea(players, _renderer, _font, separatorPos);
 
     // destroy everything
     SDL_DestroyTexture(table_texture);
-
-    // close font
-    TTF_CloseFont(serif);
 }
 
-void RenderPlayerArea(List *players, SDL_Renderer* _renderer, TTF_Font *serif, int separatorPos)
+void RenderPlayerArea(List *players, SDL_Renderer* _renderer, TTF_Font *_font, int separatorPos)
 {
     SDL_Color white = {255, 255, 255, 255};
     SDL_Rect playerRect;
@@ -93,29 +84,28 @@ void RenderPlayerArea(List *players, SDL_Renderer* _renderer, TTF_Font *serif, i
 
 	while (aux) {
 		cur_player = (Player *) aux->payload;
-		if (cur_player->ingame) {
-			if (cur_player->playing)
-				SDL_SetRenderDrawColor(_renderer, 255, 0, 0, 255);
-			else
-				SDL_SetRenderDrawColor(_renderer, 255, 255, 255, 255);
+		if (cur_player->playing)
+			SDL_SetRenderDrawColor(_renderer, 255, 0, 0, 255);
+		else
+			SDL_SetRenderDrawColor(_renderer, 255, 255, 255, 255);
 
-			playerRect.x = num_player * (separatorPos/4-5)+10;
-			playerRect.y = (int) (0.55f*HEIGHT_WINDOW);
-			playerRect.w = separatorPos/4-5;
-			playerRect.h = (int) (0.42f*HEIGHT_WINDOW);
+		playerRect.x = num_player * (separatorPos/4-5)+10;
+		playerRect.y = (int) (0.55f*HEIGHT_WINDOW);
+		playerRect.w = separatorPos/4-5;
+		playerRect.h = (int) (0.42f*HEIGHT_WINDOW);
 
-			if (cur_player->status == WW || cur_player->status == ST)
-				sprintf(points_str, "%d", cur_player->points);
-			else if (cur_player->status == BJ)
-				sprintf(points_str, "BJ");
-			else if (cur_player->status == BU)
-				sprintf(points_str, "BU");
+		if (cur_player->status == WW || cur_player->status == ST)
+			sprintf(points_str, "%d", cur_player->points);
+		else if (cur_player->status == BJ)
+			sprintf(points_str, "BJ");
+		else if (cur_player->status == BU)
+			sprintf(points_str, "BU");
 
-			sprintf(status_str, "%s -- bet: %d, points: %s",
-					cur_player->name, cur_player->bet, points_str);
-			RenderText(playerRect.x, playerRect.y-30, status_str, serif, &white, _renderer);
-			SDL_RenderDrawRect(_renderer, &playerRect);
-		}
+		sprintf(status_str, "%s -- bet: %d, points: %s",
+				cur_player->name, cur_player->bet, points_str);
+		RenderText(playerRect.x, playerRect.y-30, status_str, _font, &white, _renderer);
+		SDL_RenderDrawRect(_renderer, &playerRect);
+
 		num_player++;
         aux = aux->next;
     }
@@ -241,6 +231,9 @@ void RenderCard(int _x, int _y, int _num_card, SDL_Surface **_cards, SDL_Rendere
     // render it !
     card_text = SDL_CreateTextureFromSurface(_renderer, _cards[_num_card]);
     SDL_RenderCopy(_renderer, card_text, NULL, &boardPos);
+
+	// destroy everything
+    SDL_DestroyTexture(card_text);
 }
 
 /**
@@ -286,6 +279,53 @@ void UnLoadCards(SDL_Surface **_array_of_cards)
     for (int i = 0 ; i < MAX_DECK_SIZE + 1; i++ )
     {
         SDL_FreeSurface(_array_of_cards[i]);
+    }
+}
+
+void render_status(List *players, TTF_Font *_font, SDL_Renderer *renderer)
+{
+    SDL_Rect rect;
+
+    char bust[] = "BUST";
+    char blackjack[] = "BLACKJACK";
+    char no_money[] = "OUT OF MONEY";
+
+    List *aux = players->next;
+    Player *cur_player = (Player *) aux->payload;
+    SDL_Color white = { 255, 255, 255, 255};
+    for (int i=0; aux->next; i++) {
+        rect.y = 380;
+        rect.h = 30;
+        if (!cur_player->ingame) {
+            rect.x = 40 + 208*i;
+            rect.w = 140;
+            SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255 );
+            SDL_RenderFillRect(renderer, &rect);
+            SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255 );
+            SDL_RenderDrawRect(renderer, &rect);
+            RenderText(50+208*i, 382, no_money, _font, &white, renderer);
+        }
+        else if (cur_player->status == BJ) {
+            rect.x = 55 + 208*i;
+            rect.w = 115;
+            SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255 );
+            SDL_RenderFillRect(renderer, &rect);
+            SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255 );
+            SDL_RenderDrawRect(renderer, &rect);
+            RenderText(64+208*i, 382, blackjack, _font, &white, renderer);
+        }
+        else if (cur_player->status == BU) {
+            rect.x = 80 + 208*i;
+            rect.w = 70;
+            SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255 );
+            SDL_RenderFillRect(renderer, &rect);
+            SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255 );
+            SDL_RenderDrawRect(renderer, &rect);
+            RenderText(94+(208*i), 382, bust, _font, &white, renderer);
+        }
+
+        aux = aux->next;
+        cur_player = (Player *) aux->payload;
     }
 }
 
@@ -359,7 +399,7 @@ int RenderText(int x, int y, const char *text, TTF_Font *_font, SDL_Color *_colo
  * \param _window represents the window of the application
  * \param _renderer renderer to handle all rendering in a window
  */
-void InitEverything(int width, int height, SDL_Surface *_img[], SDL_Window** _window, SDL_Renderer** _renderer)
+void InitEverything(int width, int height, TTF_Font **_font, SDL_Surface *_img[], SDL_Window** _window, SDL_Renderer** _renderer)
 {
     InitSDL();
     InitFont();
@@ -382,6 +422,13 @@ void InitEverything(int width, int height, SDL_Surface *_img[], SDL_Window** _wi
         exit(EXIT_FAILURE);
     }
 
+    // this opens (loads) a font file and sets a size
+    *_font = TTF_OpenFont("assets//FreeSerif.ttf", 16);
+    if(!*_font)
+    {
+        printf("TTF_OpenFont: %s\n", TTF_GetError());
+        exit(EXIT_FAILURE);
+    }
 }
 
 /**
@@ -390,8 +437,7 @@ void InitEverything(int width, int height, SDL_Surface *_img[], SDL_Window** _wi
 void InitSDL()
 {
     // init SDL library
-	if ( SDL_Init( SDL_INIT_EVERYTHING ) == -1 )
-	{
+	if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
 		printf(" Failed to initialize SDL : %s\n", SDL_GetError());
         exit(EXIT_FAILURE);
 	}
@@ -453,46 +499,4 @@ SDL_Renderer* CreateRenderer(int width, int height, SDL_Window *_window)
 	SDL_RenderSetLogicalSize( renderer, width+EXTRASPACE, height );
 
 	return renderer;
-}
-
-void render_status(List *players, SDL_Renderer *renderer)
-{
-    SDL_Rect rect;
-    TTF_Font *serif = TTF_OpenFont("assets//FreeSerif.ttf", 16);
-     if (!serif) {
-        printf("TTF_OpenFont: %s\n", TTF_GetError());
-        exit(EXIT_FAILURE);
-    }
-
-    char *bust = "BUST";
-    char *blackjack = "BLACKJACK";
-    List *aux = players->next;
-    Player *cur_player = (Player *) aux->payload;
-    SDL_Color white = { 255, 255, 255, 255};
-    for (int i=0; aux->next; i++) {
-        rect.y = 380;
-        rect.h = 30;
-        if (cur_player->status == BJ) { 
-            rect.x = 55 + 208*i;
-            rect.w = 115;
-            SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255 );
-            SDL_RenderFillRect(renderer, &rect);
-            SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255 );
-            SDL_RenderDrawRect(renderer, &rect);
-            RenderText(64+208*i, 380, blackjack, serif, &white, renderer);
-        }
-        if (cur_player->status == BU) { 
-            rect.x = 80 + 208*i;
-            rect.w = 70;               
-            SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255 );
-            SDL_RenderFillRect(renderer, &rect);
-            SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255 );
-            SDL_RenderDrawRect(renderer, &rect);
-            RenderText(94+(208*i), 380, bust, serif, &white,renderer); 
-        }             
-    
-        aux = aux->next;
-        cur_player = (Player *) aux->payload; 
-    }  
-    TTF_CloseFont(serif);
 }

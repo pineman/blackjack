@@ -10,7 +10,8 @@
 #define SUIT_SIZE 13
 #define MAX_PLAYER_NAME 8
 
-typedef enum {EA, HU} Type;
+// Entidade Artificial, Humano, Vazio
+typedef enum {EA, HU, VA} Type;
 // waiting, blackjack, busted, stand'ed'
 typedef enum {WW, BJ, BU, ST, SU} Status; // double, surrender
 

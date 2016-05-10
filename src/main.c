@@ -19,6 +19,7 @@ int main(int argc, char *argv[])
 {
     SDL_Window *window;
     SDL_Renderer *renderer;
+    TTF_Font *serif = NULL;
     SDL_Surface *cards[MAX_DECK_SIZE+1], *imgs[2];
     SDL_Event event;
     int delay = 300;
@@ -38,6 +39,7 @@ int main(int argc, char *argv[])
 	// Declarar a lista de jogadores e enchê-la
 	List *players = (List *) calloc((size_t) 1, sizeof(List));
 	const int num_decks = init_game(config, players);
+	free(config);
 
 	// Declarar o megabaralho (give_card enche-o automaticate)
     int cards_left = 0;
@@ -55,13 +57,18 @@ int main(int argc, char *argv[])
     LoadCards(cards);
 
 	// initialize graphics
-	InitEverything(WIDTH_WINDOW, HEIGHT_WINDOW, imgs, &window, &renderer);
+	InitEverything(WIDTH_WINDOW, HEIGHT_WINDOW, &serif, imgs, &window, &renderer);
 
-	char test[100] = {0};
+	// temos de ver se o rato é clicado dentro destas áreas
+	// (em que num_player varia de 0 a 3):
+    //int separatorPos = (int)(0.95f*WIDTH_WINDOW); // seperates the left from the right part of the window
+	//playerRect.x = num_player * (separatorPos/4-5)+10;
+	//playerRect.y = (int) (0.55f*HEIGHT_WINDOW);
+	//playerRect.w = separatorPos/4-5;
+	//playerRect.h = (int) (0.42f*HEIGHT_WINDOW);
+
  	while (!quit)
     {
-		sprintf(test, "%d", house->points);
-
         // while there's events to handle
         while (SDL_PollEvent(&event))
         {
@@ -78,18 +85,22 @@ int main(int argc, char *argv[])
 						break;
 
 					case SDLK_s:
+						// stand
                         stand(players, house, megadeck);
 						break;
 
     				case SDLK_h:
+						// hit
 						player_hit(players, house, megadeck);
 						break;
 
 					case SDLK_n:
+						// new_game
 						new_game(players, house, megadeck);
 						break;
 
 					case SDLK_a:
+						// add_player
 						// this is tricky.
 						// do we keep old players (i.e. in the list players,
 						// and know if theyre playing and their position
@@ -101,9 +112,15 @@ int main(int argc, char *argv[])
 						break;
 
 					case SDLK_r:
+						// surrender
 						break;
 
 					case SDLK_d:
+						// double
+						break;
+
+					case SDLK_b:
+						// bet
 						break;
 
 					default:
@@ -112,12 +129,13 @@ int main(int argc, char *argv[])
 			}
         }
         // render game table
-        RenderTable(players, imgs, renderer);
+        RenderTable(players, serif, imgs, renderer);
         // render house cards
         RenderHouseCards(house, cards, renderer);
         // render player cards
-        RenderPlayerCards(players, cards, renderer); 
-    	render_status(players, renderer);
+        RenderPlayerCards(players, cards, renderer);
+        // render colorful status rects above player
+    	render_status(players, serif, renderer);
         // render in the screen all changes above
         SDL_RenderPresent(renderer);
         // add a delay
@@ -134,9 +152,11 @@ int main(int argc, char *argv[])
     }
     destroy_stack(&house->cards);
 	destroy_list(players);
+	free(house);
 	destroy_list(megadeck->deck);
 
     UnLoadCards(cards);
+    TTF_CloseFont(serif);
     SDL_FreeSurface(imgs[0]);
     SDL_FreeSurface(imgs[1]);
     SDL_DestroyRenderer(renderer);

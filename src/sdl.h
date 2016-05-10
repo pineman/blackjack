@@ -15,27 +15,28 @@
 #define EXTRASPACE 150
 #define MARGIN 5
 
-void InitEverything(int , int , SDL_Surface **, SDL_Window **, SDL_Renderer **);
+void InitEverything(int width, int height, TTF_Font **_font, SDL_Surface *_img[], SDL_Window** _window, SDL_Renderer** _renderer);
 void InitSDL();
 void InitFont();
 
-SDL_Window *CreateWindow(int , int);
-SDL_Renderer *CreateRenderer(int, int, SDL_Window *);
+SDL_Window* CreateWindow(int width, int height);
+SDL_Renderer* CreateRenderer(int width, int height, SDL_Window *_window);
 
-int RenderText(int, int, const char *, TTF_Font *, SDL_Color *, SDL_Renderer *);
-void RenderPlayerArea(List *players, SDL_Renderer* _renderer, TTF_Font *serif, int separatorPos);
+int RenderText(int x, int y, const char *text, TTF_Font *_font, SDL_Color *_color, SDL_Renderer* _renderer);
+void RenderPlayerArea(List *players, SDL_Renderer* _renderer, TTF_Font *_font, int separatorPos);
 int RenderLogo(int, int, SDL_Surface *, SDL_Renderer *);
 
-void RenderTable(List *players, SDL_Surface **, SDL_Renderer *);
+void RenderTable(List *players, TTF_Font *_font, SDL_Surface *_img[], SDL_Renderer *_renderer);
 
 void RenderHouseCards(Player *house, SDL_Surface **_cards, SDL_Renderer* _renderer);
 void RenderPlayerCards(List *players, SDL_Surface **_cards, SDL_Renderer* _renderer);
-void RenderCard(int, int, int, SDL_Surface **, SDL_Renderer *);
+void RenderCard(int _x, int _y, int _num_card, SDL_Surface **_cards, SDL_Renderer* _renderer);
 
-void LoadCards(SDL_Surface **);
-void UnLoadCards(SDL_Surface **);
+void LoadCards(SDL_Surface **_cards);
+void UnLoadCards(SDL_Surface **_array_of_cards);
 
-void render_status(List *players, SDL_Renderer *renderer);
+void render_status(List *players, TTF_Font *_font, SDL_Renderer *renderer);
+
 // definition of some strings: they cannot be changed when the program is executed !
 extern const char myName[];
 extern const char myNumber[];
