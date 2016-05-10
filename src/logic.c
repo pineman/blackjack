@@ -219,6 +219,17 @@ List *find_active_player(List *players)
     return aux;
 }
 
+void surrender(List *players, Player *house, Megadeck *megadeck)
+{
+    List *aux = find_active_player(players);
+    if (!aux)
+		return;
+    Player *cur_player = (Player *) aux->payload;
+
+    cur_player->status = SU;
+    stand(players, house, megadeck);
+}
+
 void double_bet(List *players, Player *house, Megadeck *megadeck)
 {
     List *aux = find_active_player(players);
@@ -280,7 +291,6 @@ void bet(List *players)
 		puts("Nova aposta inválida.");
 		return;
 	}
-
 	cur_player->bet = (int) new_bet;
 }
 

@@ -100,6 +100,8 @@ void RenderPlayerArea(List *players, SDL_Renderer* _renderer, TTF_Font *_font, i
 			sprintf(points_str, "BJ");
 		else if (cur_player->status == BU)
 			sprintf(points_str, "BU");
+		else if (cur_player->status == SU)
+			sprintf(points_str, "SU");
 
 		sprintf(status_str, "%s -- bet: %d, points: %s",
 				cur_player->name, cur_player->bet, points_str);
