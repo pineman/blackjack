@@ -8,14 +8,42 @@
 #include "file.h"
 #include "sdl.h"
 
-/*
- * roadmap:
- * dar cartas duma lista de cartas
- * a uma stack apontada pela struct jogador
- * que está dentro duma lista de jogadores
- *
- * kek
- */
+// Definição das operações válidas nas pilhas de cartas
+void stack_push(Stack **sp, Card *card)
+{
+	Stack *old_sp = *sp;
+	Stack *new = (Stack *) calloc((size_t) 1, sizeof(Stack));
+
+	new->card = card;
+
+	new->next = old_sp;
+	new->prev = NULL;
+	if (old_sp)
+		old_sp->prev = new;
+	else {
+		// estamos a pushar o primeiro elemento, sp tava a NULL
+	}
+
+	*sp = new;
+}
+
+Card *stack_pop(Stack **sp)
+{
+	if (!*sp) {
+		puts("Erro: tentou-se fazer pop numa stack vazia.");
+		exit(EXIT_FAILURE);
+	}
+
+	Stack *pop = *sp;
+	Card *card = pop->card;
+	*sp = pop->next;
+	if (pop->next)
+		pop->next->prev = NULL;
+
+	free(pop);
+
+	return card;
+}
 
 int init_game(Config *config, List *players)
 {
@@ -45,30 +73,6 @@ int init_game(Config *config, List *players)
 	free(config);
 
 	return num_decks;
-}
-
-void stack_push(Stack **sp, Card *card)
-{
-	Stack *old = *sp;
-	Stack *new = (Stack *) calloc((size_t) 1, sizeof(Stack));
-	new->next = old;
-	new->card = card;
-	*sp = new;
-}
-
-Card *stack_pop(Stack **sp)
-{
-	if (!*sp) {
-		puts("Erro: tentou-se remover stack NULL.");
-		exit(EXIT_FAILURE);
-	}
-
-	Stack *pop = *sp;
-	Card *card = pop->card;
-	*sp = pop->next;
-	free(pop);
-
-	return card;
 }
 
 int give_card(Player *player, Megadeck *megadeck)
@@ -127,32 +131,17 @@ void new_game(List *players, Player *house, Megadeck *megadeck)
     if (aux)
 		return;
 
-	new_game_house(house, megadeck);
-	printf("house->points = %d\n", house->points);
-
-	new_game_players(players, house, megadeck);
+	clear_cards(players, house);
+	distribute_cards(players, house, megadeck);
+	find_playing(players, house);
 
 	if (house->status == BJ)
 		// a ronda acaba mais cedo
 		pay_bets(players, house);
 }
 
-void new_game_house(Player *house, Megadeck *megadeck)
+void clear_cards(List *players, Player *house)
 {
-	destroy_stack(&house->cards);
-	for (int i = 0; i < 2; i++)
-		give_card(house, megadeck);
-	house->num_cards = 1; // desenhar só uma carta
-	house->status = WW;
-
-	count_points(house);
-    if (house->points == 21)
-		house->status = BJ;
-}
-
-void new_game_players(List *players, Player *house, Megadeck *megadeck)
-{
-    bool found = 0;
     List *aux = players->next;
     Player *cur_player = NULL;
     while (aux) {
@@ -164,18 +153,55 @@ void new_game_players(List *players, Player *house, Megadeck *megadeck)
 		if (cur_player->ingame) {
 			// Limpar cartas antigas
 			destroy_stack(&cur_player->cards);
+			cur_player->num_cards = 0;
 
 			// Verificar se o jogador pode jogar outra vez
 			if (cur_player->money < cur_player->bet)
 				cur_player->ingame = false;
 		}
+		aux = aux->next;
+	}
+	destroy_stack(&house->cards);
+}
 
-		// se puder jogar...
-		if (cur_player->ingame) {
-			// Distribuir cartas novas
-			for (int i = 0; i < 2; i++)
+void distribute_cards(List *players, Player *house, Megadeck *megadeck)
+{
+	List *aux = players->next;
+	Player *cur_player = NULL;
+	// Distribuir cartas realisticamente
+    for (int i = 0; i < 2; i++) {
+		aux = players->next;
+		cur_player = NULL;
+		while (aux) {
+			cur_player = (Player *) aux->payload;
+			// se puder jogar...
+			if (cur_player->ingame)
+				// dar uma carta
 				give_card(cur_player, megadeck);
-			cur_player->num_cards = 2;
+			aux = aux->next;
+		}
+		give_card(house, megadeck);
+	}
+}
+
+void find_playing(List *players, Player *house)
+{
+	house->num_cards = 1; // desenhar só uma carta
+	house->status = WW;
+
+	count_points(house);
+	// TODO: desenhar os pontos da casa
+	printf("house->points = %d\n", house->points);
+    if (house->points == 21)
+		house->status = BJ;
+
+    bool found = 0;
+    List *aux = players->next;
+    Player *cur_player = NULL;
+	while (aux) {
+		cur_player = (Player *) aux->payload;
+		if (cur_player->ingame) {
+			// Colocar status a Waiting
 			cur_player->status = WW;
 
 			// Contar pontos e verificar se tem blackjack
@@ -216,6 +242,15 @@ List *find_active_player(List *players)
     return aux;
 }
 
+void quit_game(List *players, bool *quit)
+{
+	List *aux = find_active_player(players);
+	if (aux)
+		return;
+	else
+		*quit = true;
+}
+
 void surrender(List *players, Player *house, Megadeck *megadeck)
 {
     List *aux = find_active_player(players);
@@ -232,7 +267,7 @@ void double_bet(List *players, Player *house, Megadeck *megadeck)
     List *aux = find_active_player(players);
     Player *cur_player = (Player *) aux->payload;
 
-    if (cur_player->money < cur_player->bet || cur_player->num_cards > 2)
+    if (cur_player->money < cur_player->bet || cur_player->num_cards != 2)
         return;
 
     cur_player->money -= cur_player->bet;
@@ -246,25 +281,35 @@ void double_bet(List *players, Player *house, Megadeck *megadeck)
 void bet(List *players)
 {
     List *aux = find_active_player(players);
-    Player *cur_player = NULL;
     if (aux)
 		return;
 
-	// TODO: get_new_bet() pode falhar!
-	int new_bet = get_new_bet(players);
-	cur_player->bet = new_bet;
+	get_new_bet(players);
 }
 
+// TODO: adicionar limites de novo
 void add_player(List *players, List *old_players)
 {
     List *aux = find_active_player(players);
-    if (aux)
-		return;
+    //if (aux)
+	//	return;
 
+	// TODO: adicionar MessageBox para informar utilizador para clicar
+	// num jogador.
 	int pos = get_clicked_player();
-	Player *new_player = get_new_player(pos);
+	if (pos == 0) {
+		puts("Não selecionou um lugar vazio.\nTente novamente primindo a tecla <a>.");
+		return;
+	}
+	aux = list_follow(players, pos);
+	Player *old_player = (Player *) aux->payload;
+	//if (pos == 0 || old_player->ingame) {
+	//	puts("Não selecionou um lugar vazio.\nTente novamente primindo a tecla <a>.");
+	//	return;
+	//}
 
-	Player *old_player = (Player *) list_remove_pos(players, pos);
+	Player *new_player = get_new_player(pos);
+	old_player = (Player *) list_remove_pos(players, pos);
 	list_append(old_players, old_player);
 	list_insert_pos(players, pos, new_player);
 }
@@ -343,6 +388,7 @@ void house_hit(Player *house, Megadeck *megadeck)
 	while (house->points < 17) {
 		give_card(house, megadeck);
 		count_points(house);
+	// TODO: desenhar os pontos da casa
 		printf("house->points = %d\n", house->points);
 	}
 

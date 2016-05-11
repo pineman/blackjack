@@ -17,7 +17,7 @@ Config *read_config(char *filename)
 	fp = fopen(filename, "r");
 
 	if (fp == NULL) {
-		puts("Erro: impossível abrir ficheiro %s.", filename);
+		printf("Erro: impossível abrir ficheiro %s.", filename);
 		exit(EXIT_FAILURE);
 	}
 
@@ -75,81 +75,145 @@ Config *read_player(char *line, Config *config, int count)
 	return config;
 }
 
-int get_new_bet(List *players)
+// Vai buscar uma linha a stdin.
+// Modfica o buffer por referência.
+// O buffer fica vazio se o fgets() der overflow ou se a input for vazia.
+// Senão, o buffer fica com a string de input, sem o \n.
+void get_line(char buffer[MAX_PLAYER_NAME+2])
 {
-	char buffer[MAX_PLAYER_NAME+2];
+	int newline = 0;
+	int c = 0;
+	fgets(buffer, MAX_PLAYER_NAME+2, stdin);
+
+	// localização do \n
+	newline = (int) strcspn(buffer, "\n");
+
+	// se não existir (ou seja, newline é o comprimento da string inserida),
+	// sabemos que a string de stdin é maior que o buffer pode conter.
+	if (newline == MAX_PLAYER_NAME+1) {
+		strcpy(buffer, "");
+		// Consumir o resto do buffer de stdin
+		while ((c = getchar()) != '\n' && c != EOF);
+		return;
+	}
+	// se existir, substituir por \0.
+	// neste caso se buffer estiver vazio, permanece vazio.
+	else
+		buffer[newline] = '\0';
+}
+
+void get_new_bet(List *players)
+{
+	char buffer[MAX_PLAYER_NAME+2] = {0}; // newline + nullbyte
+	bool correct = false;
 	List *aux = players->next;
 	Player *cur_player = NULL;
 
 	printf("Insira o nome do jogador a modificar a aposta: ");
-	fgets(buffer, sizeof(buffer), stdin);
-	int newline = (int) strcspn(buffer, "\n");
+	get_line(buffer);
 
-	if (newline == 9) {
-		puts("Erro: O nome do jogador tem no máximo 8 caracteres.");
-		return -1;
+	if (buffer[0] == '\0') {
+		puts("Jogador não encontrado. Tente novamente primindo a tecla <b>.");
+		return;
 	}
-	else
-		buffer[newline] = '\0';
 
-	bool found_player = false;
-	while (aux && !found_player) {
+	correct = false;
+	while (aux && !correct) {
 		cur_player = (Player *) aux->payload;
-		if (strcmp(buffer, cur_player->name) == 0 && !found_player)
-			found_player = true;
+		if (strcmp(buffer, cur_player->name) == 0 && !correct)
+			correct = true;
 		else
 			aux = aux->next;
 	}
 
 	if (!aux) {
-		puts("Erro: Jogador não encontrado.");
-		return -1;
+		puts("Jogador não encontrado. Tente novamente primindo a tecla <b>.");
+		return;
 	}
 
+	correct = false;
 	cur_player = (Player *) aux->payload;
-	printf("Insira o novo valor da aposta do jogador %s: ", cur_player->name);
-	fgets(buffer, sizeof(buffer), stdin);
-	long new_bet = strtol(buffer, NULL, 10);
-	// 25% ou 100% do dinheiro?
-	// o dinheiro do jogador está (essencialmente) garantido
-	// de estar abaixo de INT_MAX (a não ser que se jogue mesmo muito)
-	// fazendo com bet de [1, money]
-	if (new_bet > cur_player->money || new_bet < 1) {
-		puts("Erro: Nova aposta inválida.");
-		return -1;
-	}
+	long new_bet = 0;
+	do {
+		printf("Insira o novo valor da aposta do jogador %s: ", cur_player->name);
+		get_line(buffer);
 
-	return new_bet;
+		if (buffer[0] == '\0')
+			puts("Nova aposta inválida.");
+		else {
+			new_bet = strtol(buffer, NULL, 10);
+			// o dinheiro do jogador está (essencialmente) garantido
+			// de estar abaixo de INT_MAX (a não ser que se jogue mesmo muito)
+			// fazendo com bet pertencente a [1, money]
+			if (new_bet > cur_player->money || new_bet < 1)
+				puts("Nova aposta inválida.");
+			else
+				correct = true;
+		}
+	} while (!correct);
+
+	cur_player->bet = (int) new_bet;
 }
 
-// TODO: parse new player correctly!
 Player *get_new_player(int pos)
 {
+	char buffer[MAX_PLAYER_NAME+2] = {0};
+	bool correct = false;
 	Type type = HU;
-	char name[MAX_PLAYER_NAME+1] = "novo";
+	char name[MAX_PLAYER_NAME+1] = {0};
 	int money = 0;
 	int bet = 0;
 	Player *new_player = NULL;
 
 	printf("Escolheu o jogador na posição %d.\n", pos);
 
+	correct = false;
+	do {
+		printf("Introduza o tipo do jogador: ");
+		get_line(buffer);
+
+		if (buffer[0] == '\0')
+			puts("Tipo de jogador inválido (HU ou EA). Tente novamente.");
+		else {
+			if (strcmp(buffer, "HU") == 0) {
+				type = HU;
+				correct = true;
+			}
+			else if (strcmp(buffer, "EA") == 0) {
+				type = EA;
+				correct = true;
+			}
+			else
+				puts("Tipo de jogador inválido (HU ou EA). Tente novamente.");
+		}
+	} while (!correct);
+
+	correct = false;
+	do {
+		printf("Introduza o nome do jogador: ");
+		get_line(buffer);
+
+		if (buffer[0] == '\0')
+			puts("Nome do jogador inválido. Este tem no máximo 8 caracteres.");
+		else {
+			strcpy(name, buffer);
+			correct = true;
+		}
+	} while (!correct);
+
+	// TODO: get money and get bet!
+
 	new_player = (Player *) calloc((size_t) 1, sizeof(Player));
 
+	new_player->ingame = true;
 	new_player->type = type;
 	strcpy(new_player->name, name);
-	new_player->ingame = true; // certificamo-nos que money >= bet
-	new_player->money = money;
-	new_player->bet = bet;
 
 	return new_player;
 }
 
-void write_stats(List *players, Player *house, List *old_players, bool *quit)
+void write_stats(List *players, Player *house, List *old_players)
 {
-    List *aux = find_active_player(players);
-    if (aux)
-        return;
-
     FILE *stats = NULL;
     stats = fopen("stats.txt" , "w");
     if (!stats)
@@ -166,8 +230,6 @@ void write_stats(List *players, Player *house, List *old_players, bool *quit)
 		fprintf(stats, "A casa ganhou: %d €\n", house->money);
 	else if (house->money == 0)
 		fprintf(stats, "A casa não ganhou nem perdeu dinheiro.");
-
-	*quit = true;
 }
 
 void write_stats_players(FILE *stats, List *players)
