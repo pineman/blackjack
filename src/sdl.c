@@ -24,7 +24,6 @@ void RenderTable(List *players, TTF_Font *_font, SDL_Surface *_img[], SDL_Render
     SDL_Color black = {0, 0, 0, 255}; // black
     SDL_Texture *table_texture;
     SDL_Rect tableSrc, tableDest;
-    int separatorPos = (int)(0.95f*WIDTH_WINDOW); // seperates the left from the right part of the window
     int height;
     char money_str[STRING_SIZE];
 
@@ -39,20 +38,20 @@ void RenderTable(List *players, TTF_Font *_font, SDL_Surface *_img[], SDL_Render
     tableSrc.w = _img[0]->w;
     tableSrc.h = _img[0]->h;
 
-    tableDest.w = separatorPos;
+    tableDest.w = SEP;
     tableDest.h = HEIGHT_WINDOW;
 
     table_texture = SDL_CreateTextureFromSurface(_renderer, _img[0]);
     SDL_RenderCopy(_renderer, table_texture, &tableSrc, &tableDest);
 
     // render the IST Logo
-    height = RenderLogo(separatorPos, 0, _img[1], _renderer);
+    height = RenderLogo(SEP, 0, _img[1], _renderer);
 
     // render the student name
-    height += RenderText(separatorPos+3*MARGIN, height, myName, _font, &black, _renderer);
+    height += RenderText(SEP+3*MARGIN, height, myName, _font, &black, _renderer);
 
     // this renders the student number
-    height += RenderText(separatorPos+3*MARGIN, height, myNumber, _font, &black, _renderer);
+    height += RenderText(SEP+3*MARGIN, height, myNumber, _font, &black, _renderer);
 
 	List *aux = players->next;
 	Player *cur_player = NULL;
@@ -61,18 +60,18 @@ void RenderTable(List *players, TTF_Font *_font, SDL_Surface *_img[], SDL_Render
 		if (!(cur_player->type == VA)) {
 			sprintf(money_str, "%s (%s): %d euros",
 					cur_player->name, cur_player->type == HU ? "HU" : "EA", cur_player->money);
-			height += RenderText(separatorPos+3*MARGIN, height, money_str, _font, &black, _renderer);
+			height += RenderText(SEP+3*MARGIN, height, money_str, _font, &black, _renderer);
 		}
 		aux = aux->next;
 	}
 
-	RenderPlayerArea(players, _renderer, _font, separatorPos);
+	RenderPlayerArea(players, _renderer, _font);
 
     // destroy everything
     SDL_DestroyTexture(table_texture);
 }
 
-void RenderPlayerArea(List *players, SDL_Renderer* _renderer, TTF_Font *_font, int separatorPos)
+void RenderPlayerArea(List *players, SDL_Renderer* _renderer, TTF_Font *_font)
 {
     SDL_Color white = {255, 255, 255, 255};
     SDL_Rect playerRect;
@@ -89,10 +88,10 @@ void RenderPlayerArea(List *players, SDL_Renderer* _renderer, TTF_Font *_font, i
 		else
 			SDL_SetRenderDrawColor(_renderer, 255, 255, 255, 255);
 
-		playerRect.x = num_player * (separatorPos/4-5)+10;
-		playerRect.y = (int) (0.55f*HEIGHT_WINDOW);
-		playerRect.w = separatorPos/4-5;
-		playerRect.h = (int) (0.42f*HEIGHT_WINDOW);
+		playerRect.x = num_player*PLAYER_RECT_X;
+		playerRect.y = PLAYER_RECT_Y;
+		playerRect.w = PLAYER_RECT_W;
+		playerRect.h = PLAYER_RECT_H;
 
 		if (cur_player->status == WW || cur_player->status == ST)
 			sprintf(points_str, "%d", cur_player->points);
@@ -111,6 +110,32 @@ void RenderPlayerArea(List *players, SDL_Renderer* _renderer, TTF_Font *_font, i
 		num_player++;
         aux = aux->next;
     }
+}
+
+int get_clicked_player()
+{
+	SDL_Event event;
+	int i = 0;
+
+	while (1) {
+		SDL_PollEvent(&event);
+		if (event.type == SDL_MOUSEBUTTONDOWN)
+			break;
+	}
+
+	int mouse_x = event.button.x;
+	int mouse_y = event.button.y;
+
+	if (mouse_y >= PLAYER_RECT_Y && mouse_y <= PLAYER_RECT_Y + PLAYER_RECT_H) {
+		while (mouse_x >= 0*PLAYER_RECT_X) {
+			mouse_x -= PLAYER_RECT_W;
+			i++;
+		}
+	}
+	else
+		i = 0;
+
+	return i;
 }
 
 // TODO: código repetido com RenderPlayerCards
@@ -195,8 +220,8 @@ void RenderPlayerCards(List *players, SDL_Surface **_cards, SDL_Renderer* _rende
 
 				// draw the card
 				pos = num_cards % 4;
-				x = (int) num_player * ((0.95f*WIDTH_WINDOW)/4-5)+(num_cards/4)*12+15;
-				y = (int) (0.55f*HEIGHT_WINDOW)+10;
+				x = (int) num_player * (SEP/4-5)+(num_cards/4)*12+15;
+				y = (int) PLAYER_RECT_Y+10;
 				if ( pos == 1 || pos == 3) x += CARD_WIDTH + 30;
 				if ( pos == 2 || pos == 3) y += CARD_HEIGHT+ 10;
 				RenderCard(x, y, card_id, _cards, _renderer);
