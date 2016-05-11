@@ -79,7 +79,7 @@ int main(int argc, char *argv[])
 			else if (event.type == SDL_KEYDOWN) {
 				switch (event.key.keysym.sym) {
 					case SDLK_q:
-						write_stats(players, house, old_players, &quit);
+						quit_game(players, &quit);
 						break;
 
 					case SDLK_n:
@@ -126,8 +126,10 @@ int main(int argc, char *argv[])
         // render in the screen all changes above
         SDL_RenderPresent(renderer);
         // add a delay
-		SDL_Delay(delay);
+		//SDL_Delay(delay);
     }
+
+	write_stats(players, house, old_players);
 
 	destroy_players_list(players);
 	destroy_players_list(old_players);

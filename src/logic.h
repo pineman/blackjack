@@ -23,6 +23,7 @@ typedef struct Card {
 typedef struct Stack {
 	Card *card;
 	struct Stack *next;
+	struct Stack *prev;
 } Stack;
 
 typedef struct Player {
@@ -56,7 +57,7 @@ typedef struct Megadeck {
     List *deck;
 } Megadeck;
 
-int   init_game(Config *config, List *players);
+int init_game(Config *config, List *players);
 
 void stack_push(Stack **sp, Card *card);
 Card *stack_pop(Stack **sp);
@@ -66,11 +67,13 @@ int give_card(Player *player, Megadeck *megadeck);
 int create_megadeck(Megadeck *megadeck);
 
 void new_game(List *players, Player *house, Megadeck *megadeck);
-void new_game_house(Player *house, Megadeck *megadeck);
-void new_game_players(List *players, Player *house, Megadeck *megadeck);
+void clear_cards(List *players, Player *house);
+void distribute_cards(List *players, Player *house, Megadeck *megadeck);
+void find_playing(List *players, Player *house);
 
 List *find_active_player(List *players);
 
+void quit_game(List *players, bool *quit);
 void surrender(List *players, Player *house, Megadeck *megadeck);
 void double_bet(List *players, Player *house, Megadeck *megadeck);
 void bet(List *players);

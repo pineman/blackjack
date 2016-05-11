@@ -126,12 +126,11 @@ int get_clicked_player()
 	int mouse_x = event.button.x;
 	int mouse_y = event.button.y;
 
-	if (mouse_y >= PLAYER_RECT_Y && mouse_y <= PLAYER_RECT_Y + PLAYER_RECT_H) {
+	if (mouse_y >= PLAYER_RECT_Y && mouse_y <= PLAYER_RECT_Y + PLAYER_RECT_H)
 		while (mouse_x >= 0*PLAYER_RECT_X) {
 			mouse_x -= PLAYER_RECT_W;
 			i++;
 		}
-	}
 	else
 		i = 0;
 
@@ -192,28 +191,25 @@ void RenderHouseCards(Player *house, SDL_Surface **_cards, SDL_Renderer* _render
 void RenderPlayerCards(List *players, SDL_Surface **_cards, SDL_Renderer* _renderer)
 {
     int pos = 0, x = 0, y = 0;
-    List *aux = players->next; // dummy head
-    Player *cur_player = NULL;
-    Card *cur_card = 0;
-	Stack *aux_cards = NULL;
-	Stack *tmp = NULL;
     int num_player = 0;
     int num_cards = 0;
     int card_id = 0;
 
+    List *aux = players->next; // dummy head
+    Player *cur_player = NULL;
+    Card *cur_card = 0;
+	Stack *aux_cards = NULL;
     // Iterate over all players
     while (aux) {
         cur_player = (Player *) aux->payload;
 		if (cur_player->ingame) {
 			// Iterate over the stack backwards
-			tmp = NULL;
-			while (tmp != cur_player->cards) {
-				aux_cards = cur_player->cards;
+			aux_cards = cur_player->cards;
+			while (aux_cards->next)
+				aux_cards = aux_cards->next;
 
-				// iterar até à posição tmp da stack (inicialmente é o fim)
-				while (aux_cards->next != tmp)
-					aux_cards = aux_cards->next;
-
+			// agora aux_cards aponta para o último elemento da stack
+			while (aux_cards) {
 				// get the card
 				cur_card = aux_cards->card;
 				card_id = cur_card->id + cur_card->suit * SUIT_SIZE;
@@ -227,7 +223,7 @@ void RenderPlayerCards(List *players, SDL_Surface **_cards, SDL_Renderer* _rende
 				RenderCard(x, y, card_id, _cards, _renderer);
 
 				num_cards++;
-				tmp = aux_cards;
+				aux_cards = aux_cards->prev;
 			}
 			num_cards = 0;
 		}

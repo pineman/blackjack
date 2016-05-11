@@ -50,8 +50,9 @@ void list_insert_pos(List *head, int pos, void *payload)
 	new->next = aux->next;
 	if (aux->next)
 		aux->next->prev = new;
-	else
+	else {
 		// inserting at the tail, no need to set aux->next->prev
+	}
 
 	new->prev = aux;
 	aux->next = new;
