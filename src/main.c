@@ -15,6 +15,9 @@
  * main function: entry point of the program
  * only to invoke other functions !
  */
+
+// TODO: ERROR CHECKING CALLOC()
+
 int main(int argc, char *argv[])
 {
     SDL_Window *window = NULL;
@@ -26,15 +29,17 @@ int main(int argc, char *argv[])
     int delay = 300;
     bool quit = false;
 
-	if (argc != 2)
-		// TODO: error msg
+	if (argc != 2) {
+		puts("Erro: número inválido de argumentos.");
+		puts("É esperado um argumento: ficheiro de configuração.");
 		exit(EXIT_FAILURE);
+	}
 
     srand(time(NULL));
 
 	char *filename = argv[1];
 
-	// Ler configuração (TODO: PODE FALHAR EARLY)
+	// Ler configuração
 	Config *config = read_config(filename);
 
 	// Declarar a lista de jogadores
@@ -51,7 +56,7 @@ int main(int argc, char *argv[])
     Megadeck megadeck_real = {cards_left, num_decks, deck};
     Megadeck *megadeck = &megadeck_real;
 
-	// TODO: há mal a casa ser do tipo 'Player'?
+	// Inicializar a casa
 	Player *house = (Player *) calloc((size_t) 1, sizeof(Player));
 
 	// Inicializar um novo jogo
