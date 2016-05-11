@@ -9,8 +9,9 @@ struct List {
 };
 typedef struct List List;
 
-//void list_prepend(List *head, void *payload);
+void list_insert_pos(List *head, int pos, void *payload);
 void list_append(List *head, void *payload);
 void *list_remove(List *node);
+void *list_remove_pos(List *head, int pos);
 
 #endif

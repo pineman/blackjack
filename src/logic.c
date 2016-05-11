@@ -5,6 +5,8 @@
 #include <stdbool.h>
 #include "logic.h"
 #include "list.h"
+#include "file.h"
+#include "sdl.h"
 
 /*
  * roadmap:
@@ -40,6 +42,8 @@ int init_game(Config *config, List *players)
 		list_append(players, new_player);
 	}
 
+	free(config);
+
 	return num_decks;
 }
 
@@ -54,9 +58,9 @@ void stack_push(Stack **sp, Card *card)
 
 Card *stack_pop(Stack **sp)
 {
-	if (!*sp)
-		// TODO: trying to remove NULL stack
-		return NULL;
+	if (!*sp) {
+		// TODO: trying to remove NULL stack, panic
+	}
 
 	Stack *pop = *sp;
 	Card *card = pop->card;
@@ -112,15 +116,6 @@ int create_megadeck(Megadeck *megadeck)
 
 	total_cards = megadeck->num_decks * DECK_SIZE;
 	return total_cards;
-}
-
-void test_quit(List *players, bool *quit)
-{
-    List *aux = find_active_player(players);
-    if (aux)
-        return;
-
-    *quit = true;
 }
 
 void new_game(List *players, Player *house, Megadeck *megadeck)
@@ -248,50 +243,27 @@ void double_bet(List *players, Player *house, Megadeck *megadeck)
 
 void bet(List *players)
 {
-	char buffer[MAX_PLAYER_NAME+2];
     List *aux = find_active_player(players);
     Player *cur_player = NULL;
     if (aux)
 		return;
 
-	aux = players->next;
-	printf("Insira o nome do jogador a modificar a aposta: ");
-	fgets(buffer, sizeof(buffer), stdin);
-	int newline = (int) strcspn(buffer, "\n");
+	int new_bet = get_new_bet(players);
+	cur_player->bet = new_bet;
+}
 
-	if (newline == 9) {
-		puts("O nome do jogador tem no máximo 8 caracteres.");
+void add_player(List *players, List *old_players)
+{
+    List *aux = find_active_player(players);
+    if (aux)
 		return;
-	}
-	else
-		buffer[newline] = '\0';
 
-	bool found_player = false;
-	while (aux && !found_player) {
-		cur_player = (Player *) aux->payload;
-		if (strcmp(buffer, cur_player->name) == 0 && !found_player)
-			found_player = true;
-		else
-			aux = aux->next;
-	}
+	int pos = get_clicked_player();
+	Player *new_player = get_new_player(pos);
 
-	if (!aux) {
-		puts("Jogador não encontrado.");
-		return;
-	}
-
-	cur_player = (Player *) aux->payload;
-	printf("Insira o novo valor da aposta do jogador %s: ", cur_player->name);
-	fgets(buffer, sizeof(buffer), stdin);
-	long new_bet = strtol(buffer, NULL, 10);
-	// 25% ou 100% do dinheiro?
-	// o dinheiro do jogador está (essencialmente) garantido
-	// de estar abaixo de INT_MAX (a não ser que se jogue mesmo muito)
-	if (new_bet > cur_player->money || new_bet <= 0) {
-		puts("Nova aposta inválida.");
-		return;
-	}
-	cur_player->bet = (int) new_bet;
+	Player *old_player = (Player *) list_remove_pos(players, pos);
+	list_append(old_players, old_player);
+	list_insert_pos(players, pos, new_player);
 }
 
 void stand(List *players, Player *house, Megadeck *megadeck)
@@ -497,4 +469,16 @@ void destroy_stack(Stack **cards)
 {
 	while (*cards)
 		free(stack_pop(cards));
+}
+
+void destroy_players_list(List *players)
+{
+    List *aux = players->next;
+    Player *cur_player = NULL;
+    while (aux) {
+		cur_player = (Player *) aux->payload;
+		destroy_stack(&cur_player->cards);
+		aux = aux->next;
+    }
+	destroy_list(players);
 }

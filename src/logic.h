@@ -65,8 +65,6 @@ Card *stack_pop(Stack **sp);
 int give_card(Player *player, Megadeck *megadeck);
 int create_megadeck(Megadeck *megadeck);
 
-void test_quit(List *players, bool *quit);
-
 void new_game(List *players, Player *house, Megadeck *megadeck);
 void new_game_house(Player *house, Megadeck *megadeck);
 void new_game_players(List *players, Player *house, Megadeck *megadeck);
@@ -76,6 +74,7 @@ List *find_active_player(List *players);
 void surrender(List *players, Player *house, Megadeck *megadeck);
 void double_bet(List *players, Player *house, Megadeck *megadeck);
 void bet(List *players);
+void add_player(List *players, List *old_players);
 void stand(List *players, Player *house, Megadeck *megadeck);
 void player_hit(List *players, Player *house, Megadeck *megadeck);
 void house_hit(Player *house, Megadeck *megadeck);
@@ -87,5 +86,6 @@ int point_index(int id);
 
 void destroy_list(List *head);
 void destroy_stack(Stack **cards);
+void destroy_players_list(List *players);
 
 #endif
