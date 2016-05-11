@@ -59,7 +59,8 @@ void stack_push(Stack **sp, Card *card)
 Card *stack_pop(Stack **sp)
 {
 	if (!*sp) {
-		// TODO: trying to remove NULL stack, panic
+		puts("Erro: tentou-se remover stack NULL.");
+		exit(EXIT_FAILURE);
 	}
 
 	Stack *pop = *sp;
@@ -88,9 +89,10 @@ int give_card(Player *player, Megadeck *megadeck)
 	for (int i = 0; i < random; i++) {
 		if (random_card->next)
 			random_card = random_card->next;
-		else
-			// TODO: a carta que queremos dar não existe
-			return -1;
+		else {
+			puts("Erro: tentou-se dar uma carta não existente.");
+			exit(EXIT_FAILURE);
+		}
 	}
 
 	stack_push(&(player->cards), random_card->payload);
@@ -248,6 +250,7 @@ void bet(List *players)
     if (aux)
 		return;
 
+	// TODO: get_new_bet() pode falhar!
 	int new_bet = get_new_bet(players);
 	cur_player->bet = new_bet;
 }
@@ -303,14 +306,12 @@ void stand(List *players, Player *house, Megadeck *megadeck)
 		}
 		else {
 			// não existe um próximo jogador válido para jogar
-			// TODO: se não existir, é o hit da casa
 			house_hit(house, megadeck);
 			pay_bets(players, house);
 		}
 	}
 	else {
 		// se não existir um próximo jogador, fizemos stand do último jogador
-		// TODO: se não existir, é o hit da casa
 		house_hit(house, megadeck);
 		pay_bets(players, house);
 	}
@@ -413,8 +414,9 @@ void pay_bets(List *players, Player *house)
         	cur_player->losses++;
         }
         else {
-			// TODO: this should never happen
-        	// exit(EXIT_FAILURE);
+			// isto nunca vai acontecer.
+			puts("Erro: estado de jogador desconhecido.");
+        	exit(EXIT_FAILURE);
         }
         aux = aux->next;
     }
