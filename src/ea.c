@@ -2,19 +2,34 @@
 #include <stdlib.h>
 #include <string.h>
 
+#define MAX_LINE_SIZE 12
+
 // hit, stand, surrender, double->hit, double->stand
-typedef enum {H, S, R, D, E} Moves;
+typedef enum {H='H', S='S', R='R', D='D', E='E'} Moves;
 
 typedef struct Strategy {
-    Moves **hardtotals;
-    Moves **softtotals;
+    Moves **hard;
+    Moves **soft;
 } Strategy;
+
+void write_matrix(Moves ***matrix, FILE *fp)
+{ 
+    char buffer[MAX_LINE_SIZE] = {0};
+    for (int i=0; fgets(buffer, MAX_LINE_SIZE, fp); i++) {
+        *matrix = (Moves **) realloc(*matrix, (i+1) * sizeof(Moves *));
+        (*matrix)[i] = (Moves *) calloc(10, sizeof(Moves));                
+         for (int j=0; j<10; j++) {
+            (*matrix)[i][j] =  buffer[j];
+        }
+    }
+}
 
 Strategy *read_strategy()
 {
-    FILE fp1 = NULL;
-    FILE fp2 = NULL;
-
+    char buffer[MAX_LINE_SIZE] = {0};
+    FILE *fp1 = NULL;
+    FILE *fp2 = NULL;
+    
     fp1 = fopen("hardtotals.txt", "r");
     if (!fp1) {
         puts("Erro: impossivel ler ficheiro 'hardtotals.txt'");
@@ -26,56 +41,28 @@ Strategy *read_strategy()
         exit(EXIT_FAILURE);
     }
 
-    Strategy *strategy = (Strategy *) malloc(sizeof(Strategy));
-    Moves **(strategy->hardtotals) = (Moves **) malloc(10*sizeof(Moves *);
-    for (int i=0; i<10; i++) 
-        Moves *(strategy->(hardtotals[i])) = (Moves *) malloc(10*sizeof(Moves);
+    Strategy *strategy = (Strategy *) calloc(1, sizeof(Strategy));
     
-    Moves **(strategy->softtotals) = (Moves **) malloc(7*sizeof(Moves *);
-    for (int i=0; i<7; i++) 
-        Moves *(strategy->(softtotals[i])) = (Moves *) malloc(10*sizeof(Moves);
-        
-    for (int i=0; i<10; i++) {
-        for (int j=0; (c = getc(fp1)) != '\n'; j++) {
-            switch (c) {
-                case 'H': 
-                    strategy->hardtotals[i][j] = H; 
-                    break;
-                case 'S':
-                    strategy->hardtotals[i][j] = S;
-                    break;
-                case 'R':
-                    strategy->hardtotals[i][j] = R;
-                    break;
-                case 'E':
-                    strategy->hardtotals[i][j] = E;
-                    break;
-            }
-        }
-    }
-
-    for (int i=0; i<7; i++) {
-        for (int j=0; (c = getc(fp2)) != '\n'; j++) {
-            switch (c) {
-                case 'H': 
-                    strategy->softtotals[i][j] = H; 
-                    break;
-                case 'S':
-                    strategy->softtotals[i][j] = S;
-                    break;
-                case 'R':
-                    strategy->softtotals[i][j] = R;
-                    break;
-                case 'E':
-                    strategy->softtotals[i][j] = E;
-                    break;
-            }
-        }
-    }
+    strategy->hard = NULL;d
+    strategy->soft = NULL; 
+    
+    write_matrix((Moves ***) &strategy->hard, fp1);
+    write_matrix((Moves ***) &strategy->soft, fp2);
  
-    return *strategy;
+    return strategy;
 }
-                    
-                    
+
+void decision(Player *player, Card house_card)
+{
+    
+}
+                 
+int main()
+{
+    Strategy *strategy = NULL;
+    strategy = read_strategy();
+
+    return EXIT_SUCCESS;
+}                   
             
         
