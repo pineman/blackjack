@@ -58,7 +58,7 @@ void RenderTable(List *players, TTF_Font *_font, SDL_Surface *_img[], SDL_Render
 	Player *cur_player = NULL;
 	while (aux) {
 		cur_player = (Player *) aux->payload;
-		if (!(cur_player->type == VA)) {
+		if (cur_player->ingame) {
 			sprintf(money_str, "%s (%s): %d euros",
 					cur_player->name, cur_player->type == HU ? "HU" : "EA", cur_player->money);
 			height += RenderText(SEP+3*MARGIN, height, money_str, _font, &black, _renderer);
@@ -84,32 +84,33 @@ void RenderPlayerArea(List *players, SDL_Renderer* _renderer, TTF_Font *_font)
 
 	while (aux) {
 		cur_player = (Player *) aux->payload;
-		if (cur_player->playing)
-			SDL_SetRenderDrawColor(_renderer, 255, 0, 0, 255);
-		else
-			SDL_SetRenderDrawColor(_renderer, 255, 255, 255, 255);
+		if (cur_player->ingame) {
+			if (cur_player->playing)
+				SDL_SetRenderDrawColor(_renderer, 255, 0, 0, 255);
+			else
+				SDL_SetRenderDrawColor(_renderer, 255, 255, 255, 255);
 
-		playerRect.x = num_player*PLAYER_RECT_X;
-		playerRect.y = PLAYER_RECT_Y;
-		playerRect.w = PLAYER_RECT_W;
-		playerRect.h = PLAYER_RECT_H;
+			playerRect.x = num_player*PLAYER_RECT_X;
+			playerRect.y = PLAYER_RECT_Y;
+			playerRect.w = PLAYER_RECT_W;
+			playerRect.h = PLAYER_RECT_H;
 
-		if (cur_player->status == WW || cur_player->status == ST)
-			sprintf(points_str, "%d", cur_player->points);
-		else if (cur_player->status == BJ)
-			sprintf(points_str, "BJ");
-		else if (cur_player->status == BU)
-			sprintf(points_str, "BU");
-		else if (cur_player->status == SU)
-			sprintf(points_str, "SU");
+			if (cur_player->status == WW || cur_player->status == ST)
+				sprintf(points_str, "%d", cur_player->points);
+			else if (cur_player->status == BJ)
+				sprintf(points_str, "BJ");
+			else if (cur_player->status == BU)
+				sprintf(points_str, "BU");
+			else if (cur_player->status == SU)
+				sprintf(points_str, "SU");
 
-		sprintf(status_str, "%s -- bet: %d, points: %s",
-				cur_player->name, cur_player->bet, points_str);
-		RenderText(playerRect.x, playerRect.y-30, status_str, _font, &white, _renderer);
-		SDL_RenderDrawRect(_renderer, &playerRect);
-
+			sprintf(status_str, "%s -- bet: %d, points: %s",
+					cur_player->name, cur_player->bet, points_str);
+			RenderText(playerRect.x, playerRect.y-30, status_str, _font, &white, _renderer);
+			SDL_RenderDrawRect(_renderer, &playerRect);
+		}
+		aux = aux->next;
 		num_player++;
-        aux = aux->next;
     }
 }
 
@@ -127,11 +128,13 @@ void show_add_player_error_message(SDL_Window *window, AddPlayerError error)
 
 	switch(error) {
 		case OUT:
-			strcpy(error_msg, "Não clicou dentro da área dos jogadores.\nTente novamente primindo a tecla <a>.");
+			strcpy(error_msg, "Não clicou dentro da área dos jogadores.\n"
+				   "Tente novamente primindo a tecla <a>.");
 			break;
 
 		case NOTEMPTY:
-			strcpy(error_msg, "Não selecionou um lugar vazio.\nTente novamente primindo a tecla <a>.");
+			strcpy(error_msg, "Não selecionou um lugar vazio.\n"
+				   "Tente novamente primindo a tecla <a>.");
 			break;
 
 		default:
@@ -351,7 +354,6 @@ void render_status(List *players, TTF_Font *_font, SDL_Renderer *renderer)
 
     char bust[] = "BUST";
     char blackjack[] = "BLACKJACK";
-    char no_money[] = "OUT OF MONEY";
 
     List *aux = players->next;
     Player *cur_player = NULL;
@@ -360,34 +362,26 @@ void render_status(List *players, TTF_Font *_font, SDL_Renderer *renderer)
         cur_player = (Player *) aux->payload;
         rect.y = 380;
         rect.h = 30;
-        if (!cur_player->ingame && cur_player->type != VA) {
-            rect.x = 40 + 208*i;
-            rect.w = 140;
-            SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255 );
-            SDL_RenderFillRect(renderer, &rect);
-            SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255 );
-            SDL_RenderDrawRect(renderer, &rect);
-            RenderText(50+208*i, 382, no_money, _font, &white, renderer);
-        }
-        else if (cur_player->status == BJ) {
-            rect.x = 55 + 208*i;
-            rect.w = 115;
-            SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255 );
-            SDL_RenderFillRect(renderer, &rect);
-            SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255 );
-            SDL_RenderDrawRect(renderer, &rect);
-            RenderText(64+208*i, 382, blackjack, _font, &white, renderer);
-        }
-        else if (cur_player->status == BU) {
-            rect.x = 80 + 208*i;
-            rect.w = 70;
-            SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255 );
-            SDL_RenderFillRect(renderer, &rect);
-            SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255 );
-            SDL_RenderDrawRect(renderer, &rect);
-            RenderText(94+(208*i), 382, bust, _font, &white, renderer);
-        }
-
+        if (cur_player->ingame) {
+			if (cur_player->status == BJ) {
+				rect.x = 55 + 208*i;
+				rect.w = 115;
+				SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255 );
+				SDL_RenderFillRect(renderer, &rect);
+				SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255 );
+				SDL_RenderDrawRect(renderer, &rect);
+				RenderText(64+208*i, 382, blackjack, _font, &white, renderer);
+			}
+			else if (cur_player->status == BU) {
+				rect.x = 80 + 208*i;
+				rect.w = 70;
+				SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255 );
+				SDL_RenderFillRect(renderer, &rect);
+				SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255 );
+				SDL_RenderDrawRect(renderer, &rect);
+				RenderText(94+(208*i), 382, bust, _font, &white, renderer);
+			}
+		}
         aux = aux->next;
     }
 }
