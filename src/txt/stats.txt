@@ -1,0 +1,6 @@
+Jogador		Tipo	Jogos	Vitorias	Empates	Derrotas	Dinheiro
+joaj		HU	0	0		0	0		8 €
+pineman		HU	0	0		0	0		120 €
+sebas		HU	0	0		0	0		8 €
+furfag		HU	0	0		0	0		120 €
+A casa não ganhou nem perdeu dinheiro.

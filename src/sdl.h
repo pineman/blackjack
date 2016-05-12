@@ -32,7 +32,13 @@ SDL_Renderer* CreateRenderer(int width, int height, SDL_Window *_window);
 
 int RenderText(int x, int y, const char *text, TTF_Font *_font, SDL_Color *_color, SDL_Renderer* _renderer);
 void RenderPlayerArea(List *players, SDL_Renderer* _renderer, TTF_Font *_font);
+
+void show_add_player_message(SDL_Window *window);
+void show_add_player_input_message(SDL_Window *window);
+void show_add_player_error_message(SDL_Window *window, char error_msg[MAX_STR_SIZE]);
+
 int get_clicked_player();
+
 int RenderLogo(int, int, SDL_Surface *, SDL_Renderer *);
 
 void RenderTable(List *players, TTF_Font *_font, SDL_Surface *_img[], SDL_Renderer *_renderer);
