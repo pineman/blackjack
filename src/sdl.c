@@ -128,12 +128,12 @@ void show_add_player_error_message(SDL_Window *window, AddPlayerError error)
 
 	switch(error) {
 		case OUT:
-			strcpy(error_msg, "Não clicou dentro da área dos jogadores.\n"
+			strcpy(error_msg, "Nao clicou dentro da area dos jogadores.\n"
 				   "Tente novamente primindo a tecla <a>.");
 			break;
 
 		case NOTEMPTY:
-			strcpy(error_msg, "Não selecionou um lugar vazio.\n"
+			strcpy(error_msg, "Nao selecionou um lugar vazio.\n"
 				   "Tente novamente primindo a tecla <a>.");
 			break;
 
