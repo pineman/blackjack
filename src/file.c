@@ -18,7 +18,7 @@ Config *read_config(char *filename)
 	fp = fopen(filename, "r");
 
 	if (fp == NULL) {
-		printf("Erro: impossível abrir ficheiro %s.", filename);
+		printf("Erro: impossível abrir ficheiro %s.\n", filename);
 		exit(EXIT_FAILURE);
 	}
 

@@ -317,25 +317,17 @@ void bet(List *players)
 	get_new_bet(players);
 }
 
-// TODO: adicionar limites de novo
-char *add_player(List *players, List *old_players, SDL_Window *window)
+AddPlayerError add_player(List *players, List *old_players, SDL_Window *window)
 {
-    List *aux = find_active_player(players);
-    if (aux) {
-		return "";
-	}
-
-	// TODO: adicionar MessageBox para informar utilizador para clicar
-	// num jogador.
 	int pos = get_clicked_player();
 	if (pos == 0) {
-		return "Não clicou dentro da área dos jogadores.\nTente novamente primindo a tecla <a>.";
+		return OUT;
 	}
 
-	aux = list_follow(players, pos);
+	List *aux = list_follow(players, pos);
 	Player *old_player = (Player *) aux->payload;
 	if (old_player->ingame) {
-		return "Não selecionou um lugar vazio.\nTente novamente primindo a tecla <a>.";
+		return NOTEMPTY;
 	}
 
 	show_add_player_input_message(window);
@@ -346,7 +338,7 @@ char *add_player(List *players, List *old_players, SDL_Window *window)
 	list_append(old_players, old_player);
 	list_insert_pos(players, pos, new_player);
 
-	return "";
+	return OK;
 }
 
 void stand(List *players, Player *house, Megadeck *megadeck)

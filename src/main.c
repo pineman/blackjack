@@ -29,7 +29,7 @@ int main(int argc, char *argv[])
     int delay = 300;
     bool quit = false;
     bool add_player_key = false;
-    char error_msg[MAX_STR_SIZE] = {0};
+    AddPlayerError add_player_error = OK;
 
 	if (argc != 2) {
 		puts("Erro: número inválido de argumentos.");
@@ -134,10 +134,9 @@ int main(int argc, char *argv[])
 		SDL_Delay(delay);
 
 		if (add_player_key) {
-			strcpy(error_msg, add_player(players, old_players, window));
-			printf("%s\n", error_msg);
-			if (error_msg[0] != '\0')
-				show_add_player_error_message(window, error_msg);
+			add_player_error = add_player(players, old_players, window);
+			if (add_player_error != OK)
+				show_add_player_error_message(window, add_player_error);
 			add_player_key = false;
 		}
     }

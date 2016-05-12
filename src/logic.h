@@ -16,6 +16,8 @@ typedef enum {EA, HU, VA} Type;
 // waiting, blackjack, busted, stand'ed', surrender
 typedef enum {WW, BJ, BU, ST, SU} Status;
 
+typedef enum {OK, OUT, NOTEMPTY} AddPlayerError;
+
 typedef struct Card {
 	int suit;
 	int id;
@@ -79,7 +81,7 @@ void quit_game(List *players, bool *quit);
 void surrender(List *players, Player *house, Megadeck *megadeck);
 void double_bet(List *players, Player *house, Megadeck *megadeck);
 void bet(List *players);
-char *add_player(List *players, List *old_players, SDL_Window *window);
+AddPlayerError add_player(List *players, List *old_players, SDL_Window *window);
 void stand(List *players, Player *house, Megadeck *megadeck);
 void player_hit(List *players, Player *house, Megadeck *megadeck);
 void house_hit(Player *house, Megadeck *megadeck);

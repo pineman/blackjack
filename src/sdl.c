@@ -121,8 +121,22 @@ void show_add_player_message(SDL_Window *window)
 							 window);
 }
 
-void show_add_player_error_message(SDL_Window *window, char error_msg[MAX_STR_SIZE])
+void show_add_player_error_message(SDL_Window *window, AddPlayerError error)
 {
+	char error_msg[MAX_STR_SIZE] = {0};
+
+	switch(error) {
+		case OUT:
+			strcpy(error_msg, "Não clicou dentro da área dos jogadores.\nTente novamente primindo a tecla <a>.");
+			break;
+
+		case NOTEMPTY:
+			strcpy(error_msg, "Não selecionou um lugar vazio.\nTente novamente primindo a tecla <a>.");
+			break;
+
+		default:
+			break;
+	}
 	SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION,
 							 "Adicionar Jogador",
 							 error_msg,
