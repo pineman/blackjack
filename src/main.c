@@ -126,7 +126,7 @@ int main(int argc, char *argv[])
         // render in the screen all changes above
         SDL_RenderPresent(renderer);
         // add a delay
-		//SDL_Delay(delay);
+		SDL_Delay(delay);
     }
 
 	write_stats(players, house, old_players);

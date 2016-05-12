@@ -131,7 +131,14 @@ void new_game(List *players, Player *house, Megadeck *megadeck)
     if (aux)
 		return;
 
+
 	clear_cards(players, house);
+        
+    // só fazer new_game quando houver jogadores
+    aux = find_ingame_player(players);
+    if (!aux)
+        return;
+
 	distribute_cards(players, house, megadeck);
 	find_playing(players, house);
 
@@ -226,6 +233,22 @@ void find_playing(List *players, Player *house)
     }
 }
 
+List *find_ingame_player(List *players)
+{    
+	List *aux = players->next; // dummy head
+	Player *cur_player = NULL;
+	while (aux) {
+		// iterar até ao jogador que está a jogar
+		cur_player = (Player *) aux->payload;
+		if (cur_player->ingame)
+			break;
+		else
+			aux = aux->next;
+    }
+
+    return aux;
+}
+
 List *find_active_player(List *players)
 {
 	List *aux = players->next; // dummy head
@@ -265,6 +288,12 @@ void surrender(List *players, Player *house, Megadeck *megadeck)
 void double_bet(List *players, Player *house, Megadeck *megadeck)
 {
     List *aux = find_active_player(players);
+
+    // Se não houver nenhum jogador disponivel
+    if (!aux) {
+        return;
+    }
+
     Player *cur_player = (Player *) aux->payload;
 
     if (cur_player->money < cur_player->bet || cur_player->num_cards != 2)
@@ -351,14 +380,15 @@ void stand(List *players, Player *house, Megadeck *megadeck)
 		}
 		else {
 			// não existe um próximo jogador válido para jogar
-			house_hit(house, megadeck);
+           
+            house_hit(house, megadeck);
 			pay_bets(players, house);
 		}
 	}
 	else {
 		// se não existir um próximo jogador, fizemos stand do último jogador
 		house_hit(house, megadeck);
-		pay_bets(players, house);
+	    pay_bets(players, house);
 	}
 }
 
