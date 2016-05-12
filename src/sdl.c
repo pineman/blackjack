@@ -4,6 +4,7 @@
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_image.h>
 #include <stdbool.h>
+#include "main.h"
 #include "sdl.h"
 
 const char myName[] = "João Pinheiro, João Freitas";
@@ -112,6 +113,30 @@ void RenderPlayerArea(List *players, SDL_Renderer* _renderer, TTF_Font *_font)
     }
 }
 
+void show_add_player_message(SDL_Window *window)
+{
+	SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION,
+							 "Adicionar Jogador",
+							 "Clique num lugar vazio para inserir um novo jogador.",
+							 window);
+}
+
+void show_add_player_error_message(SDL_Window *window, char error_msg[MAX_STR_SIZE])
+{
+	SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION,
+							 "Adicionar Jogador",
+							 error_msg,
+							 window);
+}
+
+void show_add_player_input_message(SDL_Window *window)
+{
+	SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION,
+							 "Adicionar Jogador",
+							 "Insira os dados do jogador no terminal.",
+							 window);
+}
+
 int get_clicked_player()
 {
 	SDL_Event event;
@@ -205,8 +230,9 @@ void RenderPlayerCards(List *players, SDL_Surface **_cards, SDL_Renderer* _rende
 		if (cur_player->ingame) {
 			// Iterate over the stack backwards
 			aux_cards = cur_player->cards;
-			while (aux_cards->next)
-				aux_cards = aux_cards->next;
+			if (aux_cards)
+				while (aux_cards->next)
+					aux_cards = aux_cards->next;
 
 			// agora aux_cards aponta para o último elemento da stack
 			while (aux_cards) {

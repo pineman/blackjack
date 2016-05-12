@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <limits.h>
 #include "file.h"
 #include "logic.h"
 
@@ -163,6 +164,8 @@ Player *get_new_player(int pos)
 	char name[MAX_PLAYER_NAME+1] = {0};
 	int money = 0;
 	int bet = 0;
+	long money_tmp = 0;
+	long bet_tmp = 0;
 	Player *new_player = NULL;
 
 	printf("Escolheu o jogador na posição %d.\n", pos);
@@ -201,13 +204,50 @@ Player *get_new_player(int pos)
 		}
 	} while (!correct);
 
-	// TODO: get money and get bet!
+	correct = false;
+	do {
+		printf("Introduza o dinheiro do jogador: ");
+		get_line(buffer);
+
+
+		if (buffer[0] == '\0')
+			puts("Valor do dinheiro do jogador inválido.");
+		else {
+			money_tmp = strtol(buffer, NULL, 10);
+			if (money_tmp <= 2 || money_tmp > INT_MAX)
+				puts("Valor do dinheiro do jogador inválido.");
+			else {
+				correct = true;
+				money = (int) money_tmp;
+			}
+		}
+	} while (!correct);
+
+	correct = false;
+	do {
+		printf("Introduza a aposta do jogador: ");
+		get_line(buffer);
+
+		if (buffer[0] == '\0')
+			puts("Valor da aposta do jogador inválido.");
+		else {
+			bet_tmp = strtol(buffer, NULL, 10);
+			if (bet_tmp > money_tmp || bet_tmp <= 0)
+				puts("Nova aposta inválida.");
+			else {
+				correct = true;
+				bet = (int) bet_tmp;
+			}
+		}
+	} while (!correct);
 
 	new_player = (Player *) calloc((size_t) 1, sizeof(Player));
 
 	new_player->ingame = true;
 	new_player->type = type;
 	strcpy(new_player->name, name);
+	new_player->money = money;
+	new_player->bet = bet;
 
 	return new_player;
 }

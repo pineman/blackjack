@@ -4,4 +4,9 @@ CC=gcc
 EXEC=blackjack
 
 all:
-	$(CC) *.c -o $(EXEC) $(CFLAGS) $(LDFLAGS)
+	$(CC) -c list.c -o list.o $(CFLAGS)
+	$(CC) -c file.c -o file.o  $(CFLAGS)
+	$(CC) -c logic.c -o logic.o $(CFLAGS)
+	$(CC) -c sdl.c -o sdl.o  $(CFLAGS)
+	$(CC) -c main.c -o main.o $(CFLAGS)
+	$(CC) *.o -o $(EXEC) $(CFLAGS) $(LDFLAGS)

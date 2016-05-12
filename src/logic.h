@@ -2,6 +2,7 @@
 #define LOGIC_H
 
 #include <stdbool.h>
+#include <SDL2/SDL.h>
 #include "list.h"
 
 #define MAX_PLAYERS 4
@@ -78,7 +79,7 @@ void quit_game(List *players, bool *quit);
 void surrender(List *players, Player *house, Megadeck *megadeck);
 void double_bet(List *players, Player *house, Megadeck *megadeck);
 void bet(List *players);
-void add_player(List *players, List *old_players);
+char *add_player(List *players, List *old_players, SDL_Window *window);
 void stand(List *players, Player *house, Megadeck *megadeck);
 void player_hit(List *players, Player *house, Megadeck *megadeck);
 void house_hit(Player *house, Megadeck *megadeck);

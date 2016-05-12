@@ -28,6 +28,8 @@ int main(int argc, char *argv[])
     SDL_Event event;
     int delay = 300;
     bool quit = false;
+    bool add_player_key = false;
+    char error_msg[MAX_STR_SIZE] = {0};
 
 	if (argc != 2) {
 		puts("Erro: número inválido de argumentos.");
@@ -99,7 +101,8 @@ int main(int argc, char *argv[])
 						break;
 
 					case SDLK_a:
-						add_player(players, old_players);
+						if (!find_active_player(players))
+							add_player_key = true;
 						break;
 
 					case SDLK_s:
@@ -115,6 +118,8 @@ int main(int argc, char *argv[])
 				}
 			}
 		}
+		if (add_player_key)
+			show_add_player_message(window);
         // render game table
         RenderTable(players, serif, imgs, renderer);
         // render house cards
@@ -127,6 +132,14 @@ int main(int argc, char *argv[])
         SDL_RenderPresent(renderer);
         // add a delay
 		SDL_Delay(delay);
+
+		if (add_player_key) {
+			strcpy(error_msg, add_player(players, old_players, window));
+			printf("%s\n", error_msg);
+			if (error_msg[0] != '\0')
+				show_add_player_error_message(window, error_msg);
+			add_player_key = false;
+		}
     }
 
 	write_stats(players, house, old_players);

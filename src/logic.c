@@ -128,16 +128,17 @@ void new_game(List *players, Player *house, Megadeck *megadeck)
 {
 	// só fazer new_game quando já toda a gente jogou
     List *aux = find_active_player(players);
-    if (aux)
+    if (aux) {
 		return;
-
+	}
 
 	clear_cards(players, house);
-        
+
     // só fazer new_game quando houver jogadores
     aux = find_ingame_player(players);
-    if (!aux)
+    if (!aux) {
         return;
+    }
 
 	distribute_cards(players, house, megadeck);
 	find_playing(players, house);
@@ -234,7 +235,7 @@ void find_playing(List *players, Player *house)
 }
 
 List *find_ingame_player(List *players)
-{    
+{
 	List *aux = players->next; // dummy head
 	Player *cur_player = NULL;
 	while (aux) {
@@ -317,30 +318,35 @@ void bet(List *players)
 }
 
 // TODO: adicionar limites de novo
-void add_player(List *players, List *old_players)
+char *add_player(List *players, List *old_players, SDL_Window *window)
 {
     List *aux = find_active_player(players);
-    //if (aux)
-	//	return;
+    if (aux) {
+		return "";
+	}
 
 	// TODO: adicionar MessageBox para informar utilizador para clicar
 	// num jogador.
 	int pos = get_clicked_player();
 	if (pos == 0) {
-		puts("Não selecionou um lugar vazio.\nTente novamente primindo a tecla <a>.");
-		return;
+		return "Não clicou dentro da área dos jogadores.\nTente novamente primindo a tecla <a>.";
 	}
+
 	aux = list_follow(players, pos);
 	Player *old_player = (Player *) aux->payload;
-	//if (pos == 0 || old_player->ingame) {
-	//	puts("Não selecionou um lugar vazio.\nTente novamente primindo a tecla <a>.");
-	//	return;
-	//}
+	if (old_player->ingame) {
+		return "Não selecionou um lugar vazio.\nTente novamente primindo a tecla <a>.";
+	}
+
+	show_add_player_input_message(window);
 
 	Player *new_player = get_new_player(pos);
+
 	old_player = (Player *) list_remove_pos(players, pos);
 	list_append(old_players, old_player);
 	list_insert_pos(players, pos, new_player);
+
+	return "";
 }
 
 void stand(List *players, Player *house, Megadeck *megadeck)
@@ -380,7 +386,7 @@ void stand(List *players, Player *house, Megadeck *megadeck)
 		}
 		else {
 			// não existe um próximo jogador válido para jogar
-           
+
             house_hit(house, megadeck);
 			pay_bets(players, house);
 		}
