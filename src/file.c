@@ -5,6 +5,7 @@
 #include <limits.h>
 #include "file.h"
 #include "logic.h"
+#include "error.h"
 
 // TODO: fazer print da linha com erro?
 Config *read_config(char *filename)
@@ -12,7 +13,7 @@ Config *read_config(char *filename)
 	char buffer[MAX_LINE_LEN];
 
 	Config *config = NULL;
-	config = (Config *) calloc((size_t) 1, sizeof(Config));
+	config = (Config *) ecalloc((size_t) 1, sizeof(Config));
 
 	FILE *fp = NULL;
 	fp = fopen(filename, "r");
@@ -241,7 +242,7 @@ Player *get_new_player(int pos)
 		}
 	} while (!correct);
 
-	new_player = (Player *) calloc((size_t) 1, sizeof(Player));
+	new_player = (Player *) ecalloc((size_t) 1, sizeof(Player));
 
 	new_player->ingame = true;
 	new_player->type = type;

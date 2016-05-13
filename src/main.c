@@ -11,6 +11,7 @@
 #include "file.h"
 #include "sdl.h"
 #include "ea.h"
+#include "error.h"
 
 /**
  * main function: entry point of the program
@@ -49,21 +50,21 @@ int main(int argc, char *argv[])
 	Strategy *strategy = read_strategy();
 
 	// Declarar a lista de jogadores
-	List *players = (List *) calloc((size_t) 1, sizeof(List));
+	List *players = (List *) ecalloc((size_t) 1, sizeof(List));
 	// enchê-la com dados do ficheiro de configuração
 	const int num_decks = init_game(config, players);
 
 	// Declarar a lista de jogadores velhos
-	List *old_players = (List *) calloc((size_t) 1, sizeof(List));
+	List *old_players = (List *) ecalloc((size_t) 1, sizeof(List));
 
 	// Declarar o megabaralho (give_card() enche-o quando precisar)
     int cards_left = 0;
-	List *deck = (List *) calloc((size_t) 1, sizeof(List));
+	List *deck = (List *) ecalloc((size_t) 1, sizeof(List));
     Megadeck megadeck_real = {cards_left, num_decks, deck};
     Megadeck *megadeck = &megadeck_real;
 
 	// Inicializar a casa
-	Player *house = (Player *) calloc((size_t) 1, sizeof(Player));
+	Player *house = (Player *) ecalloc((size_t) 1, sizeof(Player));
 
 	// Inicializar um novo jogo
 	new_game(players, house, megadeck);

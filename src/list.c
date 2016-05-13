@@ -18,6 +18,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "list.h"
+#include "error.h"
 
 List *list_follow(List *head, int pos)
 {
@@ -44,7 +45,7 @@ void list_insert_pos(List *head, int pos, void *payload)
 {
 	List *aux = list_follow(head, pos - 1);
 
-	List *new = (List *) calloc((size_t) 1, sizeof(List));
+	List *new = (List *) ecalloc((size_t) 1, sizeof(List));
 	new->payload = payload;
 
 	new->next = aux->next;
@@ -65,7 +66,7 @@ void list_append(List *head, void *payload)
 		aux = aux->next;
 	List *tail = aux;
 
-	List *new_tail = (List *) calloc((size_t) 1, sizeof(List));
+	List *new_tail = (List *) ecalloc((size_t) 1, sizeof(List));
 
 	new_tail->payload = payload;
 

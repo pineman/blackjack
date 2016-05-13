@@ -4,13 +4,14 @@
 #include <stdbool.h>
 #include "logic.h"
 #include "ea.h"
+#include "error.h"
 
 void write_matrix(Move ***matrix, FILE *fp)
-{ 
+{
     char buffer[MAX_LINE_SIZE] = {0};
     for (int i=0; fgets(buffer, MAX_LINE_SIZE, fp); i++) {
         *matrix = (Move **) realloc(*matrix, (i+1) * sizeof(Move *));
-        (*matrix)[i] = (Move *) calloc(10, sizeof(Move));                
+        (*matrix)[i] = (Move *) ecalloc(10, sizeof(Move));
          for (int j=0; j<10; j++) {
             (*matrix)[i][j] =  buffer[j];
         }
@@ -21,7 +22,7 @@ Strategy *read_strategy()
 {
     FILE *fp1 = NULL;
     FILE *fp2 = NULL;
-    
+
     fp1 = fopen("txt/hardtotals.txt", "r");
     if (!fp1) {
         puts("Erro: impossivel ler ficheiro 'hardtotals.txt'");
@@ -33,14 +34,14 @@ Strategy *read_strategy()
         exit(EXIT_FAILURE);
     }
 
-    Strategy *strategy = (Strategy *) calloc(1, sizeof(Strategy));
-    
+    Strategy *strategy = (Strategy *) ecalloc(1, sizeof(Strategy));
+
     strategy->hard = NULL;
-    strategy->soft = NULL; 
-    
+    strategy->soft = NULL;
+
     write_matrix((Move ***) &strategy->hard, fp1);
     write_matrix((Move ***) &strategy->soft, fp2);
- 
+
     return strategy;
 }
 
@@ -67,7 +68,7 @@ Move get_decision(Player *player, Card *house_card, Strategy *strategy)
             line = player->points - 13;
         else if (player->points >= 19)
             line = 6;
-            
+
         return strategy->soft[line][column];
     }
     else {
@@ -79,12 +80,12 @@ Move get_decision(Player *player, Card *house_card, Strategy *strategy)
             line = 9;
 
         return strategy->hard[line][column];
-    }   
+    }
 }
 
 void make_decision(List *players, Player *house, Megadeck megadeck, Strategy *strategy)
 {
-	bool check; 
+	bool check;
 	Player *player =  find_active_player(players);
 	if (player->type != EA)
 		 return;
@@ -95,10 +96,10 @@ void make_decision(List *players, Player *house, Megadeck megadeck, Strategy *st
 		case H:
 			hit(players, house, megadeck);
 			break;
-		case S: 
+		case S:
 			stand(players, house, megadeck);
 			break;
-		case R:			
+		case R:
 			surrender(players, house, megadeck);
 			break;
 		case D:
@@ -106,7 +107,7 @@ void make_decision(List *players, Player *house, Megadeck megadeck, Strategy *st
 			if (!check)
 				stand(players, house, megadeck);
 			break;
-		case E:	
+		case E:
 			check = double_bet(players, house, megadeck);
 			if (!check)
 				hit(players, house, megadeck);
@@ -115,6 +116,3 @@ void make_decision(List *players, Player *house, Megadeck megadeck, Strategy *st
 			break;
 	}
 }
-	
-	
-
