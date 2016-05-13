@@ -9,7 +9,6 @@
 void write_matrix(Move ***matrix, FILE *fp);
 Strategy *read_strategy();
 Move get_decision(Player *player, Card *house_card, Strategy *strategy);
-bool make_decision(List *players, Player *house, Megadeck *megadeck, Strategy *strategy);
-void ea_play(List *players, Player *house, Megadeck *megadeck, Strategy *strategy);
+void ea_make_decision(List *players, Player *house, Megadeck *megadeck, Strategy *strategy);
 
 #endif

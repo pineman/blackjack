@@ -68,7 +68,7 @@ int main(int argc, char *argv[])
 	Player *house = (Player *) ecalloc((size_t) 1, sizeof(Player));
 
 	// Inicializar um novo jogo
-	new_game(players, house, megadeck, strategy);
+	new_game(players, house, megadeck);
 
     // loads the cards images
     LoadCards(cards);
@@ -76,6 +76,8 @@ int main(int argc, char *argv[])
 	// initialize graphics
 	InitEverything(WIDTH_WINDOW, HEIGHT_WINDOW, &serif, imgs, &window, &renderer);
 
+	List *aux = find_active_player(players);
+	bool ea = false;
  	while (!quit) {
         // while there's events to handle
         while (SDL_PollEvent(&event)) {
@@ -91,15 +93,15 @@ int main(int argc, char *argv[])
 						break;
 
 					case SDLK_n:
-						new_game(players, house, megadeck, strategy);
+						new_game(players, house, megadeck);
 						break;
 
 					case SDLK_r:
-						surrender(players, house, megadeck, strategy);
+						surrender(players, house, megadeck);
 						break;
 
 					case SDLK_d:
-                        double_bet(players, house, megadeck, strategy);
+                        double_bet(players, house, megadeck);
 						break;
 
 					case SDLK_b:
@@ -112,13 +114,13 @@ int main(int argc, char *argv[])
 						break;
 
 					case SDLK_s:
-                        stand(players, house, megadeck, strategy);
+                        stand(players, house, megadeck);
                         //debbuging não mexer sff
 						//printf("%d", decision(((Player *) players->next->payload), house->cards->card, strategy));
 						break;
 
     				case SDLK_h:
-						player_hit(players, house, megadeck, strategy);
+						player_hit(players, house, megadeck);
 						break;
 
 					default:
@@ -126,6 +128,8 @@ int main(int argc, char *argv[])
 				}
 			}
 		}
+
+		// TODO: fazer função com isto tudo
 		if (add_player_key)
 			show_add_player_message(window);
         // render game table
@@ -141,7 +145,18 @@ int main(int argc, char *argv[])
         // add a delay
 		SDL_Delay(delay);
 
-		if (add_player_key) {
+		aux = find_active_player(players);
+		ea = false;
+		if (aux)
+			if (((Player * ) aux->payload)->type == EA)
+				ea = true;
+
+		if (ea) {
+			ea_make_decision(players, house, megadeck, strategy);
+			SDL_Delay(1500);
+		}
+
+		else if (add_player_key) {
 			add_player_error = add_player(players, old_players, window);
 			if (add_player_error != OK)
 				show_add_player_error_message(window, add_player_error);
@@ -149,6 +164,7 @@ int main(int argc, char *argv[])
 		}
     }
 
+	// TODO: fazer função com isto
 	write_stats(players, house, old_players);
 
 	destroy_players_list(players);
