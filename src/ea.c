@@ -84,7 +84,10 @@ Move get_decision(Player *player, Card *house_card, Strategy *strategy)
 
 void make_decision(List *players, Player *house, Megadeck megadeck, Strategy *strategy)
 {
- 	Player *player =  find_active_player(players);
+	bool check; 
+	Player *player =  find_active_player(players);
+	if (player->type != EA)
+		 return;
 	Card *house_card = house->cards->card;
 	Move decision = get_decision(player, house_card, strategy);
 
@@ -95,14 +98,18 @@ void make_decision(List *players, Player *house, Megadeck megadeck, Strategy *st
 		case S: 
 			stand(players, house, megadeck);
 			break;
-		case R:
+		case R:			
 			surrender(players, house, megadeck);
 			break;
 		case D:
-			double_bet(players, house, megadeck);
+			check = double_bet(players, house, megadeck);
+			if (!check)
+				stand(players, house, megadeck);
 			break;
-		case E:
-			double_bet(players, house, megadeck);
+		case E:	
+			check = double_bet(players, house, megadeck);
+			if (!check)
+				hit(players, house, megadeck);
 			break;
 		default:
 			break;
@@ -110,4 +117,4 @@ void make_decision(List *players, Player *house, Megadeck megadeck, Strategy *st
 }
 	
 	
-}
+
