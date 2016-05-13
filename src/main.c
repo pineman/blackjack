@@ -58,6 +58,7 @@ int main(int argc, char *argv[])
 	List *old_players = (List *) ecalloc((size_t) 1, sizeof(List));
 
 	// Declarar o megabaralho (give_card() enche-o quando precisar)
+	// é uma struct que contém a lista das cartas em si
     int cards_left = 0;
 	List *deck = (List *) ecalloc((size_t) 1, sizeof(List));
     Megadeck megadeck_real = {cards_left, num_decks, deck};
@@ -67,7 +68,7 @@ int main(int argc, char *argv[])
 	Player *house = (Player *) ecalloc((size_t) 1, sizeof(Player));
 
 	// Inicializar um novo jogo
-	new_game(players, house, megadeck);
+	new_game(players, house, megadeck, strategy);
 
     // loads the cards images
     LoadCards(cards);
@@ -90,15 +91,15 @@ int main(int argc, char *argv[])
 						break;
 
 					case SDLK_n:
-						new_game(players, house, megadeck);
+						new_game(players, house, megadeck, strategy);
 						break;
 
 					case SDLK_r:
-						surrender(players, house, megadeck);
+						surrender(players, house, megadeck, strategy);
 						break;
 
 					case SDLK_d:
-                        double_bet(players, house, megadeck);
+                        double_bet(players, house, megadeck, strategy);
 						break;
 
 					case SDLK_b:
@@ -111,13 +112,13 @@ int main(int argc, char *argv[])
 						break;
 
 					case SDLK_s:
-                        stand(players, house, megadeck);
+                        stand(players, house, megadeck, strategy);
                         //debbuging não mexer sff
 						//printf("%d", decision(((Player *) players->next->payload), house->cards->card, strategy));
 						break;
 
     				case SDLK_h:
-						player_hit(players, house, megadeck);
+						player_hit(players, house, megadeck, strategy);
 						break;
 
 					default:

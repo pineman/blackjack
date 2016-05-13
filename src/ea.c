@@ -2,9 +2,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+#include "error.h"
 #include "logic.h"
 #include "ea.h"
-#include "error.h"
 
 void write_matrix(Move ***matrix, FILE *fp)
 {
@@ -64,7 +64,7 @@ Move get_decision(Player *player, Card *house_card, Strategy *strategy)
         column = 9;
 
     if (ace) {
-		//Dois ases correspondem a primeira linha da matriz soft
+		// Dois ases correspondem a primeira linha da matriz soft
         if (player->points >= 12 && player->points < 19)
             line = player->points - 13;
         else if (player->points >= 19)
@@ -87,43 +87,65 @@ Move get_decision(Player *player, Card *house_card, Strategy *strategy)
 bool make_decision(List *players, Player *house, Megadeck *megadeck, Strategy *strategy)
 {
 	bool check;
-	Player *player =  find_active_player(players);
-	if (player->type != EA)
-		 return;
-	Card *house_card = house->cards->card;
-	Move decision = get_decision(player, house_card, strategy);
+	List *aux =  find_active_player(players);
+	Player *cur_player = (Player *) aux->payload;
+
+	Card *house_card = house->cards->next->card;
+	Move decision = get_decision(cur_player, house_card, strategy);
+
+	printf("house->card = %d\n", house_card->id);
+	printf("EA->points = %d\n", cur_player->points);
 
 	switch (decision) {
 		case H:
-			hit(players, house, megadeck);
-			return false;		
-		case S: 
-			stand(players, house, megadeck);
+			player_hit(players, house, megadeck, strategy);
+			puts("Decisão: hit");
 			return true;
-		case R:			
-			surrender(players, house, megadeck);
+
+		case S:
+			stand(players, house, megadeck, strategy);
+			puts("Decisão: stand");
+			return false;
+
+		case R:
+			surrender(players, house, megadeck, strategy);
+			puts("Decisão: surrender");
 			return true;
+
 		case D:
-			check = double_bet(players, house, megadeck);
-			if (!check)
-				stand(players, house, megadeck);
-			return true;
-		case E:	
-			check = double_bet(players, house, megadeck);
+			check = double_bet(players, house, megadeck, strategy);
 			if (!check) {
-				hit(players, house, megadeck);
+				stand(players, house, megadeck, strategy);
+				puts("Decisão: stand porque não double");
+			}
+			else {
+				puts("Decisão: double");
+			}
+			return false;
+
+		case E:
+			check = double_bet(players, house, megadeck, strategy);
+			if (!check) {
+				player_hit(players, house, megadeck, strategy);
+				puts("Decisão: hit porque não double");
+				return true;
+			}
+			else {
+				puts("Decisão: double");
 				return false;
 			}
-			else
-				return true;
+
 		default:
-			break;
+			// this should not happen
+			puts("what?");
+			return true;
 	}
+	puts("");
 }
-	
+
 void ea_play(List *players, Player *house, Megadeck *megadeck, Strategy *strategy)
 {
 	while (make_decision(players, house, megadeck, strategy))
 		;
-}	
+}
 

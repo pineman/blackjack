@@ -4,6 +4,7 @@ CC=gcc
 EXEC=blackjack
 
 all:
+	$(CC) -c error.c -o error.o $(CFLAGS)
 	$(CC) -c list.c -o list.o $(CFLAGS)
 	$(CC) -c file.c -o file.o  $(CFLAGS)
 	$(CC) -c logic.c -o logic.o $(CFLAGS)
