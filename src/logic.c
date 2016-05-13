@@ -7,12 +7,14 @@
 #include "list.h"
 #include "file.h"
 #include "sdl.h"
+#include "ea.h"
+#include "error.h"
 
 // Definição das operações válidas nas pilhas de cartas
 void stack_push(Stack **sp, Card *card)
 {
 	Stack *old_sp = *sp;
-	Stack *new = (Stack *) calloc((size_t) 1, sizeof(Stack));
+	Stack *new = (Stack *) ecalloc((size_t) 1, sizeof(Stack));
 
 	new->card = card;
 
@@ -51,7 +53,7 @@ int init_game(Config *config, List *players)
 	const int num_decks = config->num_decks;
 
 	for (int i = 0; i < MAX_PLAYERS; i++) {
-		new_player = (Player *) calloc((size_t) 1, sizeof(Player));
+		new_player = (Player *) ecalloc((size_t) 1, sizeof(Player));
 		if (i + 1 <= config->num_players) {
 			// Jogadores efetivos
 			new_player->type = config->player_type[i];
@@ -114,7 +116,7 @@ int create_megadeck(Megadeck *megadeck)
 	for (int i = 0; i < megadeck->num_decks; i++)
 		for (int j = 0; j < 4; j++)
 			for (int k = 0; k < SUIT_SIZE; k++) {
-				cur_card = (Card *) calloc(1, sizeof(Card));
+				cur_card = (Card *) ecalloc(1, sizeof(Card));
 				cur_card->suit = j;
 				cur_card->id = k;
 				list_append(megadeck->deck, cur_card);
@@ -221,6 +223,7 @@ void find_playing(List *players, Player *house)
 			// E não dar a vez a ninguém se a casa tiver blackjack
 			if (!(house->status == BJ) && !(cur_player->status == BJ) && !found) {
 				cur_player->playing = true;
+				// TODO: EA
 				found = true;
 			}
 			else
@@ -304,8 +307,9 @@ bool double_bet(List *players, Player *house, Megadeck *megadeck)
     cur_player->bet += cur_player->bet;
 
     player_hit(players, house, megadeck);
-    if (!(cur_player->status == BU))
+    if (!(cur_player->status == BU)) {
         stand(players, house, megadeck);
+	}
 
 	return true;
 }
@@ -377,6 +381,7 @@ void stand(List *players, Player *house, Megadeck *megadeck)
 		// se ele existir, dar-lhe a vez
 		if (aux) {
 			cur_player->playing = true;
+			// TODO: EA
 		}
 		else {
 			// não existe um próximo jogador válido para jogar
