@@ -126,7 +126,7 @@ int create_megadeck(Megadeck *megadeck)
 	return total_cards;
 }
 
-void new_game(List *players, Player *house, Megadeck *megadeck)
+void new_game(List *players, Player *house, Megadeck *megadeck, Strategy *strategy)
 {
 	// só fazer new_game quando já toda a gente jogou
     List *aux = find_active_player(players);
@@ -143,7 +143,7 @@ void new_game(List *players, Player *house, Megadeck *megadeck)
     }
 
 	distribute_cards(players, house, megadeck);
-	find_playing(players, house);
+	find_playing(players, house, megadeck, strategy);
 
 	if (house->status == BJ)
 		// a ronda acaba mais cedo
@@ -194,7 +194,7 @@ void distribute_cards(List *players, Player *house, Megadeck *megadeck)
 	}
 }
 
-void find_playing(List *players, Player *house)
+void find_playing(List *players, Player *house, Megadeck *megadeck, Strategy *strategy)
 {
 	house->num_cards = 1; // desenhar só uma carta
 	house->status = WW;
@@ -205,7 +205,8 @@ void find_playing(List *players, Player *house)
     if (house->points == 21)
 		house->status = BJ;
 
-    bool found = 0;
+    bool found = false;
+    bool ea = false;
     List *aux = players->next;
     Player *cur_player = NULL;
 	while (aux) {
@@ -223,7 +224,8 @@ void find_playing(List *players, Player *house)
 			// E não dar a vez a ninguém se a casa tiver blackjack
 			if (!(house->status == BJ) && !(cur_player->status == BJ) && !found) {
 				cur_player->playing = true;
-				// TODO: EA
+				if (cur_player->type == EA)
+					ea = true;
 				found = true;
 			}
 			else
@@ -235,6 +237,8 @@ void find_playing(List *players, Player *house)
 		}
 		aux = aux->next;
     }
+    if (ea)
+		ea_play(players, house, megadeck, strategy);
 }
 
 List *find_ingame_player(List *players)
@@ -278,7 +282,7 @@ void quit_game(List *players, bool *quit)
 		*quit = true;
 }
 
-void surrender(List *players, Player *house, Megadeck *megadeck)
+void surrender(List *players, Player *house, Megadeck *megadeck, Strategy *strategy)
 {
     List *aux = find_active_player(players);
     if (!aux)
@@ -286,10 +290,10 @@ void surrender(List *players, Player *house, Megadeck *megadeck)
     Player *cur_player = (Player *) aux->payload;
 
     cur_player->status = SU;
-    stand(players, house, megadeck);
+    stand(players, house, megadeck, strategy);
 }
 
-bool double_bet(List *players, Player *house, Megadeck *megadeck)
+bool double_bet(List *players, Player *house, Megadeck *megadeck, Strategy *strategy)
 {
     List *aux = find_active_player(players);
 
@@ -300,15 +304,16 @@ bool double_bet(List *players, Player *house, Megadeck *megadeck)
 
     Player *cur_player = (Player *) aux->payload;
 
+	// o jogador não pode fazer double
     if (cur_player->money < cur_player->bet || cur_player->num_cards != 2)
         return false;
 
     cur_player->money -= cur_player->bet;
     cur_player->bet += cur_player->bet;
 
-    player_hit(players, house, megadeck);
+    player_hit(players, house, megadeck, strategy);
     if (!(cur_player->status == BU)) {
-        stand(players, house, megadeck);
+        stand(players, house, megadeck, strategy);
 	}
 
 	return true;
@@ -347,7 +352,7 @@ AddPlayerError add_player(List *players, List *old_players, SDL_Window *window)
 	return OK;
 }
 
-void stand(List *players, Player *house, Megadeck *megadeck)
+void stand(List *players, Player *house, Megadeck *megadeck, Strategy *strategy)
 {
 	List *aux = find_active_player(players);
 	Player *cur_player = NULL;
@@ -381,11 +386,11 @@ void stand(List *players, Player *house, Megadeck *megadeck)
 		// se ele existir, dar-lhe a vez
 		if (aux) {
 			cur_player->playing = true;
-			// TODO: EA
+			if (cur_player->type == EA)
+				ea_play(players, house, megadeck, strategy);
 		}
 		else {
 			// não existe um próximo jogador válido para jogar
-
             house_hit(house, megadeck);
 			pay_bets(players, house);
 		}
@@ -397,7 +402,7 @@ void stand(List *players, Player *house, Megadeck *megadeck)
 	}
 }
 
-void player_hit(List *players, Player *house, Megadeck *megadeck)
+void player_hit(List *players, Player *house, Megadeck *megadeck, Strategy *strategy)
 {
 	List *aux = find_active_player(players);
 	Player *cur_player = NULL;
@@ -413,7 +418,7 @@ void player_hit(List *players, Player *house, Megadeck *megadeck)
 	if (cur_player->points > 21)
 		cur_player->status = BU;
 	if (cur_player->points >= 21)
-		stand(players, house, megadeck);
+		stand(players, house, megadeck, strategy);
 }
 
 void house_hit(Player *house, Megadeck *megadeck)
