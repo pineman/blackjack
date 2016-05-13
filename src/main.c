@@ -10,6 +10,7 @@
 #include "logic.h"
 #include "file.h"
 #include "sdl.h"
+#include "ea.h"
 
 /**
  * main function: entry point of the program
@@ -41,8 +42,11 @@ int main(int argc, char *argv[])
 
 	char *filename = argv[1];
 
-	// Ler configuração
+	// Ler ficheiro de configuração dos jogadores
 	Config *config = read_config(filename);
+
+	// Ler ficheiro de estrategia das EAs
+	Strategy *strategy = read_strategy();
 
 	// Declarar a lista de jogadores
 	List *players = (List *) calloc((size_t) 1, sizeof(List));
@@ -107,6 +111,8 @@ int main(int argc, char *argv[])
 
 					case SDLK_s:
                         stand(players, house, megadeck);
+                        //debbuging não mexer sff
+						//printf("%d", decision(((Player *) players->next->payload), house->cards->card, strategy));
 						break;
 
     				case SDLK_h:
