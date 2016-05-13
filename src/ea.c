@@ -64,7 +64,8 @@ Move get_decision(Player *player, Card *house_card, Strategy *strategy)
         column = 9;
 
     if (ace) {
-        if (player->points > 12 && player->points < 19)
+		//Dois ases correspondem a primeira linha da matriz soft
+        if (player->points >= 12 && player->points < 19)
             line = player->points - 13;
         else if (player->points >= 19)
             line = 6;
@@ -83,7 +84,7 @@ Move get_decision(Player *player, Card *house_card, Strategy *strategy)
     }
 }
 
-void make_decision(List *players, Player *house, Megadeck megadeck, Strategy *strategy)
+bool make_decision(List *players, Player *house, Megadeck *megadeck, Strategy *strategy)
 {
 	bool check;
 	Player *player =  find_active_player(players);
@@ -95,24 +96,34 @@ void make_decision(List *players, Player *house, Megadeck megadeck, Strategy *st
 	switch (decision) {
 		case H:
 			hit(players, house, megadeck);
-			break;
-		case S:
+			return false;		
+		case S: 
 			stand(players, house, megadeck);
-			break;
-		case R:
+			return true;
+		case R:			
 			surrender(players, house, megadeck);
-			break;
+			return true;
 		case D:
 			check = double_bet(players, house, megadeck);
 			if (!check)
 				stand(players, house, megadeck);
-			break;
-		case E:
+			return true;
+		case E:	
 			check = double_bet(players, house, megadeck);
-			if (!check)
+			if (!check) {
 				hit(players, house, megadeck);
-			break;
+				return false;
+			}
+			else
+				return true;
 		default:
 			break;
 	}
 }
+	
+void ea_play(List *players, Player *house, Megadeck *megadeck, Strategy *strategy)
+{
+	while (make_decision(players, house, megadeck, strategy))
+		;
+}	
+
