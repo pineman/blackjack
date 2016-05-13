@@ -286,19 +286,19 @@ void surrender(List *players, Player *house, Megadeck *megadeck)
     stand(players, house, megadeck);
 }
 
-void double_bet(List *players, Player *house, Megadeck *megadeck)
+bool double_bet(List *players, Player *house, Megadeck *megadeck)
 {
     List *aux = find_active_player(players);
 
     // Se não houver nenhum jogador disponivel
     if (!aux) {
-        return;
+        return false;
     }
 
     Player *cur_player = (Player *) aux->payload;
 
     if (cur_player->money < cur_player->bet || cur_player->num_cards != 2)
-        return;
+        return false;
 
     cur_player->money -= cur_player->bet;
     cur_player->bet += cur_player->bet;
@@ -306,6 +306,8 @@ void double_bet(List *players, Player *house, Megadeck *megadeck)
     player_hit(players, house, megadeck);
     if (!(cur_player->status == BU))
         stand(players, house, megadeck);
+
+	return true;
 }
 
 void bet(List *players)
