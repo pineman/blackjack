@@ -7,8 +7,8 @@
 #include "main.h"
 #include "sdl.h"
 
-const char myName[] = "João Pinheiro, João Freitas";
-const char myNumber[] = "84086, 84093";
+const char myName1[] = "João Pinheiro 84086";
+const char myName2[] = "João Freitas  84093";
 
 /**
  * RenderTable: Draws the table where the game will be played, namely:
@@ -49,10 +49,10 @@ void RenderTable(List *players, TTF_Font *_font, SDL_Surface *_img[], SDL_Render
     height = RenderLogo(SEP, 0, _img[1], _renderer);
 
     // render the student name
-    height += RenderText(SEP+3*MARGIN, height, myName, _font, &black, _renderer);
+    height += RenderText(SEP+3*MARGIN, height, myName1, _font, &black, _renderer);
 
     // this renders the student number
-    height += RenderText(SEP+3*MARGIN, height, myNumber, _font, &black, _renderer);
+    height += RenderText(SEP+3*MARGIN, height, myName2, _font, &black, _renderer);
 
 	List *aux = players->next;
 	Player *cur_player = NULL;
