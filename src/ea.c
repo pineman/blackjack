@@ -65,7 +65,9 @@ Move get_decision(Player *player, Card *house_card, Strategy *strategy)
 
     if (ace) {
 		// Dois ases correspondem a primeira linha da matriz soft
-        if (player->points >= 12 && player->points < 19)
+		if (player->points == 12)
+			line = 0;
+        else if (player->points > 12 && player->points < 19)
             line = player->points - 13;
         else if (player->points >= 19)
             line = 6;
@@ -84,10 +86,10 @@ Move get_decision(Player *player, Card *house_card, Strategy *strategy)
     }
 }
 
-bool make_decision(List *players, Player *house, Megadeck *megadeck, Strategy *strategy)
+void ea_make_decision(List *players, Player *house, Megadeck *megadeck, Strategy *strategy)
 {
-	bool check;
-	List *aux =  find_active_player(players);
+	bool check = false;
+	List *aux = find_active_player(players);
 	Player *cur_player = (Player *) aux->payload;
 
 	Card *house_card = house->cards->next->card;
@@ -98,54 +100,46 @@ bool make_decision(List *players, Player *house, Megadeck *megadeck, Strategy *s
 
 	switch (decision) {
 		case H:
-			player_hit(players, house, megadeck, strategy);
+			player_hit(players, house, megadeck);
 			puts("Decisão: hit");
-			return true;
+			break;
 
 		case S:
-			stand(players, house, megadeck, strategy);
+			stand(players, house, megadeck);
 			puts("Decisão: stand");
-			return false;
+			break;
 
 		case R:
-			surrender(players, house, megadeck, strategy);
+			surrender(players, house, megadeck);
 			puts("Decisão: surrender");
-			return true;
+			break;
 
 		case D:
-			check = double_bet(players, house, megadeck, strategy);
+			check = double_bet(players, house, megadeck);
 			if (!check) {
-				stand(players, house, megadeck, strategy);
+				stand(players, house, megadeck);
 				puts("Decisão: stand porque não double");
 			}
 			else {
 				puts("Decisão: double");
 			}
-			return false;
+			break;
 
 		case E:
-			check = double_bet(players, house, megadeck, strategy);
+			check = double_bet(players, house, megadeck);
 			if (!check) {
-				player_hit(players, house, megadeck, strategy);
+				player_hit(players, house, megadeck);
 				puts("Decisão: hit porque não double");
-				return true;
 			}
 			else {
 				puts("Decisão: double");
-				return false;
 			}
+			break;
 
 		default:
 			// this should not happen
 			puts("what?");
-			return true;
+			break;
 	}
 	puts("");
 }
-
-void ea_play(List *players, Player *house, Megadeck *megadeck, Strategy *strategy)
-{
-	while (make_decision(players, house, megadeck, strategy))
-		;
-}
-
