@@ -144,3 +144,17 @@ void ea_make_decision(List *players, Player *house, Megadeck *megadeck, Strategy
 	}
 	puts("");
 }
+
+int count_strategy(Player *player, Card *new_card, int count)
+{
+	if (new_card->id < 5)
+		count++;
+	else if (new_card->id > 7)
+		count--;
+	
+	player->count = count;
+
+	return count;
+}
+		 
+
