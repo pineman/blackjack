@@ -145,16 +145,28 @@ void ea_make_decision(List *players, Player *house, Megadeck *megadeck, Strategy
 	puts("");
 }
 
-int count_strategy(Player *player, Card *new_card, int count)
+void count_strategy(Player *player, Card *new_card, Megadeck *megadeck)
 {
 	if (new_card->id < 5)
-		count++;
+		megadeck->count++;
 	else if (new_card->id > 7)
-		count--;
+		megadeck->count--;
 	
-	player->count = count;
+	player->count = megadeck->count;
+}
 
-	return count;
+void hi_lo(List *players, Megadeck *megadeck)
+{
+	int decks_left = (int) (megadeck->cards_left)/DECK_SIZE;
+	int modifier = (int) (megadeck->count)/decks_left;
+
+	List * aux = players->next;
+	while (aux) {
+		Player *cur_player = (Player *)  aux->payload;
+		if (cur_player->type == EA && modifier > 0)
+			cur_player->bet = cur_player->orig_bet * (modifier+1);
+		aux = aux->next;
+	}		
 }
 		 
 

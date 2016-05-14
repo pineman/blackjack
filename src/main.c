@@ -57,7 +57,7 @@ int main(int argc, char *argv[])
 	// é uma struct que contém a lista das cartas em si
     int cards_left = 0;
 	List *deck = (List *) ecalloc((size_t) 1, sizeof(List));
-    Megadeck megadeck_real = {cards_left, num_decks, deck};
+    Megadeck megadeck_real = {cards_left, num_decks, deck, 0};
     Megadeck *megadeck = &megadeck_real;
 
 	// Inicializar a casa

@@ -33,6 +33,7 @@ typedef struct Player {
     Status status;
 	int money;
 	int bet;
+	int orig_bet;
 	Stack *cards;
 	int num_cards;
 	int points;
@@ -55,6 +56,7 @@ typedef struct Megadeck {
     int cards_left;
     const int num_decks;
     List *deck;
+	int count;                 //TODO: Ups, não sei onde por isto, arranjar melhor solução. Ou não.
 } Megadeck;
 
 typedef struct Strategy {
