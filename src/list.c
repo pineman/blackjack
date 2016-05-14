@@ -23,7 +23,7 @@
 List *list_follow(List *head, int pos)
 {
 	if (pos < 0) {
-		puts("Erro: tentou-se aceder a um nó da lista não existente.");
+		puts("Erro: tentou-se aceder a um nó não existente na lista.");
 		exit(EXIT_FAILURE);
 	}
 
@@ -33,7 +33,7 @@ List *list_follow(List *head, int pos)
 			aux = aux->next;
 		}
 		else {
-			puts("Erro: tentou-se aceder a um nó da lista não existente.");
+			puts("Erro: tentou-se aceder a um nó não existente na lista..");
 			exit(EXIT_FAILURE);
 		}
 	}
