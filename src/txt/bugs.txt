@@ -1,2 +1,3 @@
 3. O que e que acontece quando a casa tem o blackjack e não há jogadores?
 CHECKAR OS TODOS!
+hi_lo floating point exception
