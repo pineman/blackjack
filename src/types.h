@@ -39,6 +39,7 @@ typedef struct Player {
 	int wins;
 	int losses;
 	int ties;
+	int count;
 } Player;
 
 typedef struct Config {

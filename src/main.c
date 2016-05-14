@@ -24,6 +24,7 @@ int main(int argc, char *argv[])
     SDL_Surface *imgs[2] = {NULL};
     SDL_Event event;
     int delay = 300;
+	int ea_delay = 1500;
     bool quit = false;
     bool add_player_key = false;
     AddPlayerError add_player_error = OK;
@@ -61,7 +62,6 @@ int main(int argc, char *argv[])
 
 	// Inicializar a casa
 	Player *house = (Player *) ecalloc((size_t) 1, sizeof(Player));
-
 	// Inicializar um novo jogo
     srand(time(NULL));
 	new_game(players, house, megadeck);
@@ -116,6 +116,15 @@ int main(int argc, char *argv[])
 						player_hit(players, house, megadeck);
 						break;
 
+					case SDLK_UP:
+						ea_delay+=100;
+						break;
+
+					case SDLK_DOWN:
+						if (delay > 100)
+							ea_delay-=100;
+						break;
+
 					default:
 						break;
 				}
@@ -146,7 +155,8 @@ int main(int argc, char *argv[])
 
 		if (ea) {
 			ea_make_decision(players, house, megadeck, strategy);
-			SDL_Delay(1500);
+			SDL_Delay(ea_delay);
+			printf("delay :%d", ea_delay);
 		}
 
 		else if (add_player_key) {

@@ -13,5 +13,6 @@ void destroy_matrix(Move **matrix, int lines);
 Strategy *read_strategy(char *filename);
 Move get_decision(Player *player, Card *house_card, Strategy *strategy);
 void ea_make_decision(List *players, Player *house, Megadeck *megadeck, Strategy *strategy);
+int count_strategy(Player *player, Card *new_card, int count);
 
 #endif
