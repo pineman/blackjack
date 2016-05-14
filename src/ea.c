@@ -44,6 +44,8 @@ Strategy *read_strategy(char *filename)
 
     write_matrix(&strategy->soft, config_file, SOFT_LINES);
 
+	fclose(config_file);
+
     return strategy;
 }
 

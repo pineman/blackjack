@@ -15,10 +15,9 @@ Config *read_config(char *filename)
 	Config *config = NULL;
 	config = (Config *) ecalloc((size_t) 1, sizeof(Config));
 
-	FILE *fp = NULL;
-	fp = efopen(filename, "r");
+	FILE *config_file = efopen(filename, "r");
 
-	fgets(buffer, MAX_LINE_LEN, fp);
+	fgets(buffer, MAX_LINE_LEN, config_file);
 	sscanf(buffer, "%d-%d", &(config->num_decks), &(config->num_players));
 
 	if (config->num_decks > 8 || config->num_decks < 4){
@@ -31,8 +30,10 @@ Config *read_config(char *filename)
 		exit(EXIT_FAILURE);
 	}
 
-	for (int i=0; fgets(buffer, MAX_LINE_LEN, fp) != NULL && i < config->num_players; i++)
+	for (int i=0; fgets(buffer, MAX_LINE_LEN, config_file) != NULL && i < config->num_players; i++)
 		config = read_player(buffer, config, i);
+
+	fclose(config_file);
 
 	return config;
 }
@@ -263,6 +264,8 @@ void write_stats(List *players, Player *house, List *old_players)
 		fprintf(stats, "A casa ganhou: %d €\n", house->money);
 	else if (house->money == 0)
 		fprintf(stats, "A casa não ganhou nem perdeu dinheiro.");
+
+	fclose(stats);
 }
 
 void write_stats_players(FILE *stats, List *players)
