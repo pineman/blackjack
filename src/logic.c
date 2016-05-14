@@ -60,7 +60,8 @@ int init_game(Config *config, List *players)
 			new_player->ingame = true;
 			strcpy(new_player->name, config->player_names[i]);
 			new_player->money = config->money[i];
-			new_player->bet = config->bets[i];
+			new_player->orig_bet = config->bets[i];
+			new_player->bet = new_player->orig_bet;
 		}
 		else {
 			// Lugar não especificado na configuração.
@@ -100,6 +101,8 @@ int give_card(Player *player, Megadeck *megadeck)
 			exit(EXIT_FAILURE);
 		}
 	}
+
+	count_strategy(player, (Card *) random_card->payload, megadeck);
 
 	stack_push(&(player->cards), random_card->payload);
 	player->num_cards++;
@@ -144,10 +147,14 @@ void new_game(List *players, Player *house, Megadeck *megadeck)
 
 	distribute_cards(players, house, megadeck);
 	find_playing(players, house);
-
-	if (house->status == BJ)
+	
+	if (house->status == BJ) {
 		// a ronda acaba mais cedo
 		pay_bets(players, house);
+		return;
+	}
+
+	hi_lo(players, megadeck);	
 }
 
 void clear_cards(List *players, Player *house)
