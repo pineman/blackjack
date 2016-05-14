@@ -121,7 +121,7 @@ int main(int argc, char *argv[])
 						break;
 
 					case SDLK_DOWN:
-						if (delay > 100)
+						if (ea_delay > 100)
 							ea_delay-=100;
 						break;
 
