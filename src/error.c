@@ -1,16 +1,26 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-// TODO: wrapper para o fopen()
-
 void *ecalloc(size_t nmemb, size_t size)
 {
-	void *p = calloc(nmemb, size);
+	void *memory = calloc(nmemb, size);
 
-	if (p == NULL) {
+	if (memory == NULL) {
 		puts("Erro: Impossível alocar memória.");
 		exit(EXIT_FAILURE);
 	}
 
-	return p;
+	return memory;
+}
+
+FILE *efopen(const char *path, const char *mode)
+{
+	FILE *file = fopen(path, mode);
+
+	if (file == NULL) {
+		printf("Erro: Impossível abrir ficheiro %s.\n", path);
+		exit(EXIT_FAILURE);
+	}
+
+	return file;
 }

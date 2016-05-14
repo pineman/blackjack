@@ -13,13 +13,8 @@
 #include "ea.h"
 #include "error.h"
 
-/**
- * main function: entry point of the program
- * only to invoke other functions !
- */
-
-// TODO: ERROR CHECKING CALLOC()
-
+// TODO: COMENTAR CÓDIGO COMO DEVE DE SER!
+// TODO: Adicionar "autores" e introdução e etc.!
 int main(int argc, char *argv[])
 {
     SDL_Window *window = NULL;
@@ -33,21 +28,21 @@ int main(int argc, char *argv[])
     bool add_player_key = false;
     AddPlayerError add_player_error = OK;
 
-	if (argc != 2) {
+	if (argc != 3) {
 		puts("Erro: número inválido de argumentos.");
-		puts("É esperado um argumento: ficheiro de configuração.");
+		puts("Utilização:");
+		printf("%s <ficheiro de config. do jogo> <ficheiro de config. das EAs>\n", argv[0]);
 		exit(EXIT_FAILURE);
 	}
 
-    srand(time(NULL));
-
-	char *filename = argv[1];
+	char *game_filename = argv[1];
+	char *ea_filename = argv[2];
 
 	// Ler ficheiro de configuração dos jogadores
-	Config *config = read_config(filename);
+	Config *config = read_config(game_filename);
 
 	// Ler ficheiro de estrategia das EAs
-	Strategy *strategy = read_strategy();
+	Strategy *strategy = read_strategy(ea_filename);
 
 	// Declarar a lista de jogadores
 	List *players = (List *) ecalloc((size_t) 1, sizeof(List));
@@ -68,6 +63,7 @@ int main(int argc, char *argv[])
 	Player *house = (Player *) ecalloc((size_t) 1, sizeof(Player));
 
 	// Inicializar um novo jogo
+    srand(time(NULL));
 	new_game(players, house, megadeck);
 
     // loads the cards images
@@ -83,7 +79,6 @@ int main(int argc, char *argv[])
         while (SDL_PollEvent(&event)) {
 			if (event.type == SDL_QUIT) {
                 // user killed the window
-                // don't write stats, quit regardless of context
 				quit = true;
 			}
 			else if (event.type == SDL_KEYDOWN) {
@@ -115,8 +110,6 @@ int main(int argc, char *argv[])
 
 					case SDLK_s:
                         stand(players, house, megadeck);
-                        //debbuging não mexer sff
-						//printf("%d", decision(((Player *) players->next->payload), house->cards->card, strategy));
 						break;
 
     				case SDLK_h:
@@ -129,7 +122,7 @@ int main(int argc, char *argv[])
 			}
 		}
 
-		// TODO: fazer função com isto tudo
+		// TODO: fazer função com isto tudo?
 		if (add_player_key)
 			show_add_player_message(window);
         // render game table
@@ -164,14 +157,17 @@ int main(int argc, char *argv[])
 		}
     }
 
-	// TODO: fazer função com isto
 	write_stats(players, house, old_players);
 
+	// TODO: fazer função com isto tudo?
 	destroy_players_list(players);
 	destroy_players_list(old_players);
     destroy_stack(&house->cards);
 	free(house);
 	destroy_list(megadeck->deck);
+	destroy_matrix(strategy->hard, HARD_LINES);
+	destroy_matrix(strategy->soft, SOFT_LINES);
+	free(strategy);
 
     UnLoadCards(cards);
     TTF_CloseFont(serif);

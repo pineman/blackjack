@@ -6,41 +6,43 @@
 #include "logic.h"
 #include "ea.h"
 
-void write_matrix(Move ***matrix, FILE *fp)
+// TODO: Error checking no ficheiro de config das eas?
+void write_matrix(Move ***matrix, FILE *file, int lines)
 {
-    char buffer[MAX_LINE_SIZE] = {0};
-    for (int i=0; fgets(buffer, MAX_LINE_SIZE, fp); i++) {
-        *matrix = (Move **) realloc(*matrix, (i+1) * sizeof(Move *));
+    char buffer[COLUMNS+2] = {0};
+	*matrix = (Move **) ecalloc(lines, sizeof(Move *));
+
+    for (int i = 0; i < lines; i++) {
+		fgets(buffer, COLUMNS+2, file); // TODO: se fgets der overflow é logo erro
         (*matrix)[i] = (Move *) ecalloc(10, sizeof(Move));
-         for (int j=0; j<10; j++) {
+         for (int j = 0; j < COLUMNS; j++)
             (*matrix)[i][j] =  buffer[j];
-        }
     }
 }
 
-Strategy *read_strategy()
+void destroy_matrix(Move **matrix, int lines)
 {
-    FILE *fp1 = NULL;
-    FILE *fp2 = NULL;
+    for (int i = 0; i < lines; i++)
+		free(matrix[i]);
 
-    fp1 = fopen("txt/hardtotals.txt", "r");
-    if (!fp1) {
-        puts("Erro: impossivel ler ficheiro 'hardtotals.txt'");
-        exit(EXIT_FAILURE);
-    }
-    fp2 = fopen("txt/softtotals.txt", "r");
-    if (!fp2) {
-        puts("Erro: impossivel ler ficheiro 'softtotals.txt'");
-        exit(EXIT_FAILURE);
-    }
+	free(matrix);
+}
+
+Strategy *read_strategy(char *filename)
+{
+    FILE *config_file = efopen(filename, "r");
 
     Strategy *strategy = (Strategy *) ecalloc(1, sizeof(Strategy));
 
     strategy->hard = NULL;
     strategy->soft = NULL;
 
-    write_matrix((Move ***) &strategy->hard, fp1);
-    write_matrix((Move ***) &strategy->soft, fp2);
+    write_matrix(&strategy->hard, config_file, HARD_LINES);
+
+    // Consumir \n de separação (1 byte!)
+    fseek(config_file, 1, SEEK_CUR);
+
+    write_matrix(&strategy->soft, config_file, SOFT_LINES);
 
     return strategy;
 }
@@ -64,7 +66,7 @@ Move get_decision(Player *player, Card *house_card, Strategy *strategy)
         column = 9;
 
     if (ace) {
-		// Dois ases correspondem a primeira linha da matriz soft
+		// Escolheu-se que dois ases correspondem à primeira linha da matriz soft
 		if (player->points == 12)
 			line = 0;
         else if (player->points > 12 && player->points < 19)
@@ -86,9 +88,11 @@ Move get_decision(Player *player, Card *house_card, Strategy *strategy)
     }
 }
 
+// TODO: Temos de informar o utilizador da decisão da EA?
+// fazemos print? messagebox? nada disto?
 void ea_make_decision(List *players, Player *house, Megadeck *megadeck, Strategy *strategy)
 {
-	bool check = false;
+	bool can_double = false;
 	List *aux = find_active_player(players);
 	Player *cur_player = (Player *) aux->payload;
 
@@ -100,45 +104,40 @@ void ea_make_decision(List *players, Player *house, Megadeck *megadeck, Strategy
 
 	switch (decision) {
 		case H:
-			player_hit(players, house, megadeck);
 			puts("Decisão: hit");
+			player_hit(players, house, megadeck);
 			break;
 
 		case S:
-			stand(players, house, megadeck);
 			puts("Decisão: stand");
+			stand(players, house, megadeck);
 			break;
 
 		case R:
-			surrender(players, house, megadeck);
 			puts("Decisão: surrender");
+			surrender(players, house, megadeck);
 			break;
 
 		case D:
-			check = double_bet(players, house, megadeck);
-			if (!check) {
-				stand(players, house, megadeck);
+			puts("Decisão: double");
+			can_double = double_bet(players, house, megadeck);
+			if (!can_double) {
 				puts("Decisão: stand porque não double");
-			}
-			else {
-				puts("Decisão: double");
+				stand(players, house, megadeck);
 			}
 			break;
 
 		case E:
-			check = double_bet(players, house, megadeck);
-			if (!check) {
-				player_hit(players, house, megadeck);
+			puts("Decisão: double");
+			can_double = double_bet(players, house, megadeck);
+			if (!can_double) {
 				puts("Decisão: hit porque não double");
-			}
-			else {
-				puts("Decisão: double");
+				player_hit(players, house, megadeck);
 			}
 			break;
 
 		default:
-			// this should not happen
-			puts("what?");
+			// TODO: this should not happen
 			break;
 	}
 	puts("");

@@ -201,6 +201,7 @@ void find_playing(List *players, Player *house)
 
 	count_points(house);
 	// TODO: desenhar os pontos da casa
+	printf("\n\nhouse->points = %d\n\n", house->points);
     if (house->points == 21)
 		house->status = BJ;
 
@@ -421,6 +422,7 @@ void house_hit(Player *house, Megadeck *megadeck)
 		give_card(house, megadeck);
 		count_points(house);
 		// TODO: desenhar os pontos da casa
+		printf("\n\nhouse->points = %d\n\n", house->points);
 	}
 
 	if (house->points > 21)
