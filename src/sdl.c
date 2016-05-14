@@ -54,6 +54,9 @@ void RenderTable(List *players, TTF_Font *_font, SDL_Surface *_img[], SDL_Render
     // this renders the student number
     height += RenderText(SEP+3*MARGIN, height, myName2, _font, &black, _renderer);
 
+    // 2xnewline
+    height += 2*RenderText(SEP+3*MARGIN, height, " ", _font, &black, _renderer);
+
 	List *aux = players->next;
 	Player *cur_player = NULL;
 	while (aux) {
@@ -179,7 +182,6 @@ int get_clicked_player()
 	return i;
 }
 
-// TODO: código repetido com RenderPlayerCards
 /**
  * RenderHouseCards: Renders cards of the house
  * \param _house vector with the house cards

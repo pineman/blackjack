@@ -4,10 +4,13 @@
 #include <stdbool.h>
 #include "logic.h"
 
-#define MAX_LINE_SIZE 12
+#define COLUMNS	10
+#define HARD_LINES 10
+#define SOFT_LINES 7
 
-void write_matrix(Move ***matrix, FILE *fp);
-Strategy *read_strategy();
+void write_matrix(Move ***matrix, FILE *file, int lines);
+void destroy_matrix(Move **matrix, int lines);
+Strategy *read_strategy(char *filename);
 Move get_decision(Player *player, Card *house_card, Strategy *strategy);
 void ea_make_decision(List *players, Player *house, Megadeck *megadeck, Strategy *strategy);
 

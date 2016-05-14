@@ -16,12 +16,7 @@ Config *read_config(char *filename)
 	config = (Config *) ecalloc((size_t) 1, sizeof(Config));
 
 	FILE *fp = NULL;
-	fp = fopen(filename, "r");
-
-	if (fp == NULL) {
-		printf("Erro: impossível abrir ficheiro %s.\n", filename);
-		exit(EXIT_FAILURE);
-	}
+	fp = efopen(filename, "r");
 
 	fgets(buffer, MAX_LINE_LEN, fp);
 	sscanf(buffer, "%d-%d", &(config->num_decks), &(config->num_players));
@@ -68,8 +63,7 @@ Config *read_player(char *line, Config *config, int count)
 	}
 
 	if (config->bets[count] < 2 ||
-		config->bets[count] > config->money[count] / 4)
-	{
+		config->bets[count] > config->money[count] / 4) {
 		puts("Erro: valor da aposta invalido!");
 		exit(EXIT_FAILURE);
 	}
@@ -148,7 +142,7 @@ void get_new_bet(List *players)
 			// de estar abaixo de INT_MAX (a não ser que se jogue mesmo muito)
 			// fazendo com bet pertencente a [1, money]
 			if (new_bet > cur_player->money || new_bet < 1)
-				puts("Nova aposta inválida.");
+				printf("Nova aposta inválida [1-%d].\n", cur_player->money);
 			else
 				correct = true;
 		}
@@ -169,15 +163,15 @@ Player *get_new_player(int pos)
 	long bet_tmp = 0;
 	Player *new_player = NULL;
 
-	printf("Escolheu o jogador na posição %d.\n", pos);
+	printf("Escolheu o %dº lugar.\n", pos);
 
 	correct = false;
 	do {
-		printf("Introduza o tipo do jogador: ");
+		printf("Introduza o tipo do jogador [HU ou EA]: ");
 		get_line(buffer);
 
 		if (buffer[0] == '\0')
-			puts("Tipo de jogador inválido (HU ou EA). Tente novamente.");
+			puts("Tipo de jogador inválido [HU ou EA].");
 		else {
 			if (strcmp(buffer, "HU") == 0) {
 				type = HU;
@@ -188,13 +182,13 @@ Player *get_new_player(int pos)
 				correct = true;
 			}
 			else
-				puts("Tipo de jogador inválido (HU ou EA). Tente novamente.");
+				puts("Tipo de jogador inválido (HU ou EA).");
 		}
 	} while (!correct);
 
 	correct = false;
 	do {
-		printf("Introduza o nome do jogador: ");
+		printf("Introduza o nome do jogador [máx. 8 carac.]: ");
 		get_line(buffer);
 
 		if (buffer[0] == '\0')
@@ -212,11 +206,11 @@ Player *get_new_player(int pos)
 
 
 		if (buffer[0] == '\0')
-			puts("Valor do dinheiro do jogador inválido.");
+			puts("Dinheiro inválido.");
 		else {
 			money_tmp = strtol(buffer, NULL, 10);
-			if (money_tmp <= 2 || money_tmp > INT_MAX)
-				puts("Valor do dinheiro do jogador inválido.");
+			if (money_tmp <= 1 || money_tmp > INT_MAX)
+				printf("Dinheiro inválido [de 1 a %d].\n", INT_MAX);
 			else {
 				correct = true;
 				money = (int) money_tmp;
@@ -230,11 +224,11 @@ Player *get_new_player(int pos)
 		get_line(buffer);
 
 		if (buffer[0] == '\0')
-			puts("Valor da aposta do jogador inválido.");
+			puts("Aposta inválida.");
 		else {
 			bet_tmp = strtol(buffer, NULL, 10);
 			if (bet_tmp > money_tmp || bet_tmp <= 0)
-				puts("Nova aposta inválida.");
+				printf("Aposta inválida [de 1 a %d].\n", money);
 			else {
 				correct = true;
 				bet = (int) bet_tmp;
@@ -256,9 +250,7 @@ Player *get_new_player(int pos)
 void write_stats(List *players, Player *house, List *old_players)
 {
     FILE *stats = NULL;
-    stats = fopen("stats.txt" , "w");
-    if (!stats)
-        exit(EXIT_FAILURE);
+    stats = efopen("stats.txt" , "w");
 
     fprintf(stats, "Jogador\t\tTipo\tJogos\tVitorias\tEmpates\tDerrotas\tDinheiro\n");
 
