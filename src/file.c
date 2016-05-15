@@ -263,7 +263,7 @@ void write_stats(List *players, Player *house, List *old_players)
 	else if (house->money > 0)
 		fprintf(stats, "A casa ganhou: %d €\n", house->money);
 	else if (house->money == 0)
-		fprintf(stats, "A casa não ganhou nem perdeu dinheiro.");
+		fprintf(stats, "A casa não ganhou nem perdeu dinheiro.\n");
 
 	fclose(stats);
 }

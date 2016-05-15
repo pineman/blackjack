@@ -1,5 +1,3 @@
-// SDL_surface cards imagens das cartas mudar para vetor dinamico?
-
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_image.h>

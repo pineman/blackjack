@@ -6,6 +6,19 @@
 #include "logic.h"
 #include "ea.h"
 
+/*
+ * O formato do ficheiro de estratégia das EAs é:
+ * 10 (HARD_LINES) linhas com 10 caracteres cada para as decisões Hard
+ * uma linha em branco (um \n)
+ * 7 (SOFT_LINES) linhas com 10 caracteres cada para as decisões Soft
+ * os caracteres podem ser:
+ *	H - hit
+ *	S - stand
+ *	R - surrender
+ *	D - double senão stand
+ *	E - double senão hit
+ */
+
 // TODO: Error checking no ficheiro de config das eas?
 void write_matrix(Move ***matrix, FILE *file, int lines)
 {
@@ -39,7 +52,7 @@ Strategy *read_strategy(char *filename)
 
     write_matrix(&strategy->hard, config_file, HARD_LINES);
 
-    // Consumir \n de separação (1 byte!)
+    // Consumir \n de separação ('\n' => 1 char => 1 byte!)
     fseek(config_file, 1, SEEK_CUR);
 
     write_matrix(&strategy->soft, config_file, SOFT_LINES);
@@ -101,6 +114,7 @@ void ea_make_decision(List *players, Player *house, Megadeck *megadeck, Strategy
 	Card *house_card = house->cards->next->card;
 	Move decision = get_decision(cur_player, house_card, strategy);
 
+	printf("player->name = %s\n", cur_player->name);
 	printf("house->card = %d\n", house_card->id);
 	printf("EA->points = %d\n", cur_player->points);
 
@@ -139,7 +153,9 @@ void ea_make_decision(List *players, Player *house, Megadeck *megadeck, Strategy
 			break;
 
 		default:
-			// TODO: this should not happen
+			// Isto nunca deverá acontecer
+			puts("Erro: Decisão de EA inesperada.");
+			exit(EXIT_FAILURE);
 			break;
 	}
 	puts("");
@@ -169,5 +185,3 @@ void hi_lo(List *players, Megadeck *megadeck)
 		aux = aux->next;
 	}
 }
-
-

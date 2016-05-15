@@ -1,14 +1,15 @@
 CFLAGS=-g -Wall -Wextra -pedantic -std=c99
+CPPFLAGS=-MP -MMD
 LDFLAGS=-L/usr/local/lib -lm -lSDL2 -lSDL2_ttf -lSDL2_image
 CC=gcc
+SRC=$(wildcard *.c)
 EXEC=blackjack
 
 all:
-	$(CC) -c error.c -o error.o $(CFLAGS)
-	$(CC) -c list.c -o list.o $(CFLAGS)
-	$(CC) -c file.c -o file.o  $(CFLAGS)
-	$(CC) -c logic.c -o logic.o $(CFLAGS)
-	$(CC) -c sdl.c -o sdl.o  $(CFLAGS)
-	$(CC) -c ea.c -o ea.o $(CFLAGS)
-	$(CC) -c main.c -o main.o $(CFLAGS)
-	$(CC) *.o -o $(EXEC) $(CFLAGS) $(LDFLAGS)
+	make $(EXEC)
+	rm -rf *.d
+
+$(EXEC): $(SRC:%.c=%.o)
+	$(CC) $(LDFLAGS) -o $@ $^
+
+-include $(SRC:%.c=/%.d)
