@@ -84,7 +84,8 @@ int main(int argc, char *argv[])
 			else if (event.type == SDL_KEYDOWN) {
 				switch (event.key.keysym.sym) {
 					case SDLK_q:
-						quit_game(players, &quit);
+						if (!find_active_player(players))
+							quit = true;
 						break;
 
 					case SDLK_n:
@@ -156,7 +157,6 @@ int main(int argc, char *argv[])
 		if (ea) {
 			ea_make_decision(players, house, megadeck, strategy);
 			SDL_Delay(ea_delay);
-			printf("delay :%d", ea_delay);
 		}
 
 		else if (add_player_key) {

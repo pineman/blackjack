@@ -90,7 +90,6 @@ int give_card(Player *player, Megadeck *megadeck)
 	// tem de ser pelo menos 1 (dummy head node),
 	// ou no máximo o número de nós (se seguirmos *cards_left
 	// nós a partir do dummy head node, chegamos à tail)
-
 	random = rand() % megadeck->cards_left + 1;
 	List *random_card = megadeck->deck;
 	for (int i = 0; i < random; i++) {
@@ -107,7 +106,7 @@ int give_card(Player *player, Megadeck *megadeck)
 	stack_push(&(player->cards), random_card->payload);
 	player->num_cards++;
 	list_remove(random_card);
-	--megadeck->cards_left;
+	megadeck->cards_left--;
 	return 0;
 }
 
@@ -139,7 +138,7 @@ void new_game(List *players, Player *house, Megadeck *megadeck)
 
 	clear_cards(players, house);
 
-    // só fazer new_game quando houver jogadores
+    // só fazer new_game quando houver jogadores para jogar
     aux = find_ingame_player(players);
     if (!aux) {
         return;
@@ -147,14 +146,14 @@ void new_game(List *players, Player *house, Megadeck *megadeck)
 
 	distribute_cards(players, house, megadeck);
 	find_playing(players, house);
-	
+
 	if (house->status == BJ) {
 		// a ronda acaba mais cedo
 		pay_bets(players, house);
 		return;
 	}
 
-	hi_lo(players, megadeck);	
+	hi_lo(players, megadeck);
 }
 
 void clear_cards(List *players, Player *house)
@@ -201,6 +200,7 @@ void distribute_cards(List *players, Player *house, Megadeck *megadeck)
 	}
 }
 
+// esta função vê quem tem blackjack e dá a vez ao primeiro jogador sem
 void find_playing(List *players, Player *house)
 {
 	house->num_cards = 1; // desenhar só uma carta
@@ -275,15 +275,6 @@ List *find_active_player(List *players)
     return aux;
 }
 
-void quit_game(List *players, bool *quit)
-{
-	List *aux = find_active_player(players);
-	if (aux)
-		return;
-	else
-		*quit = true;
-}
-
 void surrender(List *players, Player *house, Megadeck *megadeck)
 {
     List *aux = find_active_player(players);
@@ -298,15 +289,14 @@ void surrender(List *players, Player *house, Megadeck *megadeck)
 bool double_bet(List *players, Player *house, Megadeck *megadeck)
 {
     List *aux = find_active_player(players);
-
-    // Se não houver nenhum jogador disponivel
+    // não fazer nada se não for a vez dum jogador
     if (!aux) {
         return false;
     }
 
     Player *cur_player = (Player *) aux->payload;
 
-	// o jogador não pode fazer double
+	// não fazer nada se o jogador não pode fazer double
     if (cur_player->money < cur_player->bet || cur_player->num_cards != 2)
         return false;
 
@@ -358,6 +348,7 @@ void stand(List *players, Player *house, Megadeck *megadeck)
 {
 	List *aux = find_active_player(players);
 	Player *cur_player = NULL;
+	bool end_of_round = false;
 
 	// Se não encontrarmos um jogador a jogar...
 	if (!aux) {
@@ -391,12 +382,15 @@ void stand(List *players, Player *house, Megadeck *megadeck)
 		}
 		else {
 			// não existe um próximo jogador válido para jogar
-            house_hit(house, megadeck);
-			pay_bets(players, house);
+			end_of_round = true;
 		}
 	}
 	else {
 		// se não existir um próximo jogador, fizemos stand do último jogador
+		end_of_round = true;
+	}
+
+	if (end_of_round) {
 		house_hit(house, megadeck);
 	    pay_bets(players, house);
 	}
@@ -500,7 +494,7 @@ void pay_bets(List *players, Player *house)
         	cur_player->losses++;
         }
         else {
-			// isto nunca vai acontecer.
+			// isto nunca pode acontecer
 			puts("Erro: estado de jogador desconhecido.");
         	exit(EXIT_FAILURE);
         }

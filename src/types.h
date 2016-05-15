@@ -56,7 +56,7 @@ typedef struct Megadeck {
     int cards_left;
     const int num_decks;
     List *deck;
-	int count;                 //TODO: Ups, não sei onde por isto, arranjar melhor solução. Ou não.
+	int count; // TODO: Ups, não sei onde por isto, arranjar melhor solução. Ou não.
 } Megadeck;
 
 typedef struct Strategy {
