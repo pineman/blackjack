@@ -20,7 +20,7 @@ void stack_push(Stack **sp, Card *card)
 
 	new->next = old_sp;
 	new->prev = NULL;
-	if (old_sp)
+	if (old_sp != NULL)
 		old_sp->prev = new;
 	else {
 		// estamos a pushar o primeiro elemento, sp tava a NULL
@@ -31,7 +31,7 @@ void stack_push(Stack **sp, Card *card)
 
 Card *stack_pop(Stack **sp)
 {
-	if (!*sp) {
+	if (*sp == NULL) {
 		puts("Erro: tentou-se fazer pop numa stack vazia.");
 		exit(EXIT_FAILURE);
 	}
@@ -39,7 +39,7 @@ Card *stack_pop(Stack **sp)
 	Stack *pop = *sp;
 	Card *card = pop->card;
 	*sp = pop->next;
-	if (pop->next)
+	if (pop->next != NULL)
 		pop->next->prev = NULL;
 
 	free(pop);
@@ -82,7 +82,7 @@ int give_card(Player *player, Megadeck *megadeck)
 {
 	int random = 0;
 
-	if (!megadeck->cards_left)
+	if (megadeck->cards_left == 0)
 		megadeck->cards_left = create_megadeck(megadeck);
 
 	// random: 1 - cards_left
@@ -93,7 +93,7 @@ int give_card(Player *player, Megadeck *megadeck)
 	random = rand() % megadeck->cards_left + 1;
 	List *random_card = megadeck->deck;
 	for (int i = 0; i < random; i++) {
-		if (random_card->next)
+		if (random_card->next != NULL)
 			random_card = random_card->next;
 		else {
 			puts("Erro: tentou-se dar uma carta não existente.");
@@ -132,7 +132,7 @@ void new_game(List *players, Player *house, Megadeck *megadeck)
 {
 	// só fazer new_game quando já toda a gente jogou
     List *aux = find_active_player(players);
-    if (aux) {
+    if (aux != NULL) {
 		return;
 	}
 
@@ -140,7 +140,7 @@ void new_game(List *players, Player *house, Megadeck *megadeck)
 
     // só fazer new_game quando houver jogadores para jogar
     aux = find_ingame_player(players);
-    if (!aux) {
+    if (aux == NULL) {
         return;
     }
 
@@ -160,7 +160,7 @@ void clear_cards(List *players, Player *house)
 {
     List *aux = players->next;
     Player *cur_player = NULL;
-    while (aux) {
+    while (aux != NULL) {
 		cur_player = (Player *) aux->payload;
 		if (cur_player->money < cur_player->bet)
 			cur_player->ingame = false;
@@ -188,7 +188,7 @@ void distribute_cards(List *players, Player *house, Megadeck *megadeck)
     for (int i = 0; i < 2; i++) {
 		aux = players->next;
 		cur_player = NULL;
-		while (aux) {
+		while (aux != NULL) {
 			cur_player = (Player *) aux->payload;
 			// se puder jogar...
 			if (cur_player->ingame)
@@ -215,7 +215,7 @@ void find_playing(List *players, Player *house)
     bool found = false;
     List *aux = players->next;
     Player *cur_player = NULL;
-	while (aux) {
+	while (aux != NULL) {
 		cur_player = (Player *) aux->payload;
 		if (cur_player->ingame) {
 			// Colocar status a Waiting
@@ -247,7 +247,7 @@ List *find_ingame_player(List *players)
 {
 	List *aux = players->next; // dummy head
 	Player *cur_player = NULL;
-	while (aux) {
+	while (aux != NULL) {
 		// iterar até ao jogador que está a jogar
 		cur_player = (Player *) aux->payload;
 		if (cur_player->ingame)
@@ -263,7 +263,7 @@ List *find_active_player(List *players)
 {
 	List *aux = players->next; // dummy head
 	Player *cur_player = NULL;
-	while (aux) {
+	while (aux != NULL) {
 		// iterar até ao jogador que está a jogar
 		cur_player = (Player *) aux->payload;
 		if (cur_player->playing)
@@ -285,7 +285,7 @@ List *find_active_human_player(List *players)
 {
 	List *aux = players->next; // dummy head
 	Player *cur_player = NULL;
-	while (aux) {
+	while (aux != NULL) {
 		// iterar até ao jogador que está a jogar
 		cur_player = (Player *) aux->payload;
 		if (cur_player->playing && cur_player->type == HU)
@@ -300,8 +300,10 @@ List *find_active_human_player(List *players)
 void surrender(List *players, Player *house, Megadeck *megadeck)
 {
     List *aux = find_active_player(players);
-    if (!aux)
+    if (aux == NULL) {
 		return;
+	}
+
     Player *cur_player = (Player *) aux->payload;
 
     cur_player->status = SU;
@@ -312,7 +314,7 @@ bool double_bet(List *players, Player *house, Megadeck *megadeck)
 {
     List *aux = find_active_player(players);
     // não fazer nada se não for a vez dum jogador
-    if (!aux) {
+    if (aux == NULL) {
         return false;
     }
 
@@ -336,8 +338,9 @@ bool double_bet(List *players, Player *house, Megadeck *megadeck)
 void bet(List *players)
 {
     List *aux = find_active_player(players);
-    if (aux)
+    if (aux != NULL) {
 		return;
+	}
 
 	get_new_bet(players);
 }
@@ -373,25 +376,24 @@ void stand(List *players, Player *house, Megadeck *megadeck)
 	bool end_of_round = false;
 
 	// Se não encontrarmos um jogador a jogar...
-	if (!aux) {
+	if (aux == NULL) {
 		// não fazer nada
         return;
     }
-    else {
-		// se encontrarmos, fazer-lhe stand
-		cur_player = (Player *) aux->payload;
-		if (cur_player->status == WW)
-			cur_player->status = ST;
-		cur_player->playing = false;
 
-		// passar ao próximo jogador
-        aux = aux->next;
-    }
+	// se encontrarmos, fazer-lhe stand
+	cur_player = (Player *) aux->payload;
+	if (cur_player->status == WW)
+		cur_player->status = ST;
+	cur_player->playing = false;
 
-	if (aux) {
+	// passar ao próximo jogador
+	aux = aux->next;
+
+	if (aux != NULL) {
 		// se este próximo jogador existir,
 		// procurar o próximo jogador válido a seguir
-		while (aux) {
+		while (aux != NULL) {
 			cur_player = (Player *) aux->payload;
 			if (cur_player->ingame && !(cur_player->status == BJ))
 				break;
@@ -399,7 +401,7 @@ void stand(List *players, Player *house, Megadeck *megadeck)
 				aux = aux->next;
 		}
 		// se ele existir, dar-lhe a vez
-		if (aux) {
+		if (aux != NULL) {
 			cur_player->playing = true;
 		}
 		else {
@@ -423,18 +425,23 @@ void player_hit(List *players, Player *house, Megadeck *megadeck)
 	List *aux = find_active_player(players);
 	Player *cur_player = NULL;
 
-	if (aux)
+	if (aux != NULL) {
 		cur_player = (Player *) aux->payload;
-	else
+	}
+	else {
 		return;
+	}
 
 	give_card(cur_player, megadeck);
 	count_points(cur_player);
 
-	if (cur_player->points > 21)
+	if (cur_player->points > 21) {
 		cur_player->status = BU;
-	if (cur_player->points >= 21)
+	}
+
+	if (cur_player->points >= 21) {
 		stand(players, house, megadeck);
+	}
 }
 
 void house_hit(Player *house, Megadeck *megadeck)
@@ -448,15 +455,16 @@ void house_hit(Player *house, Megadeck *megadeck)
 		printf("\n\nhouse->points = %d\n\n", house->points);
 	}
 
-	if (house->points > 21)
+	if (house->points > 21) {
 		house->status = BU;
+	}
 }
 
 void pay_bets(List *players, Player *house)
 {
     List *aux = players->next;
 	Player *cur_player = NULL;
-	while (aux) {
+	while (aux != NULL) {
         cur_player = ((Player *) aux->payload);
 
         // not playing
@@ -530,7 +538,7 @@ void count_points(Player *player)
     int num_ace = 0;
 
 	player->points = 0;
-    while (cards) {
+    while (cards != NULL) {
         player->points += point_index(cards->card->id);
         if (cards->card->id == 12)
             num_ace++;
@@ -560,7 +568,7 @@ void destroy_list(List *head)
 {
 	List *aux = head->next; // dummy head
 	List *tmp = NULL;
-	while (aux) {
+	while (aux != NULL) {
 		tmp = aux;
 		aux = tmp->next;
 		free(tmp->payload);
@@ -571,15 +579,16 @@ void destroy_list(List *head)
 
 void destroy_stack(Stack **cards)
 {
-	while (*cards)
+	while (*cards != NULL) {
 		free(stack_pop(cards));
+	}
 }
 
 void destroy_players_list(List *players)
 {
     List *aux = players->next;
     Player *cur_player = NULL;
-    while (aux) {
+    while (aux != NULL) {
 		cur_player = (Player *) aux->payload;
 		destroy_stack(&cur_player->cards);
 		aux = aux->next;

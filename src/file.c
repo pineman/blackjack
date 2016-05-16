@@ -41,9 +41,9 @@ Config *read_config(char *filename)
 Config *read_player(char *line, Config *config, int count)
 {
 	char *str = strtok(line, "-");
-	if (!strcmp(str, "HU"))
+	if (strcmp(str, "HU") == 0)
 		config->player_type[count] = HU;
-	else if (!strcmp(str, "EA"))
+	else if (strcmp(str, "EA") == 0)
 		config->player_type[count] = EA;
 	else {
 		puts("Erro: tipo de jogador inválido.");
