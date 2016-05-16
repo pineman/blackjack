@@ -19,7 +19,7 @@ int give_card(Player *player, Megadeck *megadeck);
 int create_megadeck(Megadeck *megadeck);
 
 void new_game(List *players, Player *house, Megadeck *megadeck);
-void clear_cards(List *players, Player *house);
+void clear_cards_take_bet(List *players, Player *house);
 void distribute_cards(List *players, Player *house, Megadeck *megadeck);
 void find_playing(List *players, Player *house);
 

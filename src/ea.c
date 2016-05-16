@@ -172,27 +172,29 @@ void ea_make_decision(List *players, Player *house, Megadeck *megadeck, Strategy
 	puts("");
 }
 
-void count_strategy(Player *player, Card *new_card, Megadeck *megadeck)
+void count_cards(Card *new_card, Megadeck *megadeck)
 {
 	if (new_card->id < 5)
 		megadeck->count++;
 	else if (new_card->id > 7)
 		megadeck->count--;
-
-	player->count = megadeck->count;
 }
+
+void update_count
 
 // TODO: lá vamos nós falar com o ascenso outra vez
 void hi_lo(List *players, Megadeck *megadeck)
 {
-	int decks_left = megadeck->cards_left/DECK_SIZE;
-	int modifier = megadeck->count/decks_left;
+	float decks_left = ((float) megadeck->cards_left)/DECK_SIZE;
+	printf("decks_left = %f\n", decks_lefts);
+	float true_count = megadeck->count/decks_left + 1;
+	printf("true_count = %f\n", true_count);
 
 	List * aux = players->next;
 	while (aux) {
 		Player *cur_player = (Player *)  aux->payload;
-		if (cur_player->type == EA && modifier > 0)
-			cur_player->bet = cur_player->orig_bet * (modifier+1);
+		if (cur_player->type == EA)
+			cur_player->bet = cur_player->orig_bet * modifier;
 		aux = aux->next;
 	}
 }

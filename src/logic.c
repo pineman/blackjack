@@ -101,7 +101,7 @@ int give_card(Player *player, Megadeck *megadeck)
 		}
 	}
 
-	count_strategy(player, (Card *) random_card->payload, megadeck);
+	count_cards((Card *) random_card->payload, megadeck);
 
 	stack_push(&(player->cards), random_card->payload);
 	player->num_cards++;
@@ -136,14 +136,17 @@ void new_game(List *players, Player *house, Megadeck *megadeck)
 		return;
 	}
 
-	clear_cards(players, house);
-
     // só fazer new_game quando houver jogadores para jogar
     aux = find_ingame_player(players);
     if (aux == NULL) {
         return;
     }
 
+	// fazer update antes de qualquer carta ser updated
+	//update_count() // soma player->count com megadeck->count
+	//megadeck->count = 0
+
+	clear_cards_take_bet(players, house);
 	distribute_cards(players, house, megadeck);
 	find_playing(players, house);
 
@@ -152,11 +155,10 @@ void new_game(List *players, Player *house, Megadeck *megadeck)
 		pay_bets(players, house);
 		return;
 	}
-
-	hi_lo(players, megadeck);
 }
 
-void clear_cards(List *players, Player *house)
+// limpar cartas e remover aposta
+void clear_cards_take_bet(List *players, Player *house)
 {
     List *aux = players->next;
     Player *cur_player = NULL;
@@ -174,6 +176,11 @@ void clear_cards(List *players, Player *house)
 			// Verificar se o jogador pode jogar outra vez
 			if (cur_player->money < cur_player->bet)
 				cur_player->ingame = false;
+			else {
+				// Retirar as apostas a todos os jogadores
+				// (apenas fazemos o cálculo dos dinheiros no final da ronda!)
+				cur_player->money -= cur_player->bet;
+			}
 		}
 		aux = aux->next;
 	}
@@ -235,9 +242,6 @@ void find_playing(List *players, Player *house)
 			else
 				cur_player->playing = false;
 
-			// Retirar as apostas a todos os jogadores
-			// (apenas fazemos o cálculo dos dinheiros no final da ronda!)
-			cur_player->money -= cur_player->bet;
 		}
 		aux = aux->next;
     }
@@ -361,6 +365,10 @@ AddPlayerError add_player(List *players, List *old_players, SDL_Window *window)
 	show_add_player_input_message(window);
 
 	Player *new_player = get_new_player(pos);
+	// subtrair a count da ronda para, quando somarmos em new_game,
+	// ficar a zero.
+	//if (new_player->type == EA)
+	//	new_player->count -= megadeck->count;
 
 	old_player = (Player *) list_remove_pos(players, pos);
 	list_append(old_players, old_player);
