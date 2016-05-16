@@ -175,8 +175,6 @@ void clear_cards_take_bet(List *players, Player *house, Megadeck *megadeck)
 			cur_player->num_cards = 0;
 
 			// Verificar se o jogador pode jogar outra vez
-			// TODO: além disto, temos de cobrir o caso de o jogador
-			// não ter dinheiro para pagar se perder! certo?
 			if (cur_player->money < cur_player->bet)
 				cur_player->ingame = false;
 			else {

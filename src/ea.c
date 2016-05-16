@@ -213,6 +213,7 @@ void hi_lo(Player *player, Megadeck *megadeck)
 	// TODO: o hi_lo tem por base a aposta original ou currente?
 	if (player->type == EA)
 		if (true_count != 0)
+			// TODO: checkar se o jogador tem dinheiro para cobrir
 			player->bet = player->orig_bet * modifier;
 
 	printf("a: EA->bet = %d\n", player->bet);
