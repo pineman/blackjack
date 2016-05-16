@@ -24,6 +24,7 @@ void distribute_cards(List *players, Player *house, Megadeck *megadeck);
 void find_playing(List *players, Player *house);
 
 List *find_ingame_player(List *players);
+List *find_active_human_player(List *players);
 List *find_active_player(List *players);
 
 void surrender(List *players, Player *house, Megadeck *megadeck);

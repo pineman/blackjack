@@ -275,6 +275,28 @@ List *find_active_player(List *players)
     return aux;
 }
 
+/*
+ * Esta função é chamada na main apenas para
+ * registar as teclas de hit, stand, etc. se o jogador
+ * for humano (ou seja para as teclas não afetarem as
+ * jogadas dos jogadores EA mesmo se primidas)
+ */
+List *find_active_human_player(List *players)
+{
+	List *aux = players->next; // dummy head
+	Player *cur_player = NULL;
+	while (aux) {
+		// iterar até ao jogador que está a jogar
+		cur_player = (Player *) aux->payload;
+		if (cur_player->playing && cur_player->type == HU)
+			break;
+		else
+			aux = aux->next;
+    }
+
+    return aux;
+}
+
 void surrender(List *players, Player *house, Megadeck *megadeck)
 {
     List *aux = find_active_player(players);
