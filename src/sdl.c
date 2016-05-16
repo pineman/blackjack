@@ -208,8 +208,8 @@ void RenderHouseCards(Player *house, SDL_Surface **_cards, TTF_Font *_font, SDL_
 	else if (house->status == BU)
 		sprintf(points_str, "BU");
 
-	sprintf(status_str, "dealer -- points: %s", points_str);
-	RenderText(0, 116, status_str, _font, &white, _renderer);
+	sprintf(status_str, "dealer: %s points", points_str);
+	RenderText(20, 130, status_str, _font, &white, _renderer);
 
     Stack *aux = house->cards;
     Stack *tmp = NULL;
@@ -367,6 +367,7 @@ void render_status(List *players, TTF_Font *_font, SDL_Renderer *renderer)
 
     char bust[] = "BUST";
     char blackjack[] = "BLACKJACK";
+	char surrender[] = "SURRENDER";
 
     List *aux = players->next;
     Player *cur_player = NULL;
@@ -394,6 +395,16 @@ void render_status(List *players, TTF_Font *_font, SDL_Renderer *renderer)
 				SDL_RenderDrawRect(renderer, &rect);
 				RenderText(94+(208*i), 382, bust, _font, &white, renderer);
 			}
+			else if (cur_player->status == SU) {
+				rect.x = 55 + 208*i;
+				rect.w = 115;
+				SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255 );
+				SDL_RenderFillRect(renderer, &rect);
+				SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255 );
+				SDL_RenderDrawRect(renderer, &rect);
+				RenderText(64+208*i, 382, surrender, _font, &white, renderer);
+			}
+				
 		}
         aux = aux->next;
     }
