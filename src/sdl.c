@@ -311,27 +311,24 @@ void RenderCard(int _x, int _y, int _num_card, SDL_Surface **_cards, SDL_Rendere
  */
 void LoadCards(SDL_Surface **_cards)
 {
-    int i;
-    char filename[STRING_SIZE];
+	int i = 0;
+    char filename[STRING_SIZE] = {0};
 
      // loads all cards to an array
-    for (i = 0 ; i < MAX_DECK_SIZE; i++ )
-    {
+    for (i = 0; i < MAX_DECK_SIZE; i++) {
         // create the filename !
         sprintf(filename, ".//assets//cartas//carta_%02d.png", i+1);
         // loads the image !
         _cards[i] = IMG_Load(filename);
         // check for errors: deleted files ?
-        if (_cards[i] == NULL)
-        {
+        if (_cards[i] == NULL) {
             printf("Unable to load image: %s\n", SDL_GetError());
             exit(EXIT_FAILURE);
         }
     }
     // loads the card back
     _cards[i] = IMG_Load(".//assets//cartas//carta_back.jpg");
-    if (_cards[i] == NULL)
-    {
+    if (_cards[i] == NULL) {
         printf("Unable to load image: %s\n", SDL_GetError());
         exit(EXIT_FAILURE);
     }
@@ -434,7 +431,7 @@ int RenderText(int x, int y, const char *text, TTF_Font *_font, SDL_Color *_colo
 	solidRect.y = y;
     // create a surface from the string text with a predefined font
 	text_surface = TTF_RenderUTF8_Blended(_font,text,*_color);
-	if(!text_surface)
+	if (text_surface == NULL)
 	{
 	    printf("TTF_RenderText_Blended: %s\n", TTF_GetError());
 	    exit(EXIT_FAILURE);
@@ -468,24 +465,21 @@ void InitEverything(int width, int height, TTF_Font **_font, SDL_Surface *_img[]
 
     // load the table texture
     _img[0] = IMG_Load("assets//table_texture.png");
-    if (_img[0] == NULL)
-    {
+    if (_img[0] == NULL) {
         printf("Unable to load image: %s\n", SDL_GetError());
         exit(EXIT_FAILURE);
     }
 
     // load IST logo
     _img[1] = SDL_LoadBMP("assets//ist_logo.bmp");
-    if (_img[1] == NULL)
-    {
+    if (_img[1] == NULL) {
         printf("Unable to load bitmap: %s\n", SDL_GetError());
         exit(EXIT_FAILURE);
     }
 
     // this opens (loads) a font file and sets a size
     *_font = TTF_OpenFont("assets//FreeSerif.ttf", 16);
-    if(!*_font)
-    {
+    if(*_font == NULL) {
         printf("TTF_OpenFont: %s\n", TTF_GetError());
         exit(EXIT_FAILURE);
     }
@@ -509,8 +503,7 @@ void InitSDL()
 void InitFont()
 {
 	// Init font library
-	if(TTF_Init()==-1)
-	{
+	if (TTF_Init() == -1) {
 	    printf("TTF_Init: %s\n", TTF_GetError());
         exit(EXIT_FAILURE);
 	}
@@ -522,17 +515,17 @@ void InitFont()
  * \param height height in px of the window
  * \return pointer to the window created
  */
-SDL_Window* CreateWindow(int width, int height)
+SDL_Window *CreateWindow(int width, int height)
 {
     SDL_Window *window;
     // init window
-	window = SDL_CreateWindow( "BlackJack", WINDOW_POSX, WINDOW_POSY, width+EXTRASPACE, height, 0 );
+	window = SDL_CreateWindow("Blackjack", WINDOW_POSX, WINDOW_POSY, width+EXTRASPACE, height, 0);
     // check for error !
-	if ( window == NULL )
-	{
+	if (window == NULL) {
 		printf("Failed to create window : %s\n", SDL_GetError());
 		exit(EXIT_FAILURE);
 	}
+
 	return window;
 }
 
@@ -543,20 +536,19 @@ SDL_Window* CreateWindow(int width, int height)
  * \param _window represents the window for which the renderer is associated
  * \return pointer to the renderer created
  */
-SDL_Renderer* CreateRenderer(int width, int height, SDL_Window *_window)
+SDL_Renderer *CreateRenderer(int width, int height, SDL_Window *_window)
 {
     SDL_Renderer *renderer;
     // init renderer
-	renderer = SDL_CreateRenderer( _window, -1, 0 );
+	renderer = SDL_CreateRenderer(_window, -1, 0);
 
-	if ( renderer == NULL )
-	{
+	if (renderer == NULL) {
 		printf("Failed to create renderer : %s", SDL_GetError());
         exit(EXIT_FAILURE);
 	}
 
 	// set size of renderer to the same as window
-	SDL_RenderSetLogicalSize( renderer, width+EXTRASPACE, height );
+	SDL_RenderSetLogicalSize(renderer, width+EXTRASPACE, height);
 
 	return renderer;
 }

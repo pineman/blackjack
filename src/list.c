@@ -29,7 +29,7 @@ List *list_follow(List *head, int pos)
 
 	List *aux = head;
 	for (int i = 0; i < pos; i++) {
-		if (aux) {
+		if (aux != NULL) {
 			aux = aux->next;
 		}
 		else {
@@ -49,7 +49,7 @@ void list_insert_pos(List *head, int pos, void *payload)
 	new->payload = payload;
 
 	new->next = aux->next;
-	if (aux->next)
+	if (aux->next != NULL)
 		aux->next->prev = new;
 	else {
 		// inserting at the tail, no need to set aux->next->prev
@@ -62,7 +62,7 @@ void list_insert_pos(List *head, int pos, void *payload)
 void list_append(List *head, void *payload)
 {
 	List *aux = head;
-	while (aux->next)
+	while (aux->next != NULL)
 		aux = aux->next;
 	List *tail = aux;
 
@@ -80,14 +80,14 @@ void *list_remove(List *node)
 	List *to_rm = node;
 	void *payload = to_rm->payload;
 
-	if (node->next) {
+	if (node->next != NULL) {
 		node->next->prev = to_rm->prev;
 	}
 	else {
 		// removing tail, it has no next, skip.
 	}
 
-	if (node->prev) {
+	if (node->prev != NULL) {
 		node->prev->next = to_rm->next;
 	}
 	else {

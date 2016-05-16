@@ -36,14 +36,11 @@ int main(int argc, char *argv[])
 		exit(EXIT_FAILURE);
 	}
 
-	char *game_filename = argv[1];
-	char *ea_filename = argv[2];
-
 	// Ler ficheiro de configuração dos jogadores
-	Config *config = read_config(game_filename);
+	Config *config = read_config(argv[1]);
 
 	// Ler ficheiro de estrategia das EAs
-	Strategy *strategy = read_strategy(ea_filename);
+	Strategy *strategy = read_strategy(argv[2]);
 
 	// Declarar a lista de jogadores
 	List *players = (List *) ecalloc((size_t) 1, sizeof(List));
@@ -154,7 +151,7 @@ int main(int argc, char *argv[])
 
 		aux = find_active_player(players);
 		ea = false;
-		if (aux)
+		if (aux != NULL)
 			if (((Player * ) aux->payload)->type == EA)
 				ea = true;
 
