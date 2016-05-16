@@ -22,11 +22,17 @@
 // TODO: Error checking no ficheiro de config das eas?
 void write_matrix(Move ***matrix, FILE *file, int lines)
 {
-    char buffer[COLUMNS+2] = {0};
+    char buffer[COLUMNS+2] = {0}; // COLUMNS + '\n' e '\0'
 	*matrix = (Move **) ecalloc(lines, sizeof(Move *));
 
     for (int i = 0; i < lines; i++) {
-		fgets(buffer, COLUMNS+2, file); // TODO: se fgets der overflow é logo erro
+		fgets(buffer, COLUMNS+2, file);
+		// Se o caracter exatamente após COLUMNS colunas da linha não for \n,
+		// sabemos que a linha não tem exatamente COLUMNS caracteres.
+		if (buffer[COLUMNS] != '\n') {
+			puts("Erro: Ficheiro de estratégia das EAs mal formatado.");
+			exit(EXIT_FAILURE);
+		}
         (*matrix)[i] = (Move *) ecalloc(10, sizeof(Move));
          for (int j = 0; j < COLUMNS; j++)
             (*matrix)[i][j] =  buffer[j];
@@ -43,6 +49,7 @@ void destroy_matrix(Move **matrix, int lines)
 
 Strategy *read_strategy(char *filename)
 {
+	char check[2] = {0}; // \n e \0
     FILE *config_file = efopen(filename, "r");
 
     Strategy *strategy = (Strategy *) ecalloc(1, sizeof(Strategy));
@@ -52,8 +59,12 @@ Strategy *read_strategy(char *filename)
 
     write_matrix(&strategy->hard, config_file, HARD_LINES);
 
-    // Consumir \n de separação ('\n' => 1 char => 1 byte!)
-    fseek(config_file, 1, SEEK_CUR);
+    // Verificar \n de separação
+    fgets(check, 2, config_file);
+    if (check[0] != '\n') {
+		puts("Erro: Ficheiro de estratégia das EAs mal formatado.");
+		exit(EXIT_FAILURE);
+	}
 
     write_matrix(&strategy->soft, config_file, SOFT_LINES);
 

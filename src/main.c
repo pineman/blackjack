@@ -93,11 +93,13 @@ int main(int argc, char *argv[])
 						break;
 
 					case SDLK_r:
-						surrender(players, house, megadeck);
+						if (find_active_human_player(players))
+							surrender(players, house, megadeck);
 						break;
 
 					case SDLK_d:
-                        double_bet(players, house, megadeck);
+						if (find_active_human_player(players))
+							double_bet(players, house, megadeck);
 						break;
 
 					case SDLK_b:
@@ -110,11 +112,13 @@ int main(int argc, char *argv[])
 						break;
 
 					case SDLK_s:
-                        stand(players, house, megadeck);
+						if (find_active_human_player(players))
+							stand(players, house, megadeck);
 						break;
 
     				case SDLK_h:
-						player_hit(players, house, megadeck);
+						if (find_active_human_player(players))
+							player_hit(players, house, megadeck);
 						break;
 
 					case SDLK_UP:
