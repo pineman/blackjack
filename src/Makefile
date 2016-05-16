@@ -1,7 +1,7 @@
 #CFLAGS=-g -Wall -Wextra -pedantic -std=c99 $(shell sdl2-config --cflags)
 CFLAGS=-g -Wall -Wextra -pedantic -std=c99
 CPPFLAGS=-MP -MMD
-LDFLAGS=$(shell sdl2-config --libs) -lSDL2_ttf -lSDL2_image
+LDFLAGS=-lm $(shell sdl2-config --libs) -lSDL2_ttf -lSDL2_image
 CC=gcc
 SRC=$(wildcard *.c)
 EXEC=blackjack

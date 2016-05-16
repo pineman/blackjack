@@ -78,7 +78,7 @@ int init_game(Config *config, List *players)
 	return num_decks;
 }
 
-int give_card(Player *player, Megadeck *megadeck)
+void give_card(Player *player, Megadeck *megadeck)
 {
 	int random = 0;
 
@@ -91,23 +91,22 @@ int give_card(Player *player, Megadeck *megadeck)
 	// ou no máximo o número de nós (se seguirmos *cards_left
 	// nós a partir do dummy head node, chegamos à tail)
 	random = rand() % megadeck->cards_left + 1;
-	List *random_card = megadeck->deck;
+	List *random_node = megadeck->deck;
 	for (int i = 0; i < random; i++) {
-		if (random_card->next != NULL)
-			random_card = random_card->next;
+		if (random_node->next != NULL)
+			random_node = random_node->next;
 		else {
 			puts("Erro: tentou-se dar uma carta não existente.");
 			exit(EXIT_FAILURE);
 		}
 	}
 
-	count_cards((Card *) random_card->payload, megadeck);
+	count_cards((Card *) random_node->payload, megadeck);
 
-	stack_push(&(player->cards), random_card->payload);
+	stack_push(&(player->cards), random_node->payload);
 	player->num_cards++;
-	list_remove(random_card);
+	list_remove(random_node);
 	megadeck->cards_left--;
-	return 0;
 }
 
 int create_megadeck(Megadeck *megadeck)
@@ -131,34 +130,36 @@ int create_megadeck(Megadeck *megadeck)
 void new_game(List *players, Player *house, Megadeck *megadeck)
 {
 	// só fazer new_game quando já toda a gente jogou
-    List *aux = find_active_player(players);
-    if (aux != NULL) {
+    if (find_active_player(players) != NULL) {
 		return;
 	}
 
     // só fazer new_game quando houver jogadores para jogar
-    aux = find_ingame_player(players);
-    if (aux == NULL) {
+    if (find_ingame_player(players) == NULL) {
         return;
     }
 
-	// fazer update antes de qualquer carta ser updated
-	//update_count() // soma player->count com megadeck->count
-	//megadeck->count = 0
+	// atualizar as contagens das EAs com os valores da ronda anterior,
+	// antes de qualquer carta ser distribuída na nova ronda.
+	update_count(players, megadeck); // soma player->count com megadeck->count
 
-	clear_cards_take_bet(players, house);
+	// Limpar cartas e retirar apostas
+	clear_cards_take_bet(players, house, megadeck);
+	// Dar cartas
 	distribute_cards(players, house, megadeck);
+	// Encontrar qual o jogador que começa a jogar
 	find_playing(players, house);
 
+	// Se a casa tiver blackjack...
 	if (house->status == BJ) {
-		// a ronda acaba mais cedo
+		// ...a ronda acaba logo.
 		pay_bets(players, house);
 		return;
 	}
 }
 
-// limpar cartas e remover aposta
-void clear_cards_take_bet(List *players, Player *house)
+// limpar cartas e retirar apostas aos jogadores que possam jogar
+void clear_cards_take_bet(List *players, Player *house, Megadeck *megadeck)
 {
     List *aux = players->next;
     Player *cur_player = NULL;
@@ -179,6 +180,15 @@ void clear_cards_take_bet(List *players, Player *house)
 			else {
 				// Retirar as apostas a todos os jogadores
 				// (apenas fazemos o cálculo dos dinheiros no final da ronda!)
+				if (cur_player->type == EA) {
+					// O jogador é EA, chamar hi_lo para modificar
+					// a sua aposta antes de esta ser retirada,
+					// de acordo com a estratégia hi-lo.
+					printf("b: EA->bet = %d\n", cur_player->bet);
+					#ifdef HI_LO
+						hi_lo(cur_player, megadeck);
+					#endif
+				}
 				cur_player->money -= cur_player->bet;
 			}
 		}
@@ -191,6 +201,8 @@ void distribute_cards(List *players, Player *house, Megadeck *megadeck)
 {
 	List *aux = players->next;
 	Player *cur_player = NULL;
+	int public_house_points = 0;
+
 	// Distribuir cartas realisticamente
     for (int i = 0; i < 2; i++) {
 		aux = players->next;
@@ -203,22 +215,23 @@ void distribute_cards(List *players, Player *house, Megadeck *megadeck)
 				give_card(cur_player, megadeck);
 			aux = aux->next;
 		}
+		if (i == 1) // segunda vez
+			public_house_points = count_points(house);
 		give_card(house, megadeck);
+	}
+
+	house->num_cards = 1; // desenhar só uma carta
+	count_points(house);
+    if (house->points == 21)
+		house->status = BJ;
+	else {
+		house->points = public_house_points;
+		house->status = WW;
 	}
 }
 
-// esta função vê quem tem blackjack e dá a vez ao primeiro jogador sem
 void find_playing(List *players, Player *house)
 {
-	house->num_cards = 1; // desenhar só uma carta
-	house->status = WW;
-
-	count_points(house);
-	// TODO: desenhar os pontos da casa
-	printf("\n\nhouse->points = %d\n\n", house->points);
-    if (house->points == 21)
-		house->status = BJ;
-
     bool found = false;
     List *aux = players->next;
     Player *cur_player = NULL;
@@ -349,6 +362,10 @@ void bet(List *players)
 	get_new_bet(players);
 }
 
+// TODO: Se o jogador adicionado for EA, subtrair megadeck->round_count
+// a player->count, para quando for somado em new_game(),
+// este dar zero (para esta EA começar a jogar efetivamente quando entrou,
+// em vez de saber os dados de count da ronda anterior).
 AddPlayerError add_player(List *players, List *old_players, SDL_Window *window)
 {
 	int pos = get_clicked_player();
@@ -459,8 +476,6 @@ void house_hit(Player *house, Megadeck *megadeck)
 	while (house->points < 17) {
 		give_card(house, megadeck);
 		count_points(house);
-		// TODO: desenhar os pontos da casa
-		printf("\n\nhouse->points = %d\n\n", house->points);
 	}
 
 	if (house->points > 21) {
@@ -540,7 +555,7 @@ void pay_bets(List *players, Player *house)
     }
 }
 
-void count_points(Player *player)
+int count_points(Player *player)
 {
     Stack *cards = player->cards;
     int num_ace = 0;
@@ -557,6 +572,8 @@ void count_points(Player *player)
         player->points -= 10;
         --num_ace;
     }
+
+    return player->points;
 }
 
 int point_index(int id)

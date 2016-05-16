@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+#include <math.h>
 #include "error.h"
 #include "logic.h"
 #include "ea.h"
@@ -175,26 +176,44 @@ void ea_make_decision(List *players, Player *house, Megadeck *megadeck, Strategy
 void count_cards(Card *new_card, Megadeck *megadeck)
 {
 	if (new_card->id < 5)
-		megadeck->count++;
+		megadeck->round_count++;
 	else if (new_card->id > 7)
-		megadeck->count--;
+		megadeck->round_count--;
 }
 
-void update_count
-
-// TODO: lá vamos nós falar com o ascenso outra vez
-void hi_lo(List *players, Megadeck *megadeck)
+// soma player->count com megadeck->round_count
+void update_count(List *players, Megadeck *megadeck)
 {
-	float decks_left = ((float) megadeck->cards_left)/DECK_SIZE;
-	printf("decks_left = %f\n", decks_lefts);
-	float true_count = megadeck->count/decks_left + 1;
-	printf("true_count = %f\n", true_count);
+	puts("updating count");
+	List *aux = players->next;
+	Player *cur_player = NULL;
 
-	List * aux = players->next;
 	while (aux) {
-		Player *cur_player = (Player *)  aux->payload;
-		if (cur_player->type == EA)
-			cur_player->bet = cur_player->orig_bet * modifier;
+		cur_player = (Player *) aux->payload;
+		if (cur_player->type == EA) {
+			printf("b: EA->count = %d\n", cur_player->count);
+			cur_player->count += megadeck->round_count;
+			printf("a: EA->count = %d\n", cur_player->count);
+		}
 		aux = aux->next;
 	}
+
+	megadeck->round_count = 0;
+}
+
+void hi_lo(Player *player, Megadeck *megadeck)
+{
+	double decks_left = round(((double) megadeck->cards_left)/DECK_SIZE + 1);
+	printf("decks_left = %f\n", decks_left);
+	double true_count = round(player->count/decks_left);
+	printf("true_count = %f\n", true_count);
+	double modifier = pow(2, true_count);
+	printf("modifier = %f\n", modifier);
+
+	// TODO: o hi_lo tem por base a aposta original ou currente?
+	if (player->type == EA)
+		if (true_count != 0)
+			player->bet = player->orig_bet * modifier;
+
+	printf("a: EA->bet = %d\n", player->bet);
 }

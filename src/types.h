@@ -40,6 +40,7 @@ typedef struct Player {
 	int wins;
 	int losses;
 	int ties;
+	// guarda a contagem das cartas para o hi-lo no caso do jogador ser EA
 	int count;
 } Player;
 
@@ -56,7 +57,8 @@ typedef struct Megadeck {
     int cards_left;
     const int num_decks;
     List *deck;
-	int count; // TODO: Ups, não sei onde por isto, arranjar melhor solução. Ou não.
+	// guarda a contagem das cartas duma ronda para o hi-lo das EAs
+	int round_count;
 } Megadeck;
 
 typedef struct Strategy {

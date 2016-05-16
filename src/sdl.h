@@ -43,7 +43,7 @@ int RenderLogo(int, int, SDL_Surface *, SDL_Renderer *);
 
 void RenderTable(List *players, TTF_Font *_font, SDL_Surface *_img[], SDL_Renderer *_renderer);
 
-void RenderHouseCards(Player *house, SDL_Surface **_cards, SDL_Renderer* _renderer);
+void RenderHouseCards(Player *house, SDL_Surface **_cards, TTF_Font *_font, SDL_Renderer* _renderer);
 void RenderPlayerCards(List *players, SDL_Surface **_cards, SDL_Renderer* _renderer);
 void RenderCard(int _x, int _y, int _num_card, SDL_Surface **_cards, SDL_Renderer* _renderer);
 

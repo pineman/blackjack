@@ -190,13 +190,26 @@ int get_clicked_player()
  * \param _cards vector with all loaded card images
  * \param _renderer renderer to handle all rendering in a window
  */
-void RenderHouseCards(Player *house, SDL_Surface **_cards, SDL_Renderer* _renderer)
+void RenderHouseCards(Player *house, SDL_Surface **_cards, TTF_Font *_font, SDL_Renderer* _renderer)
 {
     int x = 0, y = 0;
     int div = WIDTH_WINDOW/CARD_WIDTH;
 	Card *cur_card = NULL;
 	int card_id = 0;
 	int num_cards = 0;
+    SDL_Color white = { 255, 255, 255, 255};
+	char status_str[STRING_SIZE] = {0};
+	char points_str[STRING_SIZE] = {0};
+
+	if (house->status == WW || house->status == ST)
+		sprintf(points_str, "%d", house->points);
+	else if (house->status == BJ)
+		sprintf(points_str, "BJ");
+	else if (house->status == BU)
+		sprintf(points_str, "BU");
+
+	sprintf(status_str, "dealer -- points: %s", points_str);
+	RenderText(0, 116, status_str, _font, &white, _renderer);
 
     Stack *aux = house->cards;
     Stack *tmp = NULL;

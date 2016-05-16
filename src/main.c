@@ -50,12 +50,13 @@ int main(int argc, char *argv[])
 	// Declarar a lista de jogadores velhos
 	List *old_players = (List *) ecalloc((size_t) 1, sizeof(List));
 
-	// Declarar o megabaralho (give_card() enche-o quando precisar)
+	// Inicializar o megabaralho
 	// é uma struct que contém a lista das cartas em si
     int cards_left = 0;
 	List *deck = (List *) ecalloc((size_t) 1, sizeof(List));
     Megadeck megadeck_real = {cards_left, num_decks, deck, 0};
     Megadeck *megadeck = &megadeck_real;
+    megadeck->cards_left = create_megadeck(megadeck);
 
 	// Inicializar a casa
 	Player *house = (Player *) ecalloc((size_t) 1, sizeof(Player));
@@ -81,7 +82,8 @@ int main(int argc, char *argv[])
 			else if (event.type == SDL_KEYDOWN) {
 				switch (event.key.keysym.sym) {
 					case SDLK_q:
-						if (!find_active_player(players))
+						if (find_active_player(players) == NULL ||
+							find_ingame_player(players) == NULL)
 							quit = true;
 						break;
 
@@ -90,12 +92,12 @@ int main(int argc, char *argv[])
 						break;
 
 					case SDLK_r:
-						if (find_active_human_player(players))
+						if (find_active_human_player(players) != NULL)
 							surrender(players, house, megadeck);
 						break;
 
 					case SDLK_d:
-						if (find_active_human_player(players))
+						if (find_active_human_player(players) != NULL)
 							double_bet(players, house, megadeck);
 						break;
 
@@ -104,17 +106,17 @@ int main(int argc, char *argv[])
 						break;
 
 					case SDLK_a:
-						if (!find_active_player(players))
+						if (find_active_player(players) == NULL)
 							add_player_key = true;
 						break;
 
 					case SDLK_s:
-						if (find_active_human_player(players))
+						if (find_active_human_player(players) != NULL)
 							stand(players, house, megadeck);
 						break;
 
     				case SDLK_h:
-						if (find_active_human_player(players))
+						if (find_active_human_player(players) != NULL)
 							player_hit(players, house, megadeck);
 						break;
 
@@ -139,7 +141,7 @@ int main(int argc, char *argv[])
         // render game table
         RenderTable(players, serif, imgs, renderer);
         // render house cards
-        RenderHouseCards(house, cards, renderer);
+        RenderHouseCards(house, cards, serif, renderer);
         // render player cards
         RenderPlayerCards(players, cards, renderer);
         // render colorful status rects above player
