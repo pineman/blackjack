@@ -15,11 +15,11 @@ int init_game(Config *config, List *players);
 void stack_push(Stack **sp, Card *card);
 Card *stack_pop(Stack **sp);
 
-int give_card(Player *player, Megadeck *megadeck);
+void give_card(Player *player, Megadeck *megadeck);
 int create_megadeck(Megadeck *megadeck);
 
 void new_game(List *players, Player *house, Megadeck *megadeck);
-void clear_cards_take_bet(List *players, Player *house);
+void clear_cards_take_bet(List *players, Player *house, Megadeck *megadeck);
 void distribute_cards(List *players, Player *house, Megadeck *megadeck);
 void find_playing(List *players, Player *house);
 
@@ -36,8 +36,7 @@ void player_hit(List *players, Player *house, Megadeck *megadeck);
 void house_hit(Player *house, Megadeck *megadeck);
 
 void pay_bets(List *players, Player *house);
-
-void count_points(Player *player);
+int count_points(Player *player);
 int point_index(int id);
 
 void destroy_list(List *head);
