@@ -20,7 +20,6 @@
  *	E - double senão hit
  */
 
-// TODO: Error checking no ficheiro de config das eas?
 void write_matrix(Move ***matrix, FILE *file, int lines)
 {
     char buffer[COLUMNS+2] = {0}; // COLUMNS + '\n' e '\0'

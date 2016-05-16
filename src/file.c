@@ -7,7 +7,6 @@
 #include "logic.h"
 #include "error.h"
 
-// TODO: fazer print da linha com erro?
 Config *read_config(char *filename)
 {
 	char buffer[MAX_LINE_LEN];
@@ -272,8 +271,6 @@ void write_stats_players(FILE *stats, List *players)
 {
 	List *aux = players->next;
 	Player *cur_player = NULL;
-	// TODO: se escrevermos cada estatística para cada jogador
-	// na sua própria linha evitamos problemas com tabs
     while (aux) {
         cur_player = (Player *) aux->payload;
         if (cur_player->type == VA) {
