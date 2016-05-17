@@ -7,6 +7,9 @@
 #include "logic.h"
 #include "error.h"
 
+/* Lê um ficheiros de configuração
+ * Numero de baralhos e jogadores
+ */
 Config *read_config(char *filename)
 {
 	char buffer[MAX_LINE_LEN];
@@ -16,6 +19,8 @@ Config *read_config(char *filename)
 
 	FILE *config_file = efopen(filename, "r");
 
+    //Parametros gerais de configuração:
+    //Numero de jogadores e numero de baralhos
 	fgets(buffer, MAX_LINE_LEN, config_file);
 	sscanf(buffer, "%d-%d", &(config->num_decks), &(config->num_players));
 
@@ -28,7 +33,7 @@ Config *read_config(char *filename)
 		puts("Erro: número de jogadores invalido.");;
 		exit(EXIT_FAILURE);
 	}
-
+    //Leitura dos paramtros de configuracão de cada jogador
 	for (int i=0; fgets(buffer, MAX_LINE_LEN, config_file) != NULL && i < config->num_players; i++)
 		config = read_player(buffer, config, i);
 
@@ -37,9 +42,15 @@ Config *read_config(char *filename)
 	return config;
 }
 
+/*  Leitura dos parametros de configuração de cada jogador
+ *  Recebe uma string e separa os parametros de configuração com strtok
+ */
 Config *read_player(char *line, Config *config, int count)
 {
+    // strtok separa o buffer no caracter '-'
 	char *str = strtok(line, "-");
+
+    //Leitura do tipo do jogador
 	if (strcmp(str, "HU") == 0)
 		config->player_type[count] = HU;
 	else if (strcmp(str, "EA") == 0)
@@ -55,7 +66,9 @@ Config *read_player(char *line, Config *config, int count)
 		exit(EXIT_FAILURE);
 	}
 	strcpy(config->player_names[count], str);
-	str = strtok(NULL, "\0");
+	
+    //Ultimo segmento da string
+    str = strtok(NULL, "\0");
 	sscanf(str, "%d-%d", &config->money[count], &config->bets[count]);
 	if (config->money[count] < 10 || config->money[count] > 500) {
 		puts("Erro: valor inicial de dinheiro inválido.");
@@ -72,7 +85,7 @@ Config *read_player(char *line, Config *config, int count)
 }
 
 // Vai buscar uma linha a stdin.
-// Modfica o buffer por referência.
+// Modifica o buffer por referência.
 // O buffer fica vazio se o fgets() der overflow ou se a input for vazia.
 // Senão, o buffer fica com a string de input, sem o \n.
 void get_line(char buffer[MAX_PLAYER_NAME+2])
@@ -98,6 +111,7 @@ void get_line(char buffer[MAX_PLAYER_NAME+2])
 		buffer[newline] = '\0';
 }
 
+//  Ler novo valor da aposta a partir stdin
 void get_new_bet(List *players)
 {
 	char buffer[MAX_PLAYER_NAME+2] = {0}; // newline + nullbyte
@@ -114,6 +128,7 @@ void get_new_bet(List *players)
 	}
 
 	correct = false;
+    //Verificar se o jogador existe
 	while (aux && !correct) {
 		cur_player = (Player *) aux->payload;
 		if (strcmp(buffer, cur_player->name) == 0 && !correct)
@@ -247,6 +262,8 @@ Player *get_new_player(int pos)
 	return new_player;
 }
 
+
+// Escrever o ficheiro de estatisticas
 void write_stats(List *players, Player *house, List *old_players)
 {
     FILE *stats = NULL;
@@ -278,8 +295,7 @@ void write_stats_players(FILE *stats, List *players)
             continue;
         }
         fprintf(stats, "%s\t", cur_player->name);
-        if (strlen(cur_player->name) < 8)
-            fprintf(stats, "\t");
+        fprintf(stats, "\t");
         if (cur_player->type == EA)
             fprintf(stats, "EA\t");
         else if (cur_player->type == HU)
