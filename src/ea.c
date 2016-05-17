@@ -11,7 +11,7 @@
  * O formato do ficheiro de estratégia das EAs é:
  * 10 (HARD_LINES) linhas com 10 caracteres cada para as decisões Hard
  * uma linha em branco (um \n)
- * 7 (SOFT_LINES) linhas com 10 caracteres cada para as decisões Soft
+ * 8 (SOFT_LINES) linhas com 10 caracteres cada para as decisões Soft
  * os caracteres podem ser:
  *	H - hit
  *	S - stand
@@ -96,9 +96,9 @@ Move get_decision(Player *player, Card *house_card, Strategy *strategy)
 		if (player->points == 12)
 			line = 0;
         else if (player->points > 12 && player->points < 19)
-            line = player->points - 13;
+            line = player->points - 12;
         else if (player->points >= 19)
-            line = 6;
+            line = 7;
 
         return strategy->soft[line][column];
     }
@@ -145,21 +145,21 @@ void ea_make_decision(List *players, Player *house, Megadeck *megadeck, Strategy
 			surrender(players, house, megadeck);
 			break;
 
+	
 		case D:
-			puts("Decisão: double");
-			can_double = double_bet(players, house, megadeck);
-			if (!can_double) {
-				puts("Decisão: stand porque não double");
-				stand(players, house, megadeck);
-			}
-			break;
-
-		case E:
 			puts("Decisão: double");
 			can_double = double_bet(players, house, megadeck);
 			if (!can_double) {
 				puts("Decisão: hit porque não double");
 				player_hit(players, house, megadeck);
+			}
+			break;
+    	case E:
+			puts("Decisão: double");
+			can_double = double_bet(players, house, megadeck);
+			if (!can_double) {
+				puts("Decisão: stand porque não double");
+				stand(players, house, megadeck);
 			}
 			break;
 

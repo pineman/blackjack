@@ -295,7 +295,8 @@ void write_stats_players(FILE *stats, List *players)
             continue;
         }
         fprintf(stats, "%s\t", cur_player->name);
-        fprintf(stats, "\t");
+        if (strlen(cur_player->name) < 8)
+            fprintf(stats, "\t");
         if (cur_player->type == EA)
             fprintf(stats, "EA\t");
         else if (cur_player->type == HU)

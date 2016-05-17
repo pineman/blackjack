@@ -6,7 +6,7 @@
 
 #define COLUMNS	10
 #define HARD_LINES 10
-#define SOFT_LINES 7
+#define SOFT_LINES 8
 #define HI_LO
 
 void write_matrix(Move ***matrix, FILE *file, int lines);
