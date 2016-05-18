@@ -209,10 +209,9 @@ void hi_lo(Player *player, Megadeck *megadeck)
 	double modifier = pow(2, true_count);
 	printf("modifier = %f\n", modifier);
 
-	// TODO: o hi_lo tem por base a aposta original ou currente?
 	if (player->type == EA)
-		if (true_count != 0)
-			// TODO: checkar se o jogador tem dinheiro para cobrir
+		if (true_count != 0 && player->orig_bet * modifier < player->money &&
+            player->orig_bet * modifier > 0)
 			player->bet = player->orig_bet * modifier;
 
 	printf("a: EA->bet = %d\n", player->bet);
