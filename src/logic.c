@@ -32,7 +32,7 @@ void stack_push(Stack **sp, Card *card)
 Card *stack_pop(Stack **sp)
 {
 	if (*sp == NULL) {
-		puts("Erro: tentou-se fazer pop numa stack vazia.");
+		fprintf(stderr, "Erro: tentou-se fazer pop numa stack vazia.\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -96,7 +96,7 @@ void give_card(Player *player, Megadeck *megadeck)
 		if (random_node->next != NULL)
 			random_node = random_node->next;
 		else {
-			puts("Erro: tentou-se dar uma carta não existente.");
+			fprintf(stderr, "Erro: tentou-se dar uma carta não existente.\n");
 			exit(EXIT_FAILURE);
 		}
 	}
@@ -548,7 +548,7 @@ void pay_bets(List *players, Player *house)
         }
         else {
 			// isto nunca pode acontecer
-			puts("Erro: estado de jogador desconhecido.");
+			fprintf(stderr, "Erro: estado de jogador desconhecido.\n");
         	exit(EXIT_FAILURE);
         }
         aux = aux->next;
@@ -604,9 +604,8 @@ void destroy_list(List *head)
 
 void destroy_stack(Stack **cards)
 {
-	while (*cards != NULL) {
+	while (*cards != NULL)
 		free(stack_pop(cards));
-	}
 }
 
 void destroy_players_list(List *players)
