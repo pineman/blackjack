@@ -30,7 +30,7 @@ void write_matrix(Move ***matrix, FILE *file, int lines)
 		// Se o caracter exatamente após COLUMNS colunas da linha não for \n,
 		// sabemos que a linha não tem exatamente COLUMNS caracteres.
 		if (buffer[COLUMNS] != '\n') {
-			puts("Erro: Ficheiro de estratégia das EAs mal formatado.");
+			fprintf(stderr, "Erro: Ficheiro de estratégia das EAs mal formatado.\n");
 			exit(EXIT_FAILURE);
 		}
         (*matrix)[i] = (Move *) ecalloc(10, sizeof(Move));
@@ -62,7 +62,7 @@ Strategy *read_strategy(char *filename)
     // Verificar \n de separação
     fgets(check, 2, config_file);
     if (check[0] != '\n') {
-		puts("Erro: Ficheiro de estratégia das EAs mal formatado.");
+		fprintf(stderr, "Erro: Ficheiro de estratégia das EAs mal formatado.\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -145,7 +145,7 @@ void ea_make_decision(List *players, Player *house, Megadeck *megadeck, Strategy
 			surrender(players, house, megadeck);
 			break;
 
-	
+
 		case D:
 			puts("Decisão: double");
 			can_double = double_bet(players, house, megadeck);
@@ -165,7 +165,7 @@ void ea_make_decision(List *players, Player *house, Megadeck *megadeck, Strategy
 
 		default:
 			// Isto nunca deverá acontecer
-			puts("Erro: Decisão de EA inesperada.");
+			fprintf(stderr, "Erro: Decisão de EA inesperada.\n");
 			exit(EXIT_FAILURE);
 			break;
 	}

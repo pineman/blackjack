@@ -23,7 +23,7 @@
 List *list_follow(List *head, int pos)
 {
 	if (pos < 0) {
-		puts("Erro: tentou-se aceder a um nó não existente na lista.");
+		fprintf(stderr, "Erro: tentou-se aceder a um nó não existente na lista.\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -33,7 +33,7 @@ List *list_follow(List *head, int pos)
 			aux = aux->next;
 		}
 		else {
-			puts("Erro: tentou-se aceder a um nó não existente na lista..");
+			fprintf(stderr, "Erro: tentou-se aceder a um nó não existente na lista.\n");
 			exit(EXIT_FAILURE);
 		}
 	}
@@ -91,7 +91,7 @@ void *list_remove(List *node)
 		node->prev->next = to_rm->next;
 	}
 	else {
-		puts("Erro: tentou-se remover o dummy head node da lista.");
+		fprintf(stderr, "Erro: tentou-se remover o dummy head node da lista.\n");
 		exit(EXIT_FAILURE);
 	}
 

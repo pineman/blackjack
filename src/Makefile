@@ -16,11 +16,4 @@ $(EXEC): $(SRC:%.c=%.o)
 clean:
 	rm -rf *.o
 
-win32:
-	make $(EXEC)_win32
-	rm -rf *.d
-
-$(EXEC)_win32: $(SRC:%.c=%.o)
-	$(CC) -o $@ $^ $(CFLAGS) $(LDFLAGS)
-
 -include $(SRC:%.c=/%.d)

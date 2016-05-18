@@ -6,7 +6,7 @@ void *ecalloc(size_t nmemb, size_t size)
 	void *memory = calloc(nmemb, size);
 
 	if (memory == NULL) {
-		puts("Erro: Impossível alocar memória.");
+		fprintf(stderr, "Erro: Impossível alocar memória.\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -18,7 +18,7 @@ FILE *efopen(const char *path, const char *mode)
 	FILE *file = fopen(path, mode);
 
 	if (file == NULL) {
-		printf("Erro: Impossível abrir ficheiro %s.\n", path);
+		fprintf(stderr, "Erro: Impossível abrir ficheiro %s.\n", path);
 		exit(EXIT_FAILURE);
 	}
 

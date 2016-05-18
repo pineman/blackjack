@@ -15,13 +15,14 @@
 
 // TODO: COMENTAR CÓDIGO COMO DEVE DE SER!
 // TODO: Adicionar "autores" e introdução e etc.!
+// TODO: Remover printfs de devel
 int main(int argc, char *argv[])
 {
     SDL_Window *window = NULL;
     SDL_Renderer *renderer = NULL;
     TTF_Font *serif = NULL;
-    SDL_Surface *cards[MAX_DECK_SIZE+1] = {NULL};
-    SDL_Surface *imgs[2] = {NULL};
+    SDL_Surface *cards[MAX_DECK_SIZE+1] = {0};
+    SDL_Surface *imgs[2] = {0};
     SDL_Event event;
     int delay = 300;
 	int ea_delay = 1500;
@@ -30,7 +31,7 @@ int main(int argc, char *argv[])
     AddPlayerError add_player_error = OK;
 
 	if (argc != 3) {
-		puts("Erro: número inválido de argumentos.");
+		fprintf(stderr, "Erro: número inválido de argumentos.\n");
 		puts("Utilização:");
 		printf("%s <ficheiro de config. do jogo> <ficheiro de config. das EAs>\n", argv[0]);
 		exit(EXIT_FAILURE);

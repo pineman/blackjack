@@ -25,12 +25,12 @@ Config *read_config(char *filename)
 	sscanf(buffer, "%d-%d", &(config->num_decks), &(config->num_players));
 
 	if (config->num_decks > 8 || config->num_decks < 4){
-		puts("Erro: número de baralhos invalido.");
+		fprintf(stderr, "Erro: número de baralhos invalido.\n");
 		exit(EXIT_FAILURE);
 	}
 
 	if (config->num_players > 4 || config->num_players < 1) {
-		puts("Erro: número de jogadores invalido.");;
+		fprintf(stderr, "Erro: número de jogadores invalido.\n");
 		exit(EXIT_FAILURE);
 	}
     //Leitura dos paramtros de configuracão de cada jogador
@@ -56,28 +56,28 @@ Config *read_player(char *line, Config *config, int count)
 	else if (strcmp(str, "EA") == 0)
 		config->player_type[count] = EA;
 	else {
-		puts("Erro: tipo de jogador inválido.");
+		fprintf(stderr, "Erro: tipo de jogador inválido.\n");
 		exit(EXIT_FAILURE);
 	}
 
 	str = strtok(NULL, "-");
 	if (strlen(str) > MAX_PLAYER_NAME) {
-		puts("Erro: nome do jogador demasiado grande (Máx. 8 caracteres).");
+		fprintf(stderr, "Erro: nome do jogador demasiado grande (Máx. 8 caracteres).\n");
 		exit(EXIT_FAILURE);
 	}
 	strcpy(config->player_names[count], str);
-	
+
     //Ultimo segmento da string
     str = strtok(NULL, "\0");
 	sscanf(str, "%d-%d", &config->money[count], &config->bets[count]);
 	if (config->money[count] < 10 || config->money[count] > 500) {
-		puts("Erro: valor inicial de dinheiro inválido.");
+		fprintf(stderr, "Erro: valor inicial de dinheiro inválido.\n");
 		exit(EXIT_FAILURE);
 	}
 
 	if (config->bets[count] < 2 ||
 		config->bets[count] > config->money[count] / 4) {
-		puts("Erro: valor da aposta invalido!");
+		fprintf(stderr, "Erro: valor da aposta invalido!\n");
 		exit(EXIT_FAILURE);
 	}
 
