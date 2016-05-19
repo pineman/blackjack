@@ -20,6 +20,8 @@
 #include "list.h"
 #include "error.h"
 
+
+// Aceder a um no numa posilão especifica da lista
 List *list_follow(List *head, int pos)
 {
 	if (pos < 0) {
@@ -41,6 +43,7 @@ List *list_follow(List *head, int pos)
 	return aux;
 }
 
+// Inserir um no numa posição especifica da lista
 void list_insert_pos(List *head, int pos, void *payload)
 {
 	List *aux = list_follow(head, pos - 1);
@@ -59,6 +62,8 @@ void list_insert_pos(List *head, int pos, void *payload)
 	aux->next = new;
 }
 
+
+//Inserir na tail
 void list_append(List *head, void *payload)
 {
 	List *aux = head;
@@ -75,6 +80,7 @@ void list_append(List *head, void *payload)
 	tail->next = new_tail;
 }
 
+//Remover um no da lista
 void *list_remove(List *node)
 {
 	List *to_rm = node;
@@ -99,6 +105,8 @@ void *list_remove(List *node)
 	return payload;
 }
 
+
+//Remover um no especifico da lista
 void *list_remove_pos(List *head, int pos)
 {
 	List *to_rm = list_follow(head, pos);
