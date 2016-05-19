@@ -208,11 +208,17 @@ void hi_lo(Player *player, Megadeck *megadeck)
 	printf("true_count = %f\n", true_count);
 	double modifier = pow(2, true_count);
 	printf("modifier = %f\n", modifier);
+	double new_bet = round(player->orig_bet * modifier);
+	printf("new_bet = %f\n", new_bet);
+	if (new_bet == 0)
+		new_bet = 1;
 
-	if (player->type == EA)
-		if (true_count != 0 && player->orig_bet * modifier < player->money &&
-            player->orig_bet * modifier > 0)
-			player->bet = player->orig_bet * modifier;
+	if (player->type == EA && true_count != 0) {
+		if (player->money > new_bet)
+			player->bet = new_bet;
+		else
+			player->bet = player->money;
+	}
 
 	printf("a: EA->bet = %d\n", player->bet);
 }
