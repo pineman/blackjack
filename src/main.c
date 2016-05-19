@@ -1,3 +1,12 @@
+/* Projecto de Programação
+ * Implementação em C do jogo de casino Blackjack
+ * Autores: 
+ * João Pinheiro:
+ * João Freitas: joao.m.freitas@tecnico.ulisboa.pt 
+ */
+
+
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -15,7 +24,6 @@
 
 // TODO: COMENTAR CÓDIGO COMO DEVE DE SER!
 // TODO: Adicionar "autores" e introdução e etc.!
-// TODO: Remover printfs de devel
 int main(int argc, char *argv[])
 {
     SDL_Window *window = NULL;
@@ -136,7 +144,6 @@ int main(int argc, char *argv[])
 			}
 		}
 
-		// TODO: fazer função com isto tudo?
 		if (add_player_key)
 			show_add_player_message(window);
         // render game table
@@ -173,7 +180,6 @@ int main(int argc, char *argv[])
 
 	write_stats(players, house, old_players);
 
-	// TODO: fazer função com isto tudo?
 	destroy_players_list(players);
 	destroy_players_list(old_players);
     destroy_stack(&house->cards);
