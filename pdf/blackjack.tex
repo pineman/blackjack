@@ -18,6 +18,7 @@
 \usepackage{geometry}
 \usepackage{listings}
 \usepackage{color}
+\usepackage{pdfpages}
 \usepackage[table,xcdraw]{xcolor}
 
 \definecolor{dkgreen}{rgb}{0,0.6,0}
@@ -31,7 +32,7 @@
   belowskip=3mm,
   showstringspaces=false,
   columns=flexible,
-  basicstyle={\small\ttfamily},
+  basicstyle={\scriptsize\ttfamily},
   numbers=none,
   numberstyle=\tiny\color{gray},
   keywordstyle=\color{blue},
@@ -61,15 +62,23 @@
 \rfoot{Página \thepage}
 \lfoot{\small Engenharia Electrotécnica e de Computadores - IST}
 
-
-\usepackage{pdfpages}
-
 \begin{document}
-\setcounter{page}{1}
+\includepdf[pages={1}]{Capa/capa.pdf}
 
-%\includepdf[pages={1}]{Capa/capa.pdf}
-
+\lstinputlisting{ea.c}
+\lstinputlisting{ea.h}
+\lstinputlisting{error.c}
+\lstinputlisting{error.h}
 \lstinputlisting{file.c}
+\lstinputlisting{file.h}
+\lstinputlisting{list.c}
+\lstinputlisting{list.h}
+\lstinputlisting{logic.c}
+\lstinputlisting{logic.h}
+\lstinputlisting{main.c}
+\lstinputlisting{sdl.c}
+\lstinputlisting{sdl.h}
+\lstinputlisting{types.h}
 
 
 \end{document}
