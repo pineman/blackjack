@@ -1,0 +1,75 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=2.5cm,includefoot,footskip=30pt,]{geometry}
+\usepackage{graphicx}
+\usepackage{bold-extra}
+\usepackage{graphicx}
+\graphicspath{ {imagens/} }
+\usepackage{epstopdf}
+\usepackage{float} 
+\usepackage{longtable}
+\usepackage{multirow}
+%\usepackage{array}
+\usepackage[export]{adjustbox}
+\usepackage{scalerel}
+\usepackage{mathtools}
+\usepackage{stackengine}
+\usepackage{fancyvrb}
+\usepackage{geometry}
+\usepackage{listings}
+\usepackage{color}
+\usepackage[table,xcdraw]{xcolor}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{frame=tb,
+  language=C{ANSI},
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  %functionstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3,
+  extendedchars=true,
+  literate={á}{{\'a}}1 {ã}{{\~a}}1 {é}{{\'e}}1 {ç}{\c{c}}1 {ã}{\~{a}}1 {ê}{{\^e}}1,
+}
+
+%\usepackage{xcolor}
+\newcommand\showdiv[1]{\overline{\smash{\hstretch{.5}{)}\mkern-3.2mu\hstretch{.5}{)}}#1}}
+\newcommand\ph[1]{\textcolor{white}{#1}}
+
+% ----- Cabeçalho e rodapé -----
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+	
+\renewcommand{\headrulewidth}{1pt}
+\renewcommand{\footrulewidth}{0.5pt}
+
+\rhead{Unidade de Controlo de Ciclo Único}
+\lhead{Arquitectura de Computadores}
+\rfoot{Página \thepage}
+\lfoot{\small Engenharia Electrotécnica e de Computadores - IST}
+
+
+\usepackage{pdfpages}
+
+\begin{document}
+\setcounter{page}{1}
+
+%\includepdf[pages={1}]{Capa/capa.pdf}
+
+\lstinputlisting{file.c}
+
+
+\end{document}
