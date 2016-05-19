@@ -174,21 +174,23 @@ void clear_cards_take_bet(List *players, Player *house, Megadeck *megadeck)
 			destroy_stack(&cur_player->cards);
 			cur_player->num_cards = 0;
 
-			// Verificar se o jogador pode jogar outra vez
-			if (cur_player->money < cur_player->bet)
-				cur_player->ingame = false;
-			else {
-				// Retirar as apostas a todos os jogadores
-				// (apenas fazemos o cálculo dos dinheiros no final da ronda!)
-				if (cur_player->type == EA) {
-					// O jogador é EA, chamar hi_lo para modificar
-					// a sua aposta antes de esta ser retirada,
-					// de acordo com a estratégia hi-lo.
-					printf("b: EA->bet = %d\n", cur_player->bet);
-					#ifdef HI_LO
-						hi_lo(cur_player, megadeck);
-					#endif
-				}
+			// Verificar se o jogador pode jogar outra vez e
+			// retirar as apostas a todos os jogadores
+			// (apenas fazemos o cálculo dos dinheiros no final da ronda!)
+			if (cur_player->type == HU) {
+				if (cur_player->money < cur_player->bet)
+					cur_player->ingame = false;
+				else
+					cur_player->money -= cur_player->bet;
+			}
+			else if (cur_player->type == EA) {
+				// O jogador é EA, chamar hi_lo para modificar
+				// a sua aposta antes de esta ser retirada,
+				// de acordo com a estratégia hi-lo.
+				printf("b: EA->bet = %d\n", cur_player->bet);
+				#ifdef HI_LO
+				hi_lo(cur_player, megadeck);
+				#endif
 				cur_player->money -= cur_player->bet;
 			}
 		}
@@ -473,7 +475,7 @@ void house_hit(Player *house, Megadeck *megadeck)
 {
 	house->num_cards = 2;
 
-	while (house->points < 17) {
+	while (house->points <= 16) {
 		give_card(house, megadeck);
 		count_points(house);
 	}
