@@ -1,3 +1,7 @@
+/* O sistema de ajuste de apostas utilizado neste projecto segue as instruções
+ * explicadas aqui: http://casinogambling.about.com/od/blackjack/a/hilo.htm
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -126,8 +130,11 @@ Move get_decision(Player *player, Card *house_card, Strategy *strategy)
     }
 }
 
-// TODO: Temos de informar o utilizador da decisão da EA?
-// fazemos print? messagebox? nada disto?
+
+/*
+ * Encontra proximo jogador
+ * Usa o valor de retorno de get_decision para escolher a proxima ação
+ */ 
 void ea_make_decision(List *players, Player *house, Megadeck *megadeck, Strategy *strategy)
 {
 	bool can_double = false;
@@ -137,40 +144,29 @@ void ea_make_decision(List *players, Player *house, Megadeck *megadeck, Strategy
 	Card *house_card = house->cards->next->card;
 	Move decision = get_decision(cur_player, house_card, strategy);
 
-	printf("player->name = %s\n", cur_player->name);
-	printf("house->card = %d\n", house_card->id);
-	printf("EA->points = %d\n", cur_player->points);
-
 	switch (decision) {
 		case H:
-			puts("Decisão: hit");
 			player_hit(players, house, megadeck);
 			break;
 
 		case S:
-			puts("Decisão: stand");
 			stand(players, house, megadeck);
 			break;
 
 		case R:
-			puts("Decisão: surrender");
 			surrender(players, house, megadeck);
 			break;
 
 
 		case D:
-			puts("Decisão: double");
 			can_double = double_bet(players, house, megadeck);
 			if (!can_double) {
-				puts("Decisão: hit porque não double");
 				player_hit(players, house, megadeck);
 			}
 			break;
     	case E:
-			puts("Decisão: double");
 			can_double = double_bet(players, house, megadeck);
 			if (!can_double) {
-				puts("Decisão: stand porque não double");
 				stand(players, house, megadeck);
 			}
 			break;
@@ -181,9 +177,16 @@ void ea_make_decision(List *players, Player *house, Megadeck *megadeck, Strategy
 			exit(EXIT_FAILURE);
 			break;
 	}
-	puts("");
 }
 
+
+/*
+ * Cada jogador começa com a contagem = 0
+ * Em cada ronda são contadas as cartas e no fim da ronda ao count dos jogadores
+ * é somada a contagem da ronda
+ */
+
+//Conta cartas segundo a estrategia hi-lo
 void count_cards(Card *new_card, Megadeck *megadeck)
 {
 	if (new_card->id < 5)
@@ -195,42 +198,42 @@ void count_cards(Card *new_card, Megadeck *megadeck)
 // soma player->count com megadeck->round_count
 void update_count(List *players, Megadeck *megadeck)
 {
-	puts("updating count");
 	List *aux = players->next;
 	Player *cur_player = NULL;
 
 	while (aux) {
 		cur_player = (Player *) aux->payload;
-		if (cur_player->type == EA) {
-			printf("b: EA->count = %d\n", cur_player->count);
+		if (cur_player->type == EA)
 			cur_player->count += megadeck->round_count;
-			printf("a: EA->count = %d\n", cur_player->count);
-		}
+
 		aux = aux->next;
 	}
 
 	megadeck->round_count = 0;
 }
 
+/* Altera a bet do jogador  
+ * A aposta original do jogador é uma unidade
+ * true_count = contagem / numero de baralhos
+ * A nova aposta no jogador é igual a 2*true_count unidades
+ * Se true_count <= 0 a nova aposta e igual a 1 unidades
+ */
 void hi_lo(Player *player, Megadeck *megadeck)
 {
+    double new_bet = 0;
 	double decks_left = round(((double) megadeck->cards_left)/DECK_SIZE + 1);
-	printf("decks_left = %f\n", decks_left);
-	double true_count = round(player->count/decks_left);
-	printf("true_count = %f\n", true_count);
-	double modifier = pow(2, true_count);
-	printf("modifier = %f\n", modifier);
-	double new_bet = round(player->orig_bet * modifier);
-	printf("new_bet = %f\n", new_bet);
-	if (new_bet == 0)
-		new_bet = 1;
-
-	if (player->type == EA && true_count != 0) {
+	int true_count = round(player->count/decks_left);
+    
+    if (true_count <= 0)
+		new_bet = player->orig_bet;
+    else 
+        new_bet = 2 * true_count * player->orig_bet;
+ 
+	
+    if (player->type == EA) {
 		if (player->money > new_bet)
 			player->bet = new_bet;
 		else
 			player->bet = player->money;
 	}
-
-	printf("a: EA->bet = %d\n", player->bet);
 }
