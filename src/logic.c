@@ -484,6 +484,9 @@ void house_hit(Player *house, Megadeck *megadeck)
 	}
 }
 
+
+// Define o estado do jogador
+// Atualiza a aposta no fim do jogo
 void pay_bets(List *players, Player *house)
 {
     List *aux = players->next;
@@ -556,6 +559,10 @@ void pay_bets(List *players, Player *house)
     }
 }
 
+
+// Conta os pontos do jogador
+// No primeiro loop atribui a todos os ases 11 pontos
+// No segundo loop se pontos>21 remove 10 pontos ate não haverem ases
 int count_points(Player *player)
 {
     Stack *cards = player->cards;
@@ -577,6 +584,8 @@ int count_points(Player *player)
     return player->points;
 }
 
+
+// Conversão do id da carta para pontos
 int point_index(int id)
 {
     int points = 0;
