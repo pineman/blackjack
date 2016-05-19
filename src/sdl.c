@@ -76,6 +76,11 @@ void RenderTable(List *players, TTF_Font *_font, SDL_Surface *_img[], SDL_Render
     SDL_DestroyTexture(table_texture);
 }
 
+
+/* Desenhar a area do jogador
+ * Nome, aposta, estado e pontos
+ * Quadrado de cor diferente para o jogador que esta a jogar
+ */
 void RenderPlayerArea(List *players, SDL_Renderer* _renderer, TTF_Font *_font)
 {
     SDL_Color white = {255, 255, 255, 255};
@@ -118,6 +123,7 @@ void RenderPlayerArea(List *players, SDL_Renderer* _renderer, TTF_Font *_font)
     }
 }
 
+
 void show_add_player_message(SDL_Window *window)
 {
 	SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION,
@@ -158,6 +164,8 @@ void show_add_player_input_message(SDL_Window *window)
 							 window);
 }
 
+
+//Obter posição para inserir o novo jogador
 int get_clicked_player()
 {
 	SDL_Event event;
@@ -360,7 +368,8 @@ void UnLoadCards(SDL_Surface **_array_of_cards)
         SDL_FreeSurface(_array_of_cards[i]);
     }
 }
-
+// Desenhar o estado do jogador
+// Blackjack, Bust e Surrender
 void render_status(List *players, TTF_Font *_font, SDL_Renderer *renderer)
 {
     SDL_Rect rect;

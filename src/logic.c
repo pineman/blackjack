@@ -187,7 +187,6 @@ void clear_cards_take_bet(List *players, Player *house, Megadeck *megadeck)
 				// O jogador é EA, chamar hi_lo para modificar
 				// a sua aposta antes de esta ser retirada,
 				// de acordo com a estratégia hi-lo.
-				printf("b: EA->bet = %d\n", cur_player->bet);
 				#ifdef HI_LO
 				hi_lo(cur_player, megadeck);
 				#endif
