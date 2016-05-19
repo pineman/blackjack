@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2016.4.27)  19 MAY 2016 21:31
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2016.4.27)  20 MAY 2016 00:01
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -598,6 +598,23 @@ File: color.cfg 2007/01/18 v1.5 color configuration of teTeX/TeXLive
 )
 Package color Info: Driver file: pdftex.def on input line 130.
 )
+(/usr/share/texlive/texmf-dist/tex/latex/pdfpages/pdfpages.sty
+Package: pdfpages 2013/08/25 v0.4v Insert pages of external PDF documents (AM)
+
+(/usr/share/texlive/texmf-dist/tex/latex/eso-pic/eso-pic.sty
+Package: eso-pic 2013/10/06 v2.0d eso-pic (RN)
+
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/atbegshi.sty
+Package: atbegshi 2011/10/05 v1.16 At begin shipout hook (HO)
+))
+(/usr/share/texlive/texmf-dist/tex/latex/pdfpages/pppdftex.def
+File: pppdftex.def 2013/08/25 v0.4v Pdfpages driver for pdfTeX (AM)
+)
+\AM@pagebox=\box44
+\AM@toc@title=\toks29
+\c@AM@survey=\count131
+\AM@templatesizebox=\box45
+)
 (/usr/share/texmf/tex/latex/xcolor/xcolor.sty
 Package: xcolor 2007/01/21 v2.11 LaTeX color extensions (UK)
 
@@ -613,15 +630,15 @@ Package: colortbl 2012/02/13 v1.0a Color table columns (DPC)
 Package: array 2008/09/09 v2.4c Tabular extension package (FMi)
 \col@sep=\dimen147
 \extrarowheight=\dimen148
-\NC@list=\toks29
+\NC@list=\toks30
 \extratabsurround=\skip63
 \backup@length=\skip64
 )
-\everycr=\toks30
+\everycr=\toks31
 \minrowclearance=\skip65
 )
 LaTeX Info: Redefining \color on input line 702.
-\rownum=\count131
+\rownum=\count132
 Package xcolor Info: Model `cmy' substituted by `cmy0' on input line 1337.
 Package xcolor Info: Model `hsb' substituted by `rgb' on input line 1341.
 Package xcolor Info: Model `RGB' extended on input line 1353.
@@ -649,38 +666,21 @@ File: lstmisc.sty 2013/08/26 1.5b (Carsten Heinz)
 \f@ncyO@olf=\skip73
 \f@ncyO@orf=\skip74
 )
-(/usr/share/texlive/texmf-dist/tex/latex/pdfpages/pdfpages.sty
-Package: pdfpages 2013/08/25 v0.4v Insert pages of external PDF documents (AM)
-
-(/usr/share/texlive/texmf-dist/tex/latex/eso-pic/eso-pic.sty
-Package: eso-pic 2013/10/06 v2.0d eso-pic (RN)
-
-(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/atbegshi.sty
-Package: atbegshi 2011/10/05 v1.16 At begin shipout hook (HO)
-))
-(/usr/share/texlive/texmf-dist/tex/latex/pdfpages/pppdftex.def
-File: pppdftex.def 2013/08/25 v0.4v Pdfpages driver for pdfTeX (AM)
-)
-\AM@pagebox=\box44
-\AM@toc@title=\toks31
-\c@AM@survey=\count132
-\AM@templatesizebox=\box45
-)
 (./blackjack.aux)
 \openout1 = `blackjack.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 67.
-LaTeX Font Info:    ... okay on input line 67.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 67.
-LaTeX Font Info:    ... okay on input line 67.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 67.
-LaTeX Font Info:    ... okay on input line 67.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 67.
-LaTeX Font Info:    ... okay on input line 67.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 67.
-LaTeX Font Info:    ... okay on input line 67.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 67.
-LaTeX Font Info:    ... okay on input line 67.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 65.
+LaTeX Font Info:    ... okay on input line 65.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 65.
+LaTeX Font Info:    ... okay on input line 65.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 65.
+LaTeX Font Info:    ... okay on input line 65.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 65.
+LaTeX Font Info:    ... okay on input line 65.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 65.
+LaTeX Font Info:    ... okay on input line 65.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 65.
+LaTeX Font Info:    ... okay on input line 65.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -732,7 +732,191 @@ LaTeX Font Info:    ... okay on input line 67.
 )
 \c@lstlisting=\count139
 \AtBeginShipoutBox=\box47
- (./file.c
+ <Capa/capa.pdf, id=1, 614.295pt x 794.97pt>
+File: Capa/capa.pdf Graphic file (type pdf)
+ <use Capa/capa.pdf>
+Package pdftex.def Info: Capa/capa.pdf used on input line 66.
+(pdftex.def)             Requested size: 614.29349pt x 794.96806pt.
+File: Capa/capa.pdf Graphic file (type pdf)
+
+<use Capa/capa.pdf>
+Package pdftex.def Info: Capa/capa.pdf used on input line 66.
+(pdftex.def)             Requested size: 614.29349pt x 794.96806pt.
+ <Capa/capa.pdf, id=4, page=1, 614.295pt x 794.97pt>
+File: Capa/capa.pdf Graphic file (type pdf)
+
+<use Capa/capa.pdf, page 1>
+Package pdftex.def Info: Capa/capa.pdf, page1 used on input line 66.
+(pdftex.def)             Requested size: 614.29349pt x 794.96806pt.
+File: Capa/capa.pdf Graphic file (type pdf)
+ <use Capa/capa.pdf, page 1>
+Package pdftex.def Info: Capa/capa.pdf, page1 used on input line 66.
+(pdftex.def)             Requested size: 614.58406pt x 795.3441pt.
+File: Capa/capa.pdf Graphic file (type pdf)
+
+<use Capa/capa.pdf, page 1>
+Package pdftex.def Info: Capa/capa.pdf, page1 used on input line 66.
+(pdftex.def)             Requested size: 614.58406pt x 795.3441pt.
+File: Capa/capa.pdf Graphic file (type pdf)
+ <use Capa/capa.pdf, page 1>
+Package pdftex.def Info: Capa/capa.pdf, page1 used on input line 66.
+(pdftex.def)             Requested size: 614.58406pt x 795.3441pt.
+File: Capa/capa.pdf Graphic file (type pdf)
+
+<use Capa/capa.pdf, page 1>
+Package pdftex.def Info: Capa/capa.pdf, page1 used on input line 66.
+(pdftex.def)             Requested size: 614.58406pt x 795.3441pt.
+ [1
+
+ <./Capa/capa.pdf{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}>] (./ea.c
+
+! Package inputenc Error: Unicode char \u8:√\lst@ECµ not set up for use with La
+TeX.
+
+See the inputenc package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.1 ...lizado neste projecto segue as instru√ß√µes
+                                                  
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+
+! Package inputenc Error: Unicode char \u8:√\lst@ECµ not set up for use with La
+TeX.
+
+See the inputenc package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.16 ... com 10 caracteres cada para as decis√µes 
+                                                  Hard
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+
+! Package inputenc Error: Unicode char \u8:√\lst@ECµ not set up for use with La
+TeX.
+
+See the inputenc package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.18 ... com 10 caracteres cada para as decis√µes 
+                                                  Soft
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+
+! Package inputenc Error: Unicode char \u8:√\lst@EC≥ not set up for use with La
+TeX.
+
+See the inputenc package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.34 		// Se o caracter exatamente ap√≥s 
+                                         COLUMNS colunas da linha n√£o for \n,
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+
+Package Fancyhdr Warning: \headheight is too small (12.0pt): 
+ Make it at least 13.59999pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[2]
+
+! Package inputenc Error: Unicode char \u8:√\lst@EC† not set up for use with La
+TeX.
+
+See the inputenc package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.110 		// Dois ases correspondem √† 
+                                     primeira linha da matriz soft
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+
+Package Fancyhdr Warning: \headheight is too small (12.0pt): 
+ Make it at least 13.59999pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[3]
+
+Package Fancyhdr Warning: \headheight is too small (12.0pt): 
+ Make it at least 13.59999pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[4]) (./ea.h
+
+Package Fancyhdr Warning: \headheight is too small (12.0pt): 
+ Make it at least 13.59999pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[5]) (./error.c
+
+! Package inputenc Error: Unicode char \u8:√\lst@EC≠ not set up for use with La
+TeX.
+
+See the inputenc package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.9 		fprintf(stderr, "Erro: Imposs√≠vel 
+                                         alocar mem√≥ria.\n");
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+
+! Package inputenc Error: Unicode char \u8:√\lst@EC≥ not set up for use with La
+TeX.
+
+See the inputenc package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.9 ...stderr, "Erro: Imposs√≠vel alocar mem√≥ria.
+                                                  \n");
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+
+! Package inputenc Error: Unicode char \u8:√\lst@EC≠ not set up for use with La
+TeX.
+
+See the inputenc package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.21 		fprintf(stderr, "Erro: Imposs√≠vel 
+                                          abrir ficheiro %s.\n", path);
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+) (./error.h) (./file.c
+
+Package Fancyhdr Warning: \headheight is too small (12.0pt): 
+ Make it at least 13.59999pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[6]
 
 ! Package inputenc Error: Unicode char \u8:√\lst@EC∫ not set up for use with La
 TeX.
@@ -767,23 +951,14 @@ Package Fancyhdr Warning: \headheight is too small (12.0pt):
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[1{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}
-
-]
+[7]
 
 Package Fancyhdr Warning: \headheight is too small (12.0pt): 
  Make it at least 13.59999pt.
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[2]
-
-Package Fancyhdr Warning: \headheight is too small (12.0pt): 
- Make it at least 13.59999pt.
- We now make it that large for the rest of the document.
- This may cause the page layout to be inconsistent, however.
-
-[3]
+[8]
 
 ! Package inputenc Error: Unicode char \u8:¬\lst@EC∫ not set up for use with La
 TeX.
@@ -804,14 +979,14 @@ Package Fancyhdr Warning: \headheight is too small (12.0pt):
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[4]
+[9]
 
 Package Fancyhdr Warning: \headheight is too small (12.0pt): 
  Make it at least 13.59999pt.
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[5]
+[10]
 
 ! Package inputenc Error: Unicode char \u8:‚\lst@ECÇ\lst@EC¨ not set up for use
  with LaTeX.
@@ -841,13 +1016,6 @@ Type  I <command> <return>  to replace it with another command,
 or  <return>  to continue without it.
 
 
-Package Fancyhdr Warning: \headheight is too small (12.0pt): 
- Make it at least 13.59999pt.
- We now make it that large for the rest of the document.
- This may cause the page layout to be inconsistent, however.
-
-[6]
-
 ! Package inputenc Error: Unicode char \u8:‚\lst@ECÇ\lst@EC¨ not set up for use
  with LaTeX.
 
@@ -861,29 +1029,559 @@ Your command was ignored.
 Type  I <command> <return>  to replace it with another command,
 or  <return>  to continue without it.
 
-)
+) (./file.h
 
 Package Fancyhdr Warning: \headheight is too small (12.0pt): 
  Make it at least 13.59999pt.
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[7] (./blackjack.aux) ) 
+[11]) (./list.c
+
+! Package inputenc Error: Unicode char \u8:√\lst@EC≥ not set up for use with La
+TeX.
+
+See the inputenc package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.7 ...er chato, adicionar complexidade ao c√≥digo
+                                                  
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+
+! Package inputenc Error: Unicode char \u8:√\lst@EC≠ not set up for use with La
+TeX.
+
+See the inputenc package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.8  * e/ou criar bugs dif√≠ceis 
+                                 de perceber se nos esquecermos de
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+
+! Package inputenc Error: Unicode char \u8:√\lst@EC≥ not set up for use with La
+TeX.
+
+See the inputenc package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.28 ...(stderr, "Erro: tentou-se aceder a um n√≥ 
+                                                  n√£o existente na lista.\n");
+
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+
+! Package inputenc Error: Unicode char \u8:√\lst@EC≥ not set up for use with La
+TeX.
+
+See the inputenc package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.38 ...(stderr, "Erro: tentou-se aceder a um n√≥ 
+                                                  n√£o existente na lista.\n");
+
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+
+Package Fancyhdr Warning: \headheight is too small (12.0pt): 
+ Make it at least 13.59999pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[12]) (./list.h
+
+Package Fancyhdr Warning: \headheight is too small (12.0pt): 
+ Make it at least 13.59999pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[13]) (./logic.c
+
+! Package inputenc Error: Unicode char \u8:√\lst@ECµ not set up for use with La
+TeX.
+
+See the inputenc package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.13 // Defini√ß√£o das opera√ß√µes 
+                                    v√°lidas nas pilhas de cartas
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+
+Package Fancyhdr Warning: \headheight is too small (12.0pt): 
+ Make it at least 13.59999pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[14]
+
+! Package inputenc Error: Unicode char \u8:√\lst@EC∫ not set up for use with La
+TeX.
+
+See the inputenc package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.89 	// random √© o n√∫mero 
+                             de n√≥s a seguir na lista, por isso,
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+
+! Package inputenc Error: Unicode char \u8:√\lst@EC≥ not set up for use with La
+TeX.
+
+See the inputenc package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.89 	// random √© o n√∫mero de n√≥s 
+                                     a seguir na lista, por isso,
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+
+! Package inputenc Error: Unicode char \u8:√\lst@EC∫ not set up for use with La
+TeX.
+
+See the inputenc package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.91 	// ou no m√°ximo o n√∫mero 
+                                 de n√≥s (se seguirmos *cards_left
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+
+! Package inputenc Error: Unicode char \u8:√\lst@EC≥ not set up for use with La
+TeX.
+
+See the inputenc package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.91 	// ou no m√°ximo o n√∫mero de n√≥s 
+                                         (se seguirmos *cards_left
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+
+! Package inputenc Error: Unicode char \u8:√\lst@EC≥ not set up for use with La
+TeX.
+
+See the inputenc package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.92 	// n√≥s 
+              a partir do dummy head node, chegamos √† tail)
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+
+! Package inputenc Error: Unicode char \u8:√\lst@EC† not set up for use with La
+TeX.
+
+See the inputenc package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.92 ... a partir do dummy head node, chegamos √† 
+                                                  tail)
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+
+Package Fancyhdr Warning: \headheight is too small (12.0pt): 
+ Make it at least 13.59999pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[15]
+
+! Package inputenc Error: Unicode char \u8:√\lst@EC≥ not set up for use with La
+TeX.
+
+See the inputenc package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.132 	// s√≥ 
+              fazer new_game quando j√° toda a gente jogou
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+
+! Package inputenc Error: Unicode char \u8:√\lst@EC≥ not set up for use with La
+TeX.
+
+See the inputenc package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.137     // s√≥ 
+                 fazer new_game quando houver jogadores para jogar
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+
+! Package inputenc Error: Unicode char \u8:√\lst@EC≠ not set up for use with La
+TeX.
+
+See the inputenc package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.143 ...antes de qualquer carta ser distribu√≠da 
+                                                  na nova ronda.
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+
+Package Fancyhdr Warning: \headheight is too small (12.0pt): 
+ Make it at least 13.59999pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[16]
+
+! Package inputenc Error: Unicode char \u8:√\lst@EC≥ not set up for use with La
+TeX.
+
+See the inputenc package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.224 	house->num_cards = 1; // desenhar s√≥ 
+                                             uma carta
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+
+Package Fancyhdr Warning: \headheight is too small (12.0pt): 
+ Make it at least 13.59999pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[17]
+
+Package Fancyhdr Warning: \headheight is too small (12.0pt): 
+ Make it at least 13.59999pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[18]
+
+Package Fancyhdr Warning: \headheight is too small (12.0pt): 
+ Make it at least 13.59999pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[19]
+
+! Package inputenc Error: Unicode char \u8:√\lst@EC≥ not set up for use with La
+TeX.
+
+See the inputenc package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.416 	// passar ao pr√≥ximo 
+                             jogador
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+
+! Package inputenc Error: Unicode char \u8:√\lst@EC≥ not set up for use with La
+TeX.
+
+See the inputenc package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.420 		// se este pr√≥ximo 
+                            jogador existir,
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+
+! Package inputenc Error: Unicode char \u8:√\lst@EC≥ not set up for use with La
+TeX.
+
+See the inputenc package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.421 		// procurar o pr√≥ximo 
+                               jogador v√°lido a seguir
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+
+! Package inputenc Error: Unicode char \u8:√\lst@EC≥ not set up for use with La
+TeX.
+
+See the inputenc package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.434 			// n√£o existe um pr√≥ximo 
+                                    jogador v√°lido para jogar
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+
+! Package inputenc Error: Unicode char \u8:√\lst@EC≥ not set up for use with La
+TeX.
+
+See the inputenc package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.439 		// se n√£o existir um pr√≥ximo 
+                                       jogador, fizemos stand do √∫ltimo jog...
+
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+
+! Package inputenc Error: Unicode char \u8:√\lst@EC∫ not set up for use with La
+TeX.
+
+See the inputenc package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.439 ...√≥ximo jogador, fizemos stand do √∫ltimo 
+                                                  jogador
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+
+Package Fancyhdr Warning: \headheight is too small (12.0pt): 
+ Make it at least 13.59999pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[20]
+
+Package Fancyhdr Warning: \headheight is too small (12.0pt): 
+ Make it at least 13.59999pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[21]
+
+Package Fancyhdr Warning: \headheight is too small (12.0pt): 
+ Make it at least 13.59999pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[22]) (./logic.h
+
+Package Fancyhdr Warning: \headheight is too small (12.0pt): 
+ Make it at least 13.59999pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[23]) (./main.c
+
+Package Fancyhdr Warning: \headheight is too small (12.0pt): 
+ Make it at least 13.59999pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[24]
+
+! Package inputenc Error: Unicode char \u8:√\lst@ECì not set up for use with La
+TeX.
+
+See the inputenc package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.25 // TODO: COMENTAR C√ìDIGO 
+                               COMO DEVE DE SER!
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+
+! Package inputenc Error: Unicode char \u8:√\lst@EC∫ not set up for use with La
+TeX.
+
+See the inputenc package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.42 		fprintf(stderr, "Erro: n√∫mero 
+                                      inv√°lido de argumentos.\n");
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+
+Package Fancyhdr Warning: \headheight is too small (12.0pt): 
+ Make it at least 13.59999pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[25]
+
+Package Fancyhdr Warning: \headheight is too small (12.0pt): 
+ Make it at least 13.59999pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[26]) (./sdl.c
+
+Package Fancyhdr Warning: \headheight is too small (12.0pt): 
+ Make it at least 13.59999pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[27]
+
+Package Fancyhdr Warning: \headheight is too small (12.0pt): 
+ Make it at least 13.59999pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[28]
+
+Package Fancyhdr Warning: \headheight is too small (12.0pt): 
+ Make it at least 13.59999pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[29]
+
+Package Fancyhdr Warning: \headheight is too small (12.0pt): 
+ Make it at least 13.59999pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[30]
+
+Package Fancyhdr Warning: \headheight is too small (12.0pt): 
+ Make it at least 13.59999pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[31]
+
+! Package inputenc Error: Unicode char \u8:√\lst@EC∫ not set up for use with La
+TeX.
+
+See the inputenc package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.278 			// agora aux_cards aponta para o √∫ltimo 
+                                                  elemento da stack
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+
+Package Fancyhdr Warning: \headheight is too small (12.0pt): 
+ Make it at least 13.59999pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[32]
+
+Package Fancyhdr Warning: \headheight is too small (12.0pt): 
+ Make it at least 13.59999pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[33]
+
+Package Fancyhdr Warning: \headheight is too small (12.0pt): 
+ Make it at least 13.59999pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[34]
+
+Package Fancyhdr Warning: \headheight is too small (12.0pt): 
+ Make it at least 13.59999pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[35]) (./sdl.h
+
+Package Fancyhdr Warning: \headheight is too small (12.0pt): 
+ Make it at least 13.59999pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[36]) (./types.h
+
+Package Fancyhdr Warning: \headheight is too small (12.0pt): 
+ Make it at least 13.59999pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[37])
+
+Package Fancyhdr Warning: \headheight is too small (12.0pt): 
+ Make it at least 13.59999pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[38] (./blackjack.aux) ) 
 Here is how much of TeX's memory you used:
- 8374 strings out of 495028
- 116104 string characters out of 6181497
- 266569 words of memory out of 5000000
- 11425 multiletter control sequences out of 15000+600000
- 4108 words of font info for 16 fonts, out of 8000000 for 9000
+ 9027 strings out of 495028
+ 124926 string characters out of 6181497
+ 302660 words of memory out of 5000000
+ 12041 multiletter control sequences out of 15000+600000
+ 4407 words of font info for 17 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 42i,13n,72p,813b,1830s stack positions out of 5000i,500n,10000p,200000b,80000s
-</usr/share/texlive/texmf-dist/fonts/type1/public/amsfon
-ts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/c
-mtt10.pfb>
-Output written on blackjack.pdf (7 pages, 47428 bytes).
+ 42i,18n,72p,813b,1797s stack positions out of 5000i,500n,10000p,200000b,80000s
+</usr/share/texlive/texmf-dist/fonts/type1/public/amsfo
+nts/cm/cmbx12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm
+/cmcsc10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr1
+0.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb><
+/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt8.pfb>
+Output written on blackjack.pdf (38 pages, 157495 bytes).
 PDF statistics:
- 36 PDF objects out of 1000 (max. 8388607)
- 24 compressed objects within 1 object stream
+ 196 PDF objects out of 1000 (max. 8388607)
+ 118 compressed objects within 2 object streams
  0 named destinations out of 1000 (max. 500000)
- 1 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 21 words of extra memory for PDF output out of 10000 (max. 10000000)
 

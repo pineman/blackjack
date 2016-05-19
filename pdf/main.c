@@ -1,7 +1,7 @@
 /* Projecto de Programação
  * Implementação em C do jogo de casino Blackjack
  * Autores: 
- * João Pinheiro: joao.castro.pinheiro@tecnico.ulisboa.pt
+ * João Pinheiro:
  * João Freitas: joao.m.freitas@tecnico.ulisboa.pt 
  */
 
