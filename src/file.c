@@ -1,4 +1,10 @@
-// Leitura e escrita de ficheiros
+/*
+ * Leitura e escrita de ficheiros
+ * Lê o ficheiro de configuração dos jogadores
+ * Escreve o ficheiro de estatisticas
+ * Lê a os parametros de um jogador quando é necessario inserir um jogador
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -7,7 +13,7 @@
 #include "logic.h"
 #include "error.h"
 
-/* Lê um ficheiros de configuração
+/* Lê o ficheiro de configuração dos jogadores
  * Numero de baralhos e jogadores
  */
 Config *read_config(char *filename)
@@ -42,7 +48,8 @@ Config *read_config(char *filename)
 	return config;
 }
 
-/*  Leitura dos parametros de configuração de cada jogador
+/*  
+ *  Leitura dos parametros de configuração de cada jogador
  *  Recebe uma string e separa os parametros de configuração com strtok
  */
 Config *read_player(char *line, Config *config, int count)
@@ -84,10 +91,11 @@ Config *read_player(char *line, Config *config, int count)
 	return config;
 }
 
-// Vai buscar uma linha a stdin.
-// Modifica o buffer por referência.
-// O buffer fica vazio se o fgets() der overflow ou se a input for vazia.
-// Senão, o buffer fica com a string de input, sem o \n.
+/* Vai buscar uma linha a stdin.
+ * Modifica o buffer por referência.
+ * O buffer fica vazio se o fgets() der overflow ou se a input for vazia.
+ * Senão, o buffer fica com a string de input, sem o \n.
+ */
 void get_line(char buffer[MAX_PLAYER_NAME+2])
 {
 	int newline = 0;
@@ -166,6 +174,12 @@ void get_new_bet(List *players)
 	cur_player->bet = (int) new_bet;
 }
 
+
+
+/* 
+ * Obter o valor do dinheiro, tipo, nome e aposta do jogador
+ * Pede ate obter um valor correto
+ */
 Player *get_new_player(int pos)
 {
 	char buffer[MAX_PLAYER_NAME+2] = {0};
@@ -179,8 +193,8 @@ Player *get_new_player(int pos)
 	Player *new_player = NULL;
 
 	printf("Escolheu o %dº lugar.\n", pos);
-
-	correct = false;
+    
+    correct = false;
 	do {
 		printf("Introduza o tipo do jogador [HU ou EA]: ");
 		get_line(buffer);
@@ -225,13 +239,14 @@ Player *get_new_player(int pos)
 		else {
 			money_tmp = strtol(buffer, NULL, 10);
 			if (money_tmp <= 1 || money_tmp > INT_MAX)
-				printf("Dinheiro inválido [de 1 a %d].\n", INT_MAX);
+				printf("Quantidade de dinheiro inválida [de 1 a %d].\n", INT_MAX);
 			else {
 				correct = true;
 				money = (int) money_tmp;
 			}
 		}
 	} while (!correct);
+
 
 	correct = false;
 	do {
@@ -251,6 +266,7 @@ Player *get_new_player(int pos)
 		}
 	} while (!correct);
 
+    // Alocar espaço para o jogador e escrever a configuração
 	new_player = (Player *) ecalloc((size_t) 1, sizeof(Player));
 
 	new_player->ingame = true;
@@ -274,6 +290,8 @@ void write_stats(List *players, Player *house, List *old_players)
 	write_stats_players(stats, players);
 	write_stats_players(stats, old_players);
 
+    // O dinheiro da casa esta em modulo. E indicado se a casa perdeu ou ganhou
+    // dinheiro
 	if (house->money < 0)
 		fprintf(stats, "A casa perdeu: %d €\n", -1*house->money);
 	else if (house->money > 0)
@@ -284,6 +302,7 @@ void write_stats(List *players, Player *house, List *old_players)
 	fclose(stats);
 }
 
+//  Escrever as estatisticas dos jogadores
 void write_stats_players(FILE *stats, List *players)
 {
 	List *aux = players->next;

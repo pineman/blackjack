@@ -16,8 +16,8 @@
  *	H - hit
  *	S - stand
  *	R - surrender
- *	D - double senão stand
- *	E - double senão hit
+ *	D - double senão hit
+ *	E - double senão stand
  */
 
 void write_matrix(Move ***matrix, FILE *file, int lines)
@@ -47,6 +47,8 @@ void destroy_matrix(Move **matrix, int lines)
 	free(matrix);
 }
 
+
+// Ler a estrategia do ficheiro de configuração
 Strategy *read_strategy(char *filename)
 {
 	char check[2] = {0}; // \n e \0
@@ -59,7 +61,7 @@ Strategy *read_strategy(char *filename)
 
     write_matrix(&strategy->hard, config_file, HARD_LINES);
 
-    // Verificar \n de separação
+    // Verificar \n de separação das matrizes
     fgets(check, 2, config_file);
     if (check[0] != '\n') {
 		fprintf(stderr, "Erro: Ficheiro de estratégia das EAs mal formatado.\n");
@@ -73,17 +75,25 @@ Strategy *read_strategy(char *filename)
     return strategy;
 }
 
+/*
+ * Decide que matriz utilizar: hard ou soft
+ * Calcula a coluna e linha da matriz
+ * Retorna a decisão a tomar
+ */
 Move get_decision(Player *player, Card *house_card, Strategy *strategy)
 {
     bool ace = false;
     int line = 0, column = 0;
     Stack *aux = player->cards;
+    
+    //Verificar se a ases
     while(aux) {
         if (aux->card->id == 12)
             ace = true;
         aux = aux->next;
     }
 
+    // Calcular a coluna da matriz
     if (house_card->id > 0 && house_card->id < 8)
         column = house_card->id;
     else if (house_card->id >=8 && house_card->id < 12)
@@ -91,8 +101,9 @@ Move get_decision(Player *player, Card *house_card, Strategy *strategy)
     else if (house_card->id == 12)
         column = 9;
 
+    // Calcular a linha da matriz soft
     if (ace) {
-		// Escolheu-se que dois ases correspondem à primeira linha da matriz soft
+		// Dois ases correspondem à primeira linha da matriz soft
 		if (player->points == 12)
 			line = 0;
         else if (player->points > 12 && player->points < 19)
@@ -102,6 +113,7 @@ Move get_decision(Player *player, Card *house_card, Strategy *strategy)
 
         return strategy->soft[line][column];
     }
+    // Calcular a coluna da matriz hard
     else {
         if (player->points >= 4 && player->points <= 8)
             line = 0;
