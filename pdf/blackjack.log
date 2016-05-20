@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2016.4.27)  20 MAY 2016 00:01
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=latex 2016.4.27)  20 MAY 2016 17:20
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -249,7 +249,7 @@ Package: keyval 1999/03/16 v1.13 key=value parser (DPC)
 )
 (/usr/share/texlive/texmf-dist/tex/generic/oberdiek/ifpdf.sty
 Package: ifpdf 2011/01/30 v2.3 Provides the ifpdf switch (HO)
-Package ifpdf Info: pdfTeX in PDF mode is detected.
+Package ifpdf Info: pdfTeX in PDF mode is not detected.
 )
 (/usr/share/texlive/texmf-dist/tex/generic/oberdiek/ifvtex.sty
 Package: ifvtex 2010/03/01 v1.5 Detect VTeX and its facilities (HO)
@@ -283,18 +283,10 @@ Package: trig 1999/03/16 v1.09 sin cos tan (DPC)
 (/usr/share/texlive/texmf-dist/tex/latex/latexconfig/graphics.cfg
 File: graphics.cfg 2010/04/23 v1.9 graphics configuration of TeX Live
 )
-Package graphics Info: Driver file: pdftex.def on input line 91.
+Package graphics Info: Driver file: dvips.def on input line 91.
 
-(/usr/share/texlive/texmf-dist/tex/latex/pdftex-def/pdftex.def
-File: pdftex.def 2011/05/27 v0.06d Graphics/color for pdfTeX
-
-(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/infwarerr.sty
-Package: infwarerr 2010/04/08 v1.3 Providing info/warning/error messages (HO)
-)
-(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/ltxcmds.sty
-Package: ltxcmds 2011/11/09 v1.22 LaTeX kernel commands for general use (HO)
-)
-\Gread@gobject=\count90
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/dvips.def
+File: dvips.def 1999/02/16 v3.0i Driver-dependant file (DPC,SPQR)
 ))
 \Gin@req@height=\dimen111
 \Gin@req@width=\dimen112
@@ -308,12 +300,18 @@ Package: epstopdf 2010/02/09 v2.5 Conversion with epstopdf on the fly (HO)
 (/usr/share/texlive/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
 Package: epstopdf-base 2010/02/09 v2.5 Base part for package epstopdf
 
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/infwarerr.sty
+Package: infwarerr 2010/04/08 v1.3 Providing info/warning/error messages (HO)
+)
 (/usr/share/texlive/texmf-dist/tex/latex/oberdiek/grfext.sty
 Package: grfext 2010/08/19 v1.1 Manage graphics extensions (HO)
 
 (/usr/share/texlive/texmf-dist/tex/generic/oberdiek/kvdefinekeys.sty
 Package: kvdefinekeys 2011/04/07 v1.3 Define keys (HO)
-))
+
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/ltxcmds.sty
+Package: ltxcmds 2011/11/09 v1.22 LaTeX kernel commands for general use (HO)
+)))
 (/usr/share/texlive/texmf-dist/tex/latex/oberdiek/kvoptions.sty
 Package: kvoptions 2011/06/30 v3.11 Key value format for package options (HO)
 
@@ -338,20 +336,14 @@ Package: pdftexcmds 2011/11/29 v0.20 Utility functions of pdfTeX for LuaTeX (HO
 Package pdftexcmds Info: LuaTeX not detected.
 Package pdftexcmds Info: \pdf@primitive is available.
 Package pdftexcmds Info: \pdf@ifprimitive is available.
-Package pdftexcmds Info: \pdfdraftmode found.
+Package pdftexcmds Info: \pdfdraftmode is ignored in DVI mode.
 )
-Package grfext Info: Graphics extension search list:
-(grfext)             [.png,.pdf,.jpg,.mps,.jpeg,.jbig2,.jb2,.PNG,.PDF,.JPG,.JPE
-G,.JBIG2,.JB2,.eps]
-(grfext)             \AppendGraphicsExtensions on input line 452.
 
-(/usr/share/texlive/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
-File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
-e
-)))
-(/usr/share/texlive/texmf-dist/tex/latex/float/float.sty
+Package epstopdf Warning: Drivers other than `pdftex.def' are not supported.
+
+)) (/usr/share/texlive/texmf-dist/tex/latex/float/float.sty
 Package: float 2001/11/08 v1.3d Float enhancements (AL)
-\c@float@type=\count91
+\c@float@type=\count90
 \float@exts=\toks18
 \float@box=\box26
 \@float@everytoks=\toks19
@@ -363,16 +355,16 @@ Package: longtable 2004/02/01 v4.11 Multi-page Table package (DPC)
 \LTright=\skip44
 \LTpre=\skip45
 \LTpost=\skip46
-\LTchunksize=\count92
+\LTchunksize=\count91
 \LTcapwidth=\dimen113
 \LT@head=\box28
 \LT@firsthead=\box29
 \LT@foot=\box30
 \LT@lastfoot=\box31
-\LT@cols=\count93
-\LT@rows=\count94
-\c@LT@tables=\count95
-\c@LT@chunks=\count96
+\LT@cols=\count92
+\LT@rows=\count93
+\c@LT@tables=\count94
+\c@LT@chunks=\count95
 \LT@p@ftn=\toks20
 )
 (/usr/share/texlive/texmf-dist/tex/latex/multirow/multirow.sty
@@ -387,7 +379,7 @@ Package: xkeyval 2012/10/14 v2.6b package option processing (HA)
 (/usr/share/texlive/texmf-dist/tex/generic/xkeyval/xkeyval.tex
 \XKV@toks=\toks21
 \XKV@tempa@toks=\toks22
-\XKV@depth=\count97
+\XKV@depth=\count96
 File: xkeyval.tex 2012/10/14 v2.6b key=value parser (HA)
 ))
 (/usr/share/texlive/texmf-dist/tex/latex/adjustbox/adjcalc.sty
@@ -405,10 +397,10 @@ Package: collectbox 2012/05/17 v0.4b Collect macro arguments as boxes
 \tc@lly=\dimen116
 \tc@urx=\dimen117
 \tc@ury=\dimen118
-Package trimclip Info: Using driver 'tc-pdftex.def'.
+Package trimclip Info: Using driver 'tc-dvips.def'.
 
-(/usr/share/texlive/texmf-dist/tex/latex/adjustbox/tc-pdftex.def
-File: tc-pdftex.def 2012/05/13 v1.0 Clipping driver for pdftex
+(/usr/share/texlive/texmf-dist/tex/latex/adjustbox/tc-dvips.def
+File: tc-dvips.def 2012/05/13 v1.0 Clipping driver for dvips
 ))
 \adjbox@Width=\dimen119
 \adjbox@Height=\dimen120
@@ -417,12 +409,12 @@ File: tc-pdftex.def 2012/05/13 v1.0 Clipping driver for pdftex
 
 (/usr/share/texlive/texmf-dist/tex/latex/ifoddpage/ifoddpage.sty
 Package: ifoddpage 2011/09/13 v1.0 Conditionals for odd/even page detection
-\c@checkoddpage=\count98
+\c@checkoddpage=\count97
 )
 (/usr/share/texlive/texmf-dist/tex/latex/varwidth/varwidth.sty
 Package: varwidth 2009/03/30 ver 0.92;  Variable-width minipages
 \@vwid@box=\box33
-\sift@deathcycles=\count99
+\sift@deathcycles=\count98
 \@vwid@loff=\dimen123
 \@vwid@roff=\dimen124
 ))
@@ -432,15 +424,15 @@ ng of objects, relative to a reference object or in absolute terms
 
 (/usr/share/texlive/texmf-dist/tex/latex/tools/calc.sty
 Package: calc 2007/08/22 v4.3 Infix arithmetic (KKT,FJ)
-\calc@Acount=\count100
-\calc@Bcount=\count101
+\calc@Acount=\count99
+\calc@Bcount=\count100
 \calc@Adimen=\dimen125
 \calc@Bdimen=\dimen126
 \calc@Askip=\skip47
 \calc@Bskip=\skip48
 LaTeX Info: Redefining \setlength on input line 76.
 LaTeX Info: Redefining \addtolength on input line 77.
-\calc@Ccount=\count102
+\calc@Ccount=\count101
 \calc@Cskip=\skip49
 )
 (/usr/share/texlive/texmf-dist/tex/latex/base/ifthen.sty
@@ -479,13 +471,13 @@ Package: amsbsy 1999/11/29 v1.2d
 (/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsopn.sty
 Package: amsopn 1999/12/14 v2.01 operator names
 )
-\inf@bad=\count103
+\inf@bad=\count102
 LaTeX Info: Redefining \frac on input line 210.
-\uproot@=\count104
-\leftroot@=\count105
+\uproot@=\count103
+\leftroot@=\count104
 LaTeX Info: Redefining \overline on input line 306.
-\classnum@=\count106
-\DOTSCASE@=\count107
+\classnum@=\count105
+\DOTSCASE@=\count106
 LaTeX Info: Redefining \ldots on input line 378.
 LaTeX Info: Redefining \dots on input line 381.
 LaTeX Info: Redefining \cdots on input line 466.
@@ -494,15 +486,15 @@ LaTeX Info: Redefining \cdots on input line 466.
 \big@size=\dimen129
 LaTeX Font Info:    Redeclaring font encoding OML on input line 566.
 LaTeX Font Info:    Redeclaring font encoding OMS on input line 567.
-\macc@depth=\count108
-\c@MaxMatrixCols=\count109
+\macc@depth=\count107
+\c@MaxMatrixCols=\count108
 \dotsspace@=\muskip10
-\c@parentequation=\count110
-\dspbrk@lvl=\count111
+\c@parentequation=\count109
+\dspbrk@lvl=\count110
 \tag@help=\toks24
-\row@=\count112
-\column@=\count113
-\maxfields@=\count114
+\row@=\count111
+\column@=\count112
+\maxfields@=\count113
 \andhelp@=\toks25
 \eqnshift@=\dimen130
 \alignsep@=\dimen131
@@ -519,7 +511,7 @@ LaTeX Info: Redefining \] on input line 2666.
 )
 LaTeX Info: Thecontrolsequence`\['isalreadyrobust on input line 129.
 LaTeX Info: Thecontrolsequence`\]'isalreadyrobust on input line 129.
-\g_MT_multlinerow_int=\count115
+\g_MT_multlinerow_int=\count114
 \l_MT_multwidth_dim=\dimen136
 \origjot=\skip58
 \l_MT_shortvdotswithinadjustabove_dim=\dimen137
@@ -538,11 +530,11 @@ Package: etoolbox 2011/01/03 v2.1 e-TeX tools for LaTeX
 
 (/usr/share/texlive/texmf-dist/tex/latex/etex-pkg/etex.sty
 Package: etex 1998/03/26 v2.0 eTeX basic definition package (PEB)
-\et@xins=\count116
+\et@xins=\count115
 )
-\etb@tempcnta=\count117
+\etb@tempcnta=\count116
 )
-\c@@stackindex=\count118
+\c@@stackindex=\count117
 \@boxshift=\skip59
 \stack@tmplength=\skip60
 \temp@stkl=\skip61
@@ -551,38 +543,38 @@ Package: etex 1998/03/26 v2.0 eTeX basic definition package (PEB)
 \@anchorbox=\box38
 \stackedbox=\box39
 \@centerbox=\box40
-\c@ROWcellindex@=\count119
+\c@ROWcellindex@=\count118
 )
 (/usr/share/texlive/texmf-dist/tex/latex/fancyvrb/fancyvrb.sty
 Package: fancyvrb 2008/02/07
 
 Style option: `fancyvrb' v2.7a, with DG/SPQR fixes, and firstline=lastline fix 
 <2008/02/07> (tvz)
-\FV@CodeLineNo=\count120
+\FV@CodeLineNo=\count119
 \FV@InFile=\read1
 \FV@TabBox=\box41
-\c@FancyVerbLine=\count121
-\FV@StepNumber=\count122
+\c@FancyVerbLine=\count120
+\FV@StepNumber=\count121
 \FV@OutFile=\write3
 )
 (/usr/share/texlive/texmf-dist/tex/latex/listings/listings.sty
-\lst@mode=\count123
+\lst@mode=\count122
 \lst@gtempboxa=\box42
 \lst@token=\toks28
-\lst@length=\count124
+\lst@length=\count123
 \lst@currlwidth=\dimen143
-\lst@column=\count125
-\lst@pos=\count126
+\lst@column=\count124
+\lst@pos=\count125
 \lst@lostspace=\dimen144
 \lst@width=\dimen145
-\lst@newlines=\count127
-\lst@lineno=\count128
+\lst@newlines=\count126
+\lst@lineno=\count127
 \lst@maxwidth=\dimen146
 
 (/usr/share/texlive/texmf-dist/tex/latex/listings/lstmisc.sty
 File: lstmisc.sty 2013/08/26 1.5b (Carsten Heinz)
-\c@lstnumber=\count129
-\lst@skipnumbers=\count130
+\c@lstnumber=\count128
+\lst@skipnumbers=\count129
 \lst@framebox=\box43
 )
 (/usr/share/texlive/texmf-dist/tex/latex/listings/listings.cfg
@@ -596,8 +588,11 @@ Package: color 2005/11/14 v1.0j Standard LaTeX Color (DPC)
 (/usr/share/texlive/texmf-dist/tex/latex/latexconfig/color.cfg
 File: color.cfg 2007/01/18 v1.5 color configuration of teTeX/TeXLive
 )
-Package color Info: Driver file: pdftex.def on input line 130.
-)
+Package color Info: Driver file: dvips.def on input line 130.
+
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/dvipsnam.def
+File: dvipsnam.def 1999/02/16 v3.0i Driver-dependant file (DPC,SPQR)
+))
 (/usr/share/texlive/texmf-dist/tex/latex/pdfpages/pdfpages.sty
 Package: pdfpages 2013/08/25 v0.4v Insert pages of external PDF documents (AM)
 
@@ -609,19 +604,27 @@ Package: atbegshi 2011/10/05 v1.16 At begin shipout hook (HO)
 ))
 (/usr/share/texlive/texmf-dist/tex/latex/pdfpages/pppdftex.def
 File: pppdftex.def 2013/08/25 v0.4v Pdfpages driver for pdfTeX (AM)
-)
+
+(/usr/share/texlive/texmf-dist/tex/latex/pdfpages/ppnull.def
+File: ppnull.def 2013/08/25 v0.4v Pdfpages dummy driver (AM)
+
+
+Package pdfpages Warning: I will use a dummy \includepdf command
+(pdfpages)                which will NOT insert any pages, because
+(pdfpages)                you are producing DVI output.
+
+))
 \AM@pagebox=\box44
 \AM@toc@title=\toks29
-\c@AM@survey=\count131
+\c@AM@survey=\count130
 \AM@templatesizebox=\box45
-)
-(/usr/share/texmf/tex/latex/xcolor/xcolor.sty
+) (/usr/share/texmf/tex/latex/xcolor/xcolor.sty
 Package: xcolor 2007/01/21 v2.11 LaTeX color extensions (UK)
 
 (/usr/share/texlive/texmf-dist/tex/latex/latexconfig/color.cfg
 File: color.cfg 2007/01/18 v1.5 color configuration of teTeX/TeXLive
 )
-Package xcolor Info: Driver file: pdftex.def on input line 225.
+Package xcolor Info: Driver file: dvips.def on input line 225.
 
 (/usr/share/texlive/texmf-dist/tex/latex/colortbl/colortbl.sty
 Package: colortbl 2012/02/13 v1.0a Color table columns (DPC)
@@ -638,9 +641,8 @@ Package: array 2008/09/09 v2.4c Tabular extension package (FMi)
 \minrowclearance=\skip65
 )
 LaTeX Info: Redefining \color on input line 702.
-\rownum=\count132
+\rownum=\count131
 Package xcolor Info: Model `cmy' substituted by `cmy0' on input line 1337.
-Package xcolor Info: Model `hsb' substituted by `rgb' on input line 1341.
 Package xcolor Info: Model `RGB' extended on input line 1353.
 Package xcolor Info: Model `HTML' substituted by `rgb' on input line 1355.
 Package xcolor Info: Model `Hsb' substituted by `hsb' on input line 1356.
@@ -683,9 +685,9 @@ LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 65.
 LaTeX Font Info:    ... okay on input line 65.
 
 *geometry* driver: auto-detecting
-*geometry* detected driver: pdftex
+*geometry* detected driver: dvips
 *geometry* verbose mode - [ preamble ] result:
-* driver: pdftex
+* driver: dvips
 * paper: <default>
 * layout: <same size as paper>
 * layoutoffset:(h,v)=(0.0pt,0.0pt)
@@ -716,872 +718,119 @@ LaTeX Font Info:    ... okay on input line 65.
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-(/usr/share/texlive/texmf-dist/tex/context/base/supp-pdf.mkii
-[Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count133
-\scratchdimen=\dimen149
-\scratchbox=\box46
-\nofMPsegments=\count134
-\nofMParguments=\count135
-\everyMPshowfont=\toks32
-\MPscratchCnt=\count136
-\MPscratchDim=\dimen150
-\MPnumerator=\count137
-\makeMPintoPDFobject=\count138
-\everyMPtoPDFconversion=\toks33
-)
-\c@lstlisting=\count139
-\AtBeginShipoutBox=\box47
- <Capa/capa.pdf, id=1, 614.295pt x 794.97pt>
-File: Capa/capa.pdf Graphic file (type pdf)
- <use Capa/capa.pdf>
-Package pdftex.def Info: Capa/capa.pdf used on input line 66.
-(pdftex.def)             Requested size: 614.29349pt x 794.96806pt.
-File: Capa/capa.pdf Graphic file (type pdf)
+\c@lstlisting=\count132
+\AtBeginShipoutBox=\box46
 
-<use Capa/capa.pdf>
-Package pdftex.def Info: Capa/capa.pdf used on input line 66.
-(pdftex.def)             Requested size: 614.29349pt x 794.96806pt.
- <Capa/capa.pdf, id=4, page=1, 614.295pt x 794.97pt>
-File: Capa/capa.pdf Graphic file (type pdf)
+Package pdfpages Warning: I cannot determine the number of pages of the
+(pdfpages)                included document, while being in DVI mode. You
+(pdfpages)                can use the option `lastpage' to give me a hint.
 
-<use Capa/capa.pdf, page 1>
-Package pdftex.def Info: Capa/capa.pdf, page1 used on input line 66.
-(pdftex.def)             Requested size: 614.29349pt x 794.96806pt.
-File: Capa/capa.pdf Graphic file (type pdf)
- <use Capa/capa.pdf, page 1>
-Package pdftex.def Info: Capa/capa.pdf, page1 used on input line 66.
-(pdftex.def)             Requested size: 614.58406pt x 795.3441pt.
-File: Capa/capa.pdf Graphic file (type pdf)
+[1
 
-<use Capa/capa.pdf, page 1>
-Package pdftex.def Info: Capa/capa.pdf, page1 used on input line 66.
-(pdftex.def)             Requested size: 614.58406pt x 795.3441pt.
-File: Capa/capa.pdf Graphic file (type pdf)
- <use Capa/capa.pdf, page 1>
-Package pdftex.def Info: Capa/capa.pdf, page1 used on input line 66.
-(pdftex.def)             Requested size: 614.58406pt x 795.3441pt.
-File: Capa/capa.pdf Graphic file (type pdf)
+]
 
-<use Capa/capa.pdf, page 1>
-Package pdftex.def Info: Capa/capa.pdf, page1 used on input line 66.
-(pdftex.def)             Requested size: 614.58406pt x 795.3441pt.
- [1
-
- <./Capa/capa.pdf{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}>] (./ea.c
-
-! Package inputenc Error: Unicode char \u8:√\lst@ECµ not set up for use with La
-TeX.
-
-See the inputenc package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.1 ...lizado neste projecto segue as instru√ß√µes
-                                                  
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
-
-
-! Package inputenc Error: Unicode char \u8:√\lst@ECµ not set up for use with La
-TeX.
-
-See the inputenc package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.16 ... com 10 caracteres cada para as decis√µes 
-                                                  Hard
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
-
-
-! Package inputenc Error: Unicode char \u8:√\lst@ECµ not set up for use with La
-TeX.
-
-See the inputenc package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.18 ... com 10 caracteres cada para as decis√µes 
-                                                  Soft
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
-
-
-! Package inputenc Error: Unicode char \u8:√\lst@EC≥ not set up for use with La
-TeX.
-
-See the inputenc package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.34 		// Se o caracter exatamente ap√≥s 
-                                         COLUMNS colunas da linha n√£o for \n,
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
-
-
-Package Fancyhdr Warning: \headheight is too small (12.0pt): 
- Make it at least 13.59999pt.
- We now make it that large for the rest of the document.
- This may cause the page layout to be inconsistent, however.
+Package pdfpages Warning: I cannot determine the number of pages of the
+(pdfpages)                included document, while being in DVI mode. You
+(pdfpages)                can use the option `lastpage' to give me a hint.
 
 [2]
 
-! Package inputenc Error: Unicode char \u8:√\lst@EC† not set up for use with La
-TeX.
-
-See the inputenc package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.110 		// Dois ases correspondem √† 
-                                     primeira linha da matriz soft
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
-
-
-Package Fancyhdr Warning: \headheight is too small (12.0pt): 
- Make it at least 13.59999pt.
- We now make it that large for the rest of the document.
- This may cause the page layout to be inconsistent, however.
+Package pdfpages Warning: I cannot determine the number of pages of the
+(pdfpages)                included document, while being in DVI mode. You
+(pdfpages)                can use the option `lastpage' to give me a hint.
 
 [3]
 
-Package Fancyhdr Warning: \headheight is too small (12.0pt): 
- Make it at least 13.59999pt.
- We now make it that large for the rest of the document.
- This may cause the page layout to be inconsistent, however.
+Package pdfpages Warning: I cannot determine the number of pages of the
+(pdfpages)                included document, while being in DVI mode. You
+(pdfpages)                can use the option `lastpage' to give me a hint.
 
-[4]) (./ea.h
+[4]
 
-Package Fancyhdr Warning: \headheight is too small (12.0pt): 
- Make it at least 13.59999pt.
- We now make it that large for the rest of the document.
- This may cause the page layout to be inconsistent, however.
+Package pdfpages Warning: I cannot determine the number of pages of the
+(pdfpages)                included document, while being in DVI mode. You
+(pdfpages)                can use the option `lastpage' to give me a hint.
 
-[5]) (./error.c
+[5]
 
-! Package inputenc Error: Unicode char \u8:√\lst@EC≠ not set up for use with La
-TeX.
-
-See the inputenc package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.9 		fprintf(stderr, "Erro: Imposs√≠vel 
-                                         alocar mem√≥ria.\n");
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
-
-
-! Package inputenc Error: Unicode char \u8:√\lst@EC≥ not set up for use with La
-TeX.
-
-See the inputenc package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.9 ...stderr, "Erro: Imposs√≠vel alocar mem√≥ria.
-                                                  \n");
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
-
-
-! Package inputenc Error: Unicode char \u8:√\lst@EC≠ not set up for use with La
-TeX.
-
-See the inputenc package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.21 		fprintf(stderr, "Erro: Imposs√≠vel 
-                                          abrir ficheiro %s.\n", path);
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
-
-) (./error.h) (./file.c
-
-Package Fancyhdr Warning: \headheight is too small (12.0pt): 
- Make it at least 13.59999pt.
- We now make it that large for the rest of the document.
- This may cause the page layout to be inconsistent, however.
+Package pdfpages Warning: I cannot determine the number of pages of the
+(pdfpages)                included document, while being in DVI mode. You
+(pdfpages)                can use the option `lastpage' to give me a hint.
 
 [6]
 
-! Package inputenc Error: Unicode char \u8:√\lst@EC∫ not set up for use with La
-TeX.
-
-See the inputenc package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.34 		fprintf(stderr, "Erro: n√∫mero 
-                                      de baralhos invalido.\n");
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
-
-
-! Package inputenc Error: Unicode char \u8:√\lst@EC∫ not set up for use with La
-TeX.
-
-See the inputenc package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.39 		fprintf(stderr, "Erro: n√∫mero 
-                                      de jogadores invalido.\n");
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
-
-
-Package Fancyhdr Warning: \headheight is too small (12.0pt): 
- Make it at least 13.59999pt.
- We now make it that large for the rest of the document.
- This may cause the page layout to be inconsistent, however.
+Package pdfpages Warning: I cannot determine the number of pages of the
+(pdfpages)                included document, while being in DVI mode. You
+(pdfpages)                can use the option `lastpage' to give me a hint.
 
 [7]
 
-Package Fancyhdr Warning: \headheight is too small (12.0pt): 
- Make it at least 13.59999pt.
- We now make it that large for the rest of the document.
- This may cause the page layout to be inconsistent, however.
+Package pdfpages Warning: I cannot determine the number of pages of the
+(pdfpages)                included document, while being in DVI mode. You
+(pdfpages)                can use the option `lastpage' to give me a hint.
 
 [8]
 
-! Package inputenc Error: Unicode char \u8:¬\lst@EC∫ not set up for use with La
-TeX.
-
-See the inputenc package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.195 	printf("Escolheu o %d¬∫ 
-                               lugar.\n", pos);
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
-
-
-Package Fancyhdr Warning: \headheight is too small (12.0pt): 
- Make it at least 13.59999pt.
- We now make it that large for the rest of the document.
- This may cause the page layout to be inconsistent, however.
+Package pdfpages Warning: I cannot determine the number of pages of the
+(pdfpages)                included document, while being in DVI mode. You
+(pdfpages)                can use the option `lastpage' to give me a hint.
 
 [9]
 
-Package Fancyhdr Warning: \headheight is too small (12.0pt): 
- Make it at least 13.59999pt.
- We now make it that large for the rest of the document.
- This may cause the page layout to be inconsistent, however.
+Package pdfpages Warning: I cannot determine the number of pages of the
+(pdfpages)                included document, while being in DVI mode. You
+(pdfpages)                can use the option `lastpage' to give me a hint.
 
 [10]
 
-! Package inputenc Error: Unicode char \u8:‚\lst@ECÇ\lst@EC¨ not set up for use
- with LaTeX.
+Package pdfpages Warning: I cannot determine the number of pages of the
+(pdfpages)                included document, while being in DVI mode. You
+(pdfpages)                can use the option `lastpage' to give me a hint.
 
-See the inputenc package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.296 		fprintf(stats, "A casa perdeu: %d ‚Ç¨\n
-                                               ", -1*house->money);
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
+[11]
 
+Package pdfpages Warning: I cannot determine the number of pages of the
+(pdfpages)                included document, while being in DVI mode. You
+(pdfpages)                can use the option `lastpage' to give me a hint.
 
-! Package inputenc Error: Unicode char \u8:‚\lst@ECÇ\lst@EC¨ not set up for use
- with LaTeX.
+[12]
 
-See the inputenc package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.298 		fprintf(stats, "A casa ganhou: %d ‚Ç¨\n
-                                               ", house->money);
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
+Package pdfpages Warning: I cannot determine the number of pages of the
+(pdfpages)                included document, while being in DVI mode. You
+(pdfpages)                can use the option `lastpage' to give me a hint.
 
+[13]
 
-! Package inputenc Error: Unicode char \u8:‚\lst@ECÇ\lst@EC¨ not set up for use
- with LaTeX.
-
-See the inputenc package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.327         fprintf(stats, "%d ‚Ç¨\n
-                                      ", cur_player->money);
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
-
-) (./file.h
-
-Package Fancyhdr Warning: \headheight is too small (12.0pt): 
- Make it at least 13.59999pt.
- We now make it that large for the rest of the document.
- This may cause the page layout to be inconsistent, however.
-
-[11]) (./list.c
-
-! Package inputenc Error: Unicode char \u8:√\lst@EC≥ not set up for use with La
-TeX.
-
-See the inputenc package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.7 ...er chato, adicionar complexidade ao c√≥digo
-                                                  
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
-
-
-! Package inputenc Error: Unicode char \u8:√\lst@EC≠ not set up for use with La
-TeX.
-
-See the inputenc package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.8  * e/ou criar bugs dif√≠ceis 
-                                 de perceber se nos esquecermos de
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
-
-
-! Package inputenc Error: Unicode char \u8:√\lst@EC≥ not set up for use with La
-TeX.
-
-See the inputenc package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.28 ...(stderr, "Erro: tentou-se aceder a um n√≥ 
-                                                  n√£o existente na lista.\n");
-
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
-
-
-! Package inputenc Error: Unicode char \u8:√\lst@EC≥ not set up for use with La
-TeX.
-
-See the inputenc package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.38 ...(stderr, "Erro: tentou-se aceder a um n√≥ 
-                                                  n√£o existente na lista.\n");
-
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
-
-
-Package Fancyhdr Warning: \headheight is too small (12.0pt): 
- Make it at least 13.59999pt.
- We now make it that large for the rest of the document.
- This may cause the page layout to be inconsistent, however.
-
-[12]) (./list.h
-
-Package Fancyhdr Warning: \headheight is too small (12.0pt): 
- Make it at least 13.59999pt.
- We now make it that large for the rest of the document.
- This may cause the page layout to be inconsistent, however.
-
-[13]) (./logic.c
-
-! Package inputenc Error: Unicode char \u8:√\lst@ECµ not set up for use with La
-TeX.
-
-See the inputenc package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.13 // Defini√ß√£o das opera√ß√µes 
-                                    v√°lidas nas pilhas de cartas
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
-
-
-Package Fancyhdr Warning: \headheight is too small (12.0pt): 
- Make it at least 13.59999pt.
- We now make it that large for the rest of the document.
- This may cause the page layout to be inconsistent, however.
+Package pdfpages Warning: I cannot determine the number of pages of the
+(pdfpages)                included document, while being in DVI mode. You
+(pdfpages)                can use the option `lastpage' to give me a hint.
 
 [14]
 
-! Package inputenc Error: Unicode char \u8:√\lst@EC∫ not set up for use with La
-TeX.
-
-See the inputenc package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.89 	// random √© o n√∫mero 
-                             de n√≥s a seguir na lista, por isso,
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
-
-
-! Package inputenc Error: Unicode char \u8:√\lst@EC≥ not set up for use with La
-TeX.
-
-See the inputenc package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.89 	// random √© o n√∫mero de n√≥s 
-                                     a seguir na lista, por isso,
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
-
-
-! Package inputenc Error: Unicode char \u8:√\lst@EC∫ not set up for use with La
-TeX.
-
-See the inputenc package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.91 	// ou no m√°ximo o n√∫mero 
-                                 de n√≥s (se seguirmos *cards_left
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
-
-
-! Package inputenc Error: Unicode char \u8:√\lst@EC≥ not set up for use with La
-TeX.
-
-See the inputenc package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.91 	// ou no m√°ximo o n√∫mero de n√≥s 
-                                         (se seguirmos *cards_left
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
-
-
-! Package inputenc Error: Unicode char \u8:√\lst@EC≥ not set up for use with La
-TeX.
-
-See the inputenc package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.92 	// n√≥s 
-              a partir do dummy head node, chegamos √† tail)
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
-
-
-! Package inputenc Error: Unicode char \u8:√\lst@EC† not set up for use with La
-TeX.
-
-See the inputenc package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.92 ... a partir do dummy head node, chegamos √† 
-                                                  tail)
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
-
-
-Package Fancyhdr Warning: \headheight is too small (12.0pt): 
- Make it at least 13.59999pt.
- We now make it that large for the rest of the document.
- This may cause the page layout to be inconsistent, however.
+Package pdfpages Warning: I cannot determine the number of pages of the
+(pdfpages)                included document, while being in DVI mode. You
+(pdfpages)                can use the option `lastpage' to give me a hint.
 
 [15]
 
-! Package inputenc Error: Unicode char \u8:√\lst@EC≥ not set up for use with La
-TeX.
-
-See the inputenc package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.132 	// s√≥ 
-              fazer new_game quando j√° toda a gente jogou
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
-
-
-! Package inputenc Error: Unicode char \u8:√\lst@EC≥ not set up for use with La
-TeX.
-
-See the inputenc package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.137     // s√≥ 
-                 fazer new_game quando houver jogadores para jogar
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
-
-
-! Package inputenc Error: Unicode char \u8:√\lst@EC≠ not set up for use with La
-TeX.
-
-See the inputenc package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.143 ...antes de qualquer carta ser distribu√≠da 
-                                                  na nova ronda.
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
-
-
-Package Fancyhdr Warning: \headheight is too small (12.0pt): 
- Make it at least 13.59999pt.
- We now make it that large for the rest of the document.
- This may cause the page layout to be inconsistent, however.
+Package pdfpages Warning: I cannot determine the number of pages of the
+(pdfpages)                included document, while being in DVI mode. You
+(pdfpages)                can use the option `lastpage' to give me a hint.
 
 [16]
 
-! Package inputenc Error: Unicode char \u8:√\lst@EC≥ not set up for use with La
-TeX.
-
-See the inputenc package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.224 	house->num_cards = 1; // desenhar s√≥ 
-                                             uma carta
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
-
-
-Package Fancyhdr Warning: \headheight is too small (12.0pt): 
- Make it at least 13.59999pt.
- We now make it that large for the rest of the document.
- This may cause the page layout to be inconsistent, however.
-
-[17]
-
-Package Fancyhdr Warning: \headheight is too small (12.0pt): 
- Make it at least 13.59999pt.
- We now make it that large for the rest of the document.
- This may cause the page layout to be inconsistent, however.
-
-[18]
-
-Package Fancyhdr Warning: \headheight is too small (12.0pt): 
- Make it at least 13.59999pt.
- We now make it that large for the rest of the document.
- This may cause the page layout to be inconsistent, however.
-
-[19]
-
-! Package inputenc Error: Unicode char \u8:√\lst@EC≥ not set up for use with La
-TeX.
-
-See the inputenc package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.416 	// passar ao pr√≥ximo 
-                             jogador
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
-
-
-! Package inputenc Error: Unicode char \u8:√\lst@EC≥ not set up for use with La
-TeX.
-
-See the inputenc package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.420 		// se este pr√≥ximo 
-                            jogador existir,
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
-
-
-! Package inputenc Error: Unicode char \u8:√\lst@EC≥ not set up for use with La
-TeX.
-
-See the inputenc package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.421 		// procurar o pr√≥ximo 
-                               jogador v√°lido a seguir
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
-
-
-! Package inputenc Error: Unicode char \u8:√\lst@EC≥ not set up for use with La
-TeX.
-
-See the inputenc package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.434 			// n√£o existe um pr√≥ximo 
-                                    jogador v√°lido para jogar
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
-
-
-! Package inputenc Error: Unicode char \u8:√\lst@EC≥ not set up for use with La
-TeX.
-
-See the inputenc package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.439 		// se n√£o existir um pr√≥ximo 
-                                       jogador, fizemos stand do √∫ltimo jog...
-
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
-
-
-! Package inputenc Error: Unicode char \u8:√\lst@EC∫ not set up for use with La
-TeX.
-
-See the inputenc package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.439 ...√≥ximo jogador, fizemos stand do √∫ltimo 
-                                                  jogador
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
-
-
-Package Fancyhdr Warning: \headheight is too small (12.0pt): 
- Make it at least 13.59999pt.
- We now make it that large for the rest of the document.
- This may cause the page layout to be inconsistent, however.
-
-[20]
-
-Package Fancyhdr Warning: \headheight is too small (12.0pt): 
- Make it at least 13.59999pt.
- We now make it that large for the rest of the document.
- This may cause the page layout to be inconsistent, however.
-
-[21]
-
-Package Fancyhdr Warning: \headheight is too small (12.0pt): 
- Make it at least 13.59999pt.
- We now make it that large for the rest of the document.
- This may cause the page layout to be inconsistent, however.
-
-[22]) (./logic.h
-
-Package Fancyhdr Warning: \headheight is too small (12.0pt): 
- Make it at least 13.59999pt.
- We now make it that large for the rest of the document.
- This may cause the page layout to be inconsistent, however.
-
-[23]) (./main.c
-
-Package Fancyhdr Warning: \headheight is too small (12.0pt): 
- Make it at least 13.59999pt.
- We now make it that large for the rest of the document.
- This may cause the page layout to be inconsistent, however.
-
-[24]
-
-! Package inputenc Error: Unicode char \u8:√\lst@ECì not set up for use with La
-TeX.
-
-See the inputenc package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.25 // TODO: COMENTAR C√ìDIGO 
-                               COMO DEVE DE SER!
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
-
-
-! Package inputenc Error: Unicode char \u8:√\lst@EC∫ not set up for use with La
-TeX.
-
-See the inputenc package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.42 		fprintf(stderr, "Erro: n√∫mero 
-                                      inv√°lido de argumentos.\n");
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
-
-
-Package Fancyhdr Warning: \headheight is too small (12.0pt): 
- Make it at least 13.59999pt.
- We now make it that large for the rest of the document.
- This may cause the page layout to be inconsistent, however.
-
-[25]
-
-Package Fancyhdr Warning: \headheight is too small (12.0pt): 
- Make it at least 13.59999pt.
- We now make it that large for the rest of the document.
- This may cause the page layout to be inconsistent, however.
-
-[26]) (./sdl.c
-
-Package Fancyhdr Warning: \headheight is too small (12.0pt): 
- Make it at least 13.59999pt.
- We now make it that large for the rest of the document.
- This may cause the page layout to be inconsistent, however.
-
-[27]
-
-Package Fancyhdr Warning: \headheight is too small (12.0pt): 
- Make it at least 13.59999pt.
- We now make it that large for the rest of the document.
- This may cause the page layout to be inconsistent, however.
-
-[28]
-
-Package Fancyhdr Warning: \headheight is too small (12.0pt): 
- Make it at least 13.59999pt.
- We now make it that large for the rest of the document.
- This may cause the page layout to be inconsistent, however.
-
-[29]
-
-Package Fancyhdr Warning: \headheight is too small (12.0pt): 
- Make it at least 13.59999pt.
- We now make it that large for the rest of the document.
- This may cause the page layout to be inconsistent, however.
-
-[30]
-
-Package Fancyhdr Warning: \headheight is too small (12.0pt): 
- Make it at least 13.59999pt.
- We now make it that large for the rest of the document.
- This may cause the page layout to be inconsistent, however.
-
-[31]
-
-! Package inputenc Error: Unicode char \u8:√\lst@EC∫ not set up for use with La
-TeX.
-
-See the inputenc package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.278 			// agora aux_cards aponta para o √∫ltimo 
-                                                  elemento da stack
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
-
-
-Package Fancyhdr Warning: \headheight is too small (12.0pt): 
- Make it at least 13.59999pt.
- We now make it that large for the rest of the document.
- This may cause the page layout to be inconsistent, however.
-
-[32]
-
-Package Fancyhdr Warning: \headheight is too small (12.0pt): 
- Make it at least 13.59999pt.
- We now make it that large for the rest of the document.
- This may cause the page layout to be inconsistent, however.
-
-[33]
-
-Package Fancyhdr Warning: \headheight is too small (12.0pt): 
- Make it at least 13.59999pt.
- We now make it that large for the rest of the document.
- This may cause the page layout to be inconsistent, however.
-
-[34]
-
-Package Fancyhdr Warning: \headheight is too small (12.0pt): 
- Make it at least 13.59999pt.
- We now make it that large for the rest of the document.
- This may cause the page layout to be inconsistent, however.
-
-[35]) (./sdl.h
-
-Package Fancyhdr Warning: \headheight is too small (12.0pt): 
- Make it at least 13.59999pt.
- We now make it that large for the rest of the document.
- This may cause the page layout to be inconsistent, however.
-
-[36]) (./types.h
-
-Package Fancyhdr Warning: \headheight is too small (12.0pt): 
- Make it at least 13.59999pt.
- We now make it that large for the rest of the document.
- This may cause the page layout to be inconsistent, however.
-
-[37])
-
-Package Fancyhdr Warning: \headheight is too small (12.0pt): 
- Make it at least 13.59999pt.
- We now make it that large for the rest of the document.
- This may cause the page layout to be inconsistent, however.
-
-[38] (./blackjack.aux) ) 
+Package pdfpages Warning: I cannot determine the number of pages of the
+(pdfpages)                included document, while being in DVI mode. You
+(pdfpages)                can use the option `lastpage' to give me a hint.
+
+[17] (./blackjack.aux) ) 
 Here is how much of TeX's memory you used:
- 9027 strings out of 495028
- 124926 string characters out of 6181497
- 302660 words of memory out of 5000000
- 12041 multiletter control sequences out of 15000+600000
- 4407 words of font info for 17 fonts, out of 8000000 for 9000
+ 7498 strings out of 495029
+ 106814 string characters out of 6181523
+ 212947 words of memory out of 5000000
+ 10557 multiletter control sequences out of 15000+600000
+ 3940 words of font info for 15 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 42i,18n,72p,813b,1797s stack positions out of 5000i,500n,10000p,200000b,80000s
-</usr/share/texlive/texmf-dist/fonts/type1/public/amsfo
-nts/cm/cmbx12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm
-/cmcsc10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr1
-0.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb><
-/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt8.pfb>
-Output written on blackjack.pdf (38 pages, 157495 bytes).
-PDF statistics:
- 196 PDF objects out of 1000 (max. 8388607)
- 118 compressed objects within 2 object streams
- 0 named destinations out of 1000 (max. 500000)
- 21 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 42i,9n,72p,813b,305s stack positions out of 5000i,500n,10000p,200000b,80000s
 
+Output written on blackjack.dvi (17 pages, 3204 bytes).
