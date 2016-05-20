@@ -7,7 +7,7 @@
 #define COLUMNS	10
 #define HARD_LINES 10
 #define SOFT_LINES 8
-#define HI_LO
+#define HI_LO // opção que, se definida, ativa a estrátegia hi-lo das EAs
 
 void write_matrix(Move ***matrix, FILE *file, int lines);
 void destroy_matrix(Move **matrix, int lines);

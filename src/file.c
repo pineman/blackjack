@@ -25,8 +25,8 @@ Config *read_config(char *filename)
 
 	FILE *config_file = efopen(filename, "r");
 
-    //Parametros gerais de configuração:
-    //Numero de jogadores e numero de baralhos
+    // Parametros gerais de configuração:
+    // Número de jogadores e numero de baralhos
 	fgets(buffer, MAX_LINE_LEN, config_file);
 	sscanf(buffer, "%d-%d", &(config->num_decks), &(config->num_players));
 
@@ -39,7 +39,7 @@ Config *read_config(char *filename)
 		fprintf(stderr, "Erro: número de jogadores invalido.\n");
 		exit(EXIT_FAILURE);
 	}
-    //Leitura dos paramtros de configuracão de cada jogador
+    // Leitura dos parâmetros de configuracão de cada jogador
 	for (int i=0; fgets(buffer, MAX_LINE_LEN, config_file) != NULL && i < config->num_players; i++)
 		config = read_player(buffer, config, i);
 
@@ -48,9 +48,9 @@ Config *read_config(char *filename)
 	return config;
 }
 
-/*  
- *  Leitura dos parametros de configuração de cada jogador
- *  Recebe uma string e separa os parametros de configuração com strtok
+/*
+ *  Leitura dos parâmetros de configuração de cada jogador
+ *  Recebe uma string e separa os parâmetros de configuração utlizando strtok()
  */
 Config *read_player(char *line, Config *config, int count)
 {
@@ -176,7 +176,7 @@ void get_new_bet(List *players)
 
 
 
-/* 
+/*
  * Obter o valor do dinheiro, tipo, nome e aposta do jogador
  * Pede ate obter um valor correto
  */
@@ -193,7 +193,7 @@ Player *get_new_player(int pos)
 	Player *new_player = NULL;
 
 	printf("Escolheu o %dº lugar.\n", pos);
-    
+
     correct = false;
 	do {
 		printf("Introduza o tipo do jogador [HU ou EA]: ");

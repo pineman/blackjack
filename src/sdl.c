@@ -123,7 +123,10 @@ void RenderPlayerArea(List *players, SDL_Renderer* _renderer, TTF_Font *_font)
     }
 }
 
-
+/*
+ * Série de três funções que mostram janelas popup quando
+ * inserimos um jogador (opção da tecla <a>)
+ */
 void show_add_player_message(SDL_Window *window)
 {
 	SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION,
@@ -165,7 +168,7 @@ void show_add_player_input_message(SDL_Window *window)
 }
 
 
-//Obter posição para inserir o novo jogador
+// Obter posição para inserir o novo jogador na lista
 int get_clicked_player()
 {
 	SDL_Event event;
@@ -368,6 +371,7 @@ void UnLoadCards(SDL_Surface **_array_of_cards)
         SDL_FreeSurface(_array_of_cards[i]);
     }
 }
+
 // Desenhar o estado do jogador
 // Blackjack, Bust e Surrender
 void render_status(List *players, TTF_Font *_font, SDL_Renderer *renderer)

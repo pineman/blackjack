@@ -89,7 +89,7 @@ Move get_decision(Player *player, Card *house_card, Strategy *strategy)
     bool ace = false;
     int line = 0, column = 0;
     Stack *aux = player->cards;
-    
+
     //Verificar se a ases
     while(aux) {
         if (aux->card->id == 12)
@@ -134,7 +134,7 @@ Move get_decision(Player *player, Card *house_card, Strategy *strategy)
 /*
  * Encontra proximo jogador
  * Usa o valor de retorno de get_decision para escolher a proxima ação
- */ 
+ */
 void ea_make_decision(List *players, Player *house, Megadeck *megadeck, Strategy *strategy)
 {
 	bool can_double = false;
@@ -212,7 +212,7 @@ void update_count(List *players, Megadeck *megadeck)
 	megadeck->round_count = 0;
 }
 
-/* Altera a bet do jogador  
+/* Altera a bet do jogador
  * A aposta original do jogador é uma unidade
  * true_count = contagem / numero de baralhos
  * A nova aposta no jogador é igual a 2*true_count unidades
@@ -223,13 +223,13 @@ void hi_lo(Player *player, Megadeck *megadeck)
     double new_bet = 0;
 	double decks_left = round(((double) megadeck->cards_left)/DECK_SIZE + 1);
 	int true_count = round(player->count/decks_left);
-    
+
     if (true_count <= 0)
 		new_bet = player->orig_bet;
-    else 
+    else
         new_bet = 2 * true_count * player->orig_bet;
- 
-	
+
+
     if (player->type == EA) {
 		if (player->money > new_bet)
 			player->bet = new_bet;

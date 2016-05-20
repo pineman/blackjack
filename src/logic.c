@@ -23,7 +23,7 @@ void stack_push(Stack **sp, Card *card)
 	if (old_sp != NULL)
 		old_sp->prev = new;
 	else {
-		// estamos a pushar o primeiro elemento, sp tava a NULL
+		// estamos a puxar o primeiro elemento, sp tava a NULL
 	}
 
 	*sp = new;
@@ -47,6 +47,10 @@ Card *stack_pop(Stack **sp)
 	return card;
 }
 
+/*
+ * Ler a estrutura de configuração vinda de file.c:read_config()
+ * e inicializar os jogadores de acordo.
+ */
 int init_game(Config *config, List *players)
 {
 	Player *new_player = NULL;
@@ -78,6 +82,10 @@ int init_game(Config *config, List *players)
 	return num_decks;
 }
 
+/* Wrapper para dar uma carta a um jogador.
+ * Atualiza cards_left no Megadeck e insere novos baralhos quando
+ * este acaba.
+ */
 void give_card(Player *player, Megadeck *megadeck)
 {
 	int random = 0;
@@ -86,10 +94,10 @@ void give_card(Player *player, Megadeck *megadeck)
 		megadeck->cards_left = create_megadeck(megadeck);
 
 	// random: 1 - cards_left
-	// random é o número de nós a seguir na lista, por isso,
-	// tem de ser pelo menos 1 (dummy head node),
-	// ou no máximo o número de nós (se seguirmos *cards_left
-	// nós a partir do dummy head node, chegamos à tail)
+	/* random é o número de nós a seguir na lista, por isso,
+	 * tem de ser pelo menos 1 (dummy head node),
+	 * ou no máximo o número de nós (se seguirmos *cards_left
+	 * nós a partir do dummy head node, chegamos à tail) */
 	random = rand() % megadeck->cards_left + 1;
 	List *random_node = megadeck->deck;
 	for (int i = 0; i < random; i++) {
@@ -141,7 +149,7 @@ void new_game(List *players, Player *house, Megadeck *megadeck)
 
 	// atualizar as contagens das EAs com os valores da ronda anterior,
 	// antes de qualquer carta ser distribuída na nova ronda.
-	update_count(players, megadeck); // soma player->count com megadeck->count
+	update_count(players, megadeck);
 
 	// Limpar cartas e retirar apostas
 	clear_cards_take_bet(players, house, megadeck);
@@ -216,7 +224,8 @@ void distribute_cards(List *players, Player *house, Megadeck *megadeck)
 				give_card(cur_player, megadeck);
 			aux = aux->next;
 		}
-		if (i == 1) // segunda vez
+		if (i == 1)
+			// segunda vez, mostrar apenas os pontos da casa até agora
 			public_house_points = count_points(house);
 		give_card(house, megadeck);
 	}
@@ -231,6 +240,9 @@ void distribute_cards(List *players, Player *house, Megadeck *megadeck)
 	}
 }
 
+/*
+ * Encontrar o primeiro jogador a jogar a seguir ao new_game()
+ */
 void find_playing(List *players, Player *house)
 {
     bool found = false;
@@ -261,6 +273,9 @@ void find_playing(List *players, Player *house)
     }
 }
 
+/*
+ * Série de três funções auxiliares para encontrar certos jogadores na lista.
+ */
 List *find_ingame_player(List *players)
 {
 	List *aux = players->next; // dummy head
@@ -339,8 +354,9 @@ bool double_bet(List *players, Player *house, Megadeck *megadeck)
     Player *cur_player = (Player *) aux->payload;
 
 	// não fazer nada se o jogador não pode fazer double
-    if (cur_player->money < cur_player->bet || cur_player->num_cards != 2)
+    if (cur_player->money < cur_player->bet || cur_player->num_cards != 2) {
         return false;
+    }
 
     cur_player->money -= cur_player->bet;
     cur_player->bet += cur_player->bet;
@@ -363,30 +379,29 @@ void bet(List *players)
 	get_new_bet(players);
 }
 
-// TODO: Se o jogador adicionado for EA, subtrair megadeck->round_count
-// a player->count, para quando for somado em new_game(),
-// este dar zero (para esta EA começar a jogar efetivamente quando entrou,
-// em vez de saber os dados de count da ronda anterior).
-AddPlayerError add_player(List *players, List *old_players, SDL_Window *window)
+AddPlayerError add_player(List *players, List *old_players, Megadeck *megadeck, SDL_Window *window)
 {
 	int pos = get_clicked_player();
+
 	if (pos == 0) {
+		// Sinalizar que o utilizador clicou fora da área de jogadores
 		return OUT;
 	}
 
 	List *aux = list_follow(players, pos);
 	Player *old_player = (Player *) aux->payload;
 	if (old_player->ingame) {
+		// Sinalizar que o utilizador clicou num jogador que ainda está a jogar
 		return NOTEMPTY;
 	}
 
 	show_add_player_input_message(window);
 
 	Player *new_player = get_new_player(pos);
-	// subtrair a count da ronda para, quando somarmos em new_game,
+	// subtrair a count da ronda para, quando somarmos em new_game(),
 	// ficar a zero.
-	//if (new_player->type == EA)
-	//	new_player->count -= megadeck->count;
+	if (new_player->type == EA)
+		new_player->count -= megadeck->round_count;
 
 	old_player = (Player *) list_remove_pos(players, pos);
 	list_append(old_players, old_player);
@@ -395,6 +410,11 @@ AddPlayerError add_player(List *players, List *old_players, SDL_Window *window)
 	return OK;
 }
 
+/*
+ * Esta função faz o stand dos jogadores, mas serve para
+ * encontrar o jogador que joga a seguir, por isso é chamada sempre
+ * no final da vez do jogador.
+ */
 void stand(List *players, Player *house, Megadeck *megadeck)
 {
 	List *aux = find_active_player(players);
@@ -407,7 +427,7 @@ void stand(List *players, Player *house, Megadeck *megadeck)
         return;
     }
 
-	// se encontrarmos, fazer-lhe stand
+	// se encontrarmos, fazer-lhe stand, se este não tiver outros atributos
 	cur_player = (Player *) aux->payload;
 	if (cur_player->status == WW)
 		cur_player->status = ST;
@@ -441,6 +461,7 @@ void stand(List *players, Player *house, Megadeck *megadeck)
 	}
 
 	if (end_of_round) {
+		// A ronda acabou, fazer o hit da casa e distribuir o dinheiro
 		house_hit(house, megadeck);
 	    pay_bets(players, house);
 	}
@@ -485,8 +506,10 @@ void house_hit(Player *house, Megadeck *megadeck)
 }
 
 
-// Define o estado do jogador
-// Atualiza a aposta no fim do jogo
+/*
+ * Esta função distribui o dinheiro no final da ronda e é
+ * chamada sempre nessa altura.
+ */
 void pay_bets(List *players, Player *house)
 {
     List *aux = players->next;
@@ -560,9 +583,11 @@ void pay_bets(List *players, Player *house)
 }
 
 
-// Conta os pontos do jogador
-// No primeiro loop atribui a todos os ases 11 pontos
-// No segundo loop se pontos>21 remove 10 pontos ate não haverem ases
+/*
+ * Conta os pontos do jogador.
+ * No primeiro loop atribui a todos os ases 11 pontos.
+ * No segundo loop se pontos > 21 remove 10 pontos ate não haverem ases.
+ */
 int count_points(Player *player)
 {
     Stack *cards = player->cards;
@@ -599,6 +624,10 @@ int point_index(int id)
     return points;
 }
 
+/*
+ * Série de três funções que libertam a diversa memória alocada
+ * ao longo do programa, como as pilhas dos jogadores e a lista dos jogadores
+ */
 void destroy_list(List *head)
 {
 	List *aux = head->next; // dummy head
