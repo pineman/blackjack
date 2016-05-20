@@ -30,7 +30,7 @@ List *find_active_player(List *players);
 void surrender(List *players, Player *house, Megadeck *megadeck);
 bool double_bet(List *players, Player *house, Megadeck *megadeck);
 void bet(List *players);
-AddPlayerError add_player(List *players, List *old_players, SDL_Window *window);
+AddPlayerError add_player(List *players, List *old_players, Megadeck *megadeck, SDL_Window *window);
 void stand(List *players, Player *house, Megadeck *megadeck);
 void player_hit(List *players, Player *house, Megadeck *megadeck);
 void house_hit(Player *house, Megadeck *megadeck);

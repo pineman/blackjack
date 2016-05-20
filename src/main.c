@@ -1,11 +1,10 @@
-/* Projecto de Programação
+/*
+ * Projecto de Programação
  * Implementação em C do jogo de casino Blackjack
- * Autores: 
- * João Pinheiro: joao.castro.pinheiro@tecnico.ulisboa.pt
- * João Freitas: joao.m.freitas@tecnico.ulisboa.pt 
+ * Autores:
+ * João Pinheiro <joao.castro.pinheiro@tecnico.ulisboa.pt>
+ * João Freitas  <joao.m.freitas@tecnico.ulisboa.pt>
  */
-
-
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -22,8 +21,6 @@
 #include "ea.h"
 #include "error.h"
 
-// TODO: COMENTAR CÓDIGO COMO DEVE DE SER!
-// TODO: Adicionar "autores" e introdução e etc.!
 int main(int argc, char *argv[])
 {
     SDL_Window *window = NULL;
@@ -116,6 +113,7 @@ int main(int argc, char *argv[])
 
 					case SDLK_a:
 						if (find_active_player(players) == NULL)
+							// sinalizar para mostrar as popups
 							add_player_key = true;
 						break;
 
@@ -164,15 +162,16 @@ int main(int argc, char *argv[])
 		if (aux != NULL)
 			if (((Player * ) aux->payload)->type == EA)
 				ea = true;
-
+		// Se for a vez dum EA, decidir a sua jogada, com delay
 		if (ea) {
 			ea_make_decision(players, house, megadeck, strategy);
 			SDL_Delay(ea_delay);
 		}
 
 		else if (add_player_key) {
-			add_player_error = add_player(players, old_players, window);
+			add_player_error = add_player(players, old_players, megadeck, window);
 			if (add_player_error != OK)
+				// mostrar popup de erro se este existir
 				show_add_player_error_message(window, add_player_error);
 			add_player_key = false;
 		}

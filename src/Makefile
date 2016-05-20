@@ -15,5 +15,6 @@ $(EXEC): $(SRC:%.c=%.o)
 
 clean:
 	rm -rf *.o
+	rm blackjack
 
 -include $(SRC:%.c=/%.d)

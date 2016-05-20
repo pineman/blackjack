@@ -1,6 +1,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+/*
+ * Wrappers para o fopen() e o calloc() que tratam de erros automaticamente.
+ */
 void *ecalloc(size_t nmemb, size_t size)
 {
 	void *memory = calloc(nmemb, size);

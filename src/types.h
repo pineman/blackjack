@@ -2,15 +2,17 @@
 #define MAX_PLAYERS 4
 #include "list.h"
 
-// Entidade Artificial, Humano, Vazio
+// Tipo de jogador: Entidade Artificial, Humano, Vazio
 typedef enum {EA, HU, VA} Type;
 
-// waiting, blackjack, busted, stand'ed', surrender
+// Estado do jogador: waiting, blackjack, busted, stand'ed', surrender
 typedef enum {WW, BJ, BU, ST, SU} Status;
 
-// Okay, user clicked outside playerarea, user clicked on valid player
+// Addplayer: OK (sem erro), OUT: o utilizador clicou fora da área dos jogadores
+// NOTEMPTY: o utilizador clicou num jogador que ainda está a jogar
 typedef enum {OK, OUT, NOTEMPTY} AddPlayerError;
 
+// Codificação das ações das EAs:
 // hit, stand, surrender, double->hit, double->stand
 typedef enum {H='H', S='S', R='R', D='D', E='E'} Move;
 
@@ -40,7 +42,8 @@ typedef struct Player {
 	int wins;
 	int losses;
 	int ties;
-	// guarda a contagem das cartas para o hi-lo no caso do jogador ser EA
+	// guarda a contagem das cartas para o hi-lo
+	// (apenas usada se o jogador for EA)
 	int count;
 } Player;
 
@@ -57,7 +60,7 @@ typedef struct Megadeck {
     int cards_left;
     const int num_decks;
     List *deck;
-	// guarda a contagem das cartas duma ronda para o hi-lo das EAs
+	// guarda a contagem das cartas duma ronda apenas para o hi-lo das EAs
 	int round_count;
 } Megadeck;
 

@@ -18,6 +18,7 @@
 #define EXTRASPACE 150
 #define MARGIN 5
 #define SEP ((int) (0.95f*WIDTH_WINDOW))
+// as quatro coordenadas dos retângulos dos jogadores
 #define PLAYER_RECT_X (SEP/4 - 5) + 10
 #define PLAYER_RECT_Y ((int) (0.55f*HEIGHT_WINDOW))
 #define PLAYER_RECT_W SEP/4 - 5
