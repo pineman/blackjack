@@ -1,5 +1,5 @@
 #CFLAGS=-g -Wall -Wextra -pedantic -std=c99 $(shell sdl2-config --cflags)
-CFLAGS=-g -Wall -Wextra -pedantic -std=c99
+CFLAGS=-O3 -Wall -Wextra -pedantic -std=c99 $(shell sdl2-config --cflags)
 CPPFLAGS=-MP -MMD
 LDFLAGS=-lm $(shell sdl2-config --libs) -lSDL2_ttf -lSDL2_image
 CC=gcc
