@@ -1,5 +1,0 @@
-Jogador		Tipo	Jogos	Vitorias	Empates	Derrotas	Dinheiro
-JAscenso	HU	3	0		0	3		50 €
-BCosta		HU	3	0		0	3		110 €
-CRibeiro	HU	3	0		0	3		80 €
-A casa ganhou: 360 €
