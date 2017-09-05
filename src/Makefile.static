@@ -1,0 +1,18 @@
+CFLAGS=-O3 -Wall -Wextra -pedantic -std=c99 $(shell $$HOST-pkg-config --static --cflags sdl2) $(shell $$HOST-pkg-config --static --cflags SDL2_ttf) $(shell $$HOST-pkg-config --static --cflags freetype2) $(shell $$HOST-pkg-config --static --cflags SDL2_image) $(shell $$HOST-pkg-config --static --cflags libjpeg) $(shell $$HOST-pkg-config --static --cflags zlib) $(shell $$HOST-pkg-config --static --cflags libpng) $(shell $$HOST-pkg-config --static --cflags libtiff-4) $(shell $$HOST-pkg-config --static --cflags libwebp)
+CPPFLAGS=-MP -MMD
+LDFLAGS=-lm $(shell $$HOST-pkg-config --static --libs sdl2) $(shell $$HOST-pkg-config --static --libs SDL2_ttf) $(shell $$HOST-pkg-config --static --libs freetype2) -lfreetype $(shell $$HOST-pkg-config --static --libs SDL2_image) $(shell $$HOST-pkg-config --static --libs libjpeg) $(shell $$HOST-pkg-config --static --libs zlib) $(shell $$HOST-pkg-config --static --libs libpng) $(shell $$HOST-pkg-config --static --libs libtiff-4) $(shell $$HOST-pkg-config --static --libs libwebp)
+SRC=$(wildcard *.c)
+EXEC=blackjack.exe
+
+all:
+	make $(EXEC)
+	rm -rf *.d
+
+$(EXEC): $(SRC:%.c=%.o)
+	$(CC) -o $@ $^ $(CFLAGS) $(LDFLAGS)
+
+clean:
+	rm -rf *.o *.d
+	rm $(EXEC)
+
+-include $(SRC:%.c=/%.d)

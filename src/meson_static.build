@@ -1,0 +1,20 @@
+# meson --default-library static --cross-file meson_cross.ini build
+project('blackjack', 'c')
+
+cc = meson.get_compiler('c')
+math = cc.find_library('m', required: false)
+libstdcpp = cc.find_library('stdc++', required: false)
+sdl = dependency('sdl2', static: true)
+sdl_ttf = dependency('SDL2_ttf', static: true)
+freetype2 = dependency('freetype2', static: true)
+sdl_image = dependency('SDL2_image', static: true)
+libjpeg = dependency('libjpeg', static: true)
+zlib = dependency('zlib', static: true)
+libpng = dependency('libpng', static: true)
+libtiff = dependency('libtiff-4', static: true)
+libwebp = dependency('libwebp', static: true)
+
+executable('blackjack',
+	sources: ['ea.c', 'error.c', 'file.c', 'list.c', 'logic.c', 'main.c', 'sdl.c'],
+	dependencies: [math, sdl, sdl_ttf, freetype2, sdl_image, libjpeg, zlib, libpng, libtiff, libwebp, libstdcpp],
+	link_args: ['-static'])
