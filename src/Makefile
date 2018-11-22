@@ -7,7 +7,7 @@ SRC=$(wildcard *.c)
 EXEC=blackjack
 
 all:
-	make $(EXEC)
+	$(MAKE) $(EXEC)
 	rm -rf *.d
 
 $(EXEC): $(SRC:%.c=%.o)

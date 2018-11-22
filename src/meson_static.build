@@ -1,5 +1,9 @@
-# meson --default-library static --cross-file meson_cross.ini build
-project('blackjack', 'c')
+# meson rcross-file meson_cross.ini build
+project('blackjack', 'c',
+	default_options: [
+	'warning_level=2',
+	'default_library=static',
+])
 
 cc = meson.get_compiler('c')
 math = cc.find_library('m', required: false)

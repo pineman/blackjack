@@ -85,7 +85,7 @@ void RenderPlayerArea(List *players, SDL_Renderer* _renderer, TTF_Font *_font)
 {
     SDL_Color white = {255, 255, 255, 255};
     SDL_Rect playerRect;
-    char points_str[STRING_SIZE];
+    char points_str[10];
     char status_str[STRING_SIZE];
     List *aux = players->next;
     Player *cur_player = NULL;
@@ -210,7 +210,7 @@ void RenderHouseCards(Player *house, SDL_Surface **_cards, TTF_Font *_font, SDL_
 	int num_cards = 0;
     SDL_Color white = { 255, 255, 255, 255};
 	char status_str[STRING_SIZE] = {0};
-	char points_str[STRING_SIZE] = {0};
+	char points_str[10] = {0};
 
 	if (house->status == WW || house->status == ST)
 		sprintf(points_str, "%d", house->points);
